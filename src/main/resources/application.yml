@@ -1,0 +1,68 @@
+logging:
+  telegram-bot-appender:
+    pattern: "%-5level --- %logger{50} : %msg%n%ex"
+
+reddit:
+  api-host: https://oauth.reddit.com
+  host: https://www.reddit.com
+  user-agent: java:$group:v\${telegram.bot.version} (by /u/\${reddit.username})
+  video-downloader:
+    uri: https://viddit.io/download
+    css-selector: a.download__item__info__actions__button
+
+spring:
+  thymeleaf:
+    enable-spring-el-compiler: true
+  config:
+    use-legacy-processing: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./data
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+    show-sql: true
+  output:
+    ansi:
+      enabled: always
+  security:
+    oauth2:
+      client:
+        registration:
+          reddit:
+            authorization-grant-type: client_credentials
+        provider:
+          reddit:
+            token-uri: \${reddit.host}/api/v1/access_token
+  threads:
+    virtual:
+      enabled: true
+
+telegram:
+  bot:
+    version: $version
+  max-photo-dimensions: 10000
+  media-group-max-size: 10
+  post-controls:
+    ignored-api-responses:
+      - "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"
+    initial-message-text: 🆕 New
+    buttons:
+      "[/approvepost]":
+#        button-text: ✅ Approve
+        callback-answer-text: Approving...
+        message-text: ✅ Approved
+      "[/rejecttext]":
+        button-text: ☑️ Reject text
+        callback-answer-text: Rejecting text...
+        message-text: ☑️ Text rejected
+      "[/rejectpost]":
+        button-text: ❌ Reject
+        callback-answer-text: Rejecting...
+        message-text: ❌ Rejected
+  unauthorized-action-text: 👮‍♀️ You are not authorized to perform this action

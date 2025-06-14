@@ -1,3 +1,0 @@
-*🗑️ Blocked authors:*
-
-%s
