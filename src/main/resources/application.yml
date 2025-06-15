@@ -54,7 +54,7 @@ telegram:
     initial-message-text: 🆕 New
     buttons:
       "[/approvepost]":
-#        button-text: ✅ Approve
+        button-text: ✅ Approve
         callback-answer-text: Approving...
         message-text: ✅ Approved
       "[/rejecttext]":
