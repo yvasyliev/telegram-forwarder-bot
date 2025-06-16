@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -30,14 +30,5 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew test bootJar
 
-      - name: Set up Ed25519 SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-      - name: Add remote host to known_hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Execute command on remote server
-        run: ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo Hello from remote server"
+      - name: Start remote service
+        uses: ./.github/workflows/start-service.yml
