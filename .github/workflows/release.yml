@@ -19,10 +19,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Print bootJar artifact name
+      - name: Deploy to remote server
         env:
           PRINT_BOOT_JAR_NAME: |
             allprojects {
@@ -33,11 +30,17 @@ jobs:
               }
             }
         run: |
+          chmod +x ./gradlew
+          ./gradlew test bootJar
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
           echo "$PRINT_BOOT_JAR_NAME" > print-bootjar.gradle
-          ./gradlew -I print-bootjar.gradle -q printBootJarName
-
-      - name: Build with Gradle
-        run: ./gradlew test bootJar
+          BOOT_JAR_NAME=$(./gradlew -I print-bootjar.gradle -q printBootJarName)
+          scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln -s ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
 
   stop-service:
     needs: release

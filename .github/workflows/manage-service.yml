@@ -1,4 +1,5 @@
 name: Manage Remote Service
+run-name: Manage Remote Service - ${{ inputs.action }}
 
 on:
   workflow_dispatch:
