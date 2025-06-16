@@ -1,7 +1,7 @@
 name: Release
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   release:
@@ -30,5 +30,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew test bootJar
 
-      - name: Start remote service
-        uses: ./.github/workflows/start-service.yml
+  start-service:
+    needs: release
+    uses: ./.github/workflows/start-service.yml
+    secrets: inherit

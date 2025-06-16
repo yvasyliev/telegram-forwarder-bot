@@ -5,7 +5,7 @@ on:
   workflow_call:
 
 jobs:
-  stop-service:
+  start-service:
     runs-on: ubuntu-latest
     steps:
       - name: Start service on remote server
