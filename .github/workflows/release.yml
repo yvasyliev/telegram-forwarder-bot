@@ -23,14 +23,32 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Print bootJar artifact name
+        env:
+          PRINT_BOOT_JAR_NAME: |
+            allprojects {
+              task printBootJarName {
+                doLast {
+                  println bootJar.archiveFileName.get()
+                }
+              }
+            }
         run: |
-          echo "allprojects { task printBootJarName { doLast { println bootJar.archiveFileName.get() } } }" > print-bootjar.gradle
+          echo "$PRINT_BOOT_JAR_NAME" > print-bootjar.gradle
           ./gradlew -I print-bootjar.gradle -q printBootJarName
 
       - name: Build with Gradle
         run: ./gradlew test bootJar
 
-  start-service:
+  stop-service:
     needs: release
-    uses: ./.github/workflows/start-service.yml
+    uses: ./.github/workflows/manage-service.yml
+    with:
+      action: stop
+    secrets: inherit
+
+  start-service:
+    needs: stop-service
+    uses: ./.github/workflows/manage-service.yml
+    with:
+      action: start
     secrets: inherit

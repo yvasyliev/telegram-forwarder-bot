@@ -1,0 +1,32 @@
+name: Manage Remote Service
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        default: 'start'
+        type: choice
+        options:
+          - start
+          - stop
+
+  workflow_call:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: string
+
+jobs:
+  manage-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Manage service on remote server
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl ${{ inputs.action }} ${{ secrets.SERVICE_NAME }}"
