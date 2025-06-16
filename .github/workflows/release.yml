@@ -9,14 +9,23 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 21
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+
+      - name: Print bootJar artifact name
+        run: |
+          echo "allprojects { task printBootJarName { doLast { println bootJar.archiveFileName.get() } } }" > print-bootjar.gradle
+          ./gradlew -I print-bootjar.gradle -q printBootJarName
+
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew test bootJar
