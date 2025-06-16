@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'io.github.yvasyliev.telegramforwarderbot'
-version = '4.0-alpha-1'
+version = '4.0-alpha.1'
 
 java {
     toolchain {
