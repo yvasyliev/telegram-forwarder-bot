@@ -54,7 +54,7 @@ jobs:
           scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
           VERSION=$(./gradlew --quiet printVersion)
-#          gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes
+          gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes
 
   restart-service:
     needs: release
