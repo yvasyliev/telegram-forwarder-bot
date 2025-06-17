@@ -14,20 +14,10 @@ on:
           - start
           - stop
 
-  workflow_call:
-    inputs:
-      action:
-        description: 'Action to perform'
-        default: 'restart'
-        type: string
-
 jobs:
   manage-service:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
       - name: Setup SSH
         uses: ./.github/actions/setup-ssh
         with:

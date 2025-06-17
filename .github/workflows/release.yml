@@ -47,16 +47,14 @@ jobs:
                 }
               }
             }
+          REMOTE: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          ED25519: ~/.ssh/id_ed25519
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
+          ssh -i $ED25519 $REMOTE "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
           echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
           BOOT_JAR_NAME=$(./gradlew --quiet printBootJarName)
-          scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
+          scp build/libs/$BOOT_JAR_NAME $REMOTE:${{ secrets.SSH_WORKING_DIR }}
+          ssh -i $ED25519 $REMOTE "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
+          ssh -i $ED25519 $REMOTE "sudo systemctl restart ${{ secrets.SERVICE_NAME }}"
           VERSION=$(./gradlew --quiet printVersion)
           gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes
-
-  restart-service:
-    needs: release
-    uses: ./.github/workflows/manage-service.yml
-    secrets: inherit

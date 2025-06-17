@@ -1,0 +1,72 @@
+name: Build with Gradle
+
+description: Builds the project with Gradle
+
+inputs:
+  sonar-token:
+    description: The SonarQube token for analysis
+    required: true
+
+outputs:
+  jar-directory:
+    description: The directory where the JAR file is located
+    value: ${{ steps.get-variables.outputs.jar_directory }}
+  jar-name:
+    description: The name of the generated JAR file
+    value: ${{ steps.get-variables.outputs.jar_name }}
+  version:
+    description: The version of the project
+    value: ${{ steps.get-variables.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout sources
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Build with Gradle
+      env:
+        SONAR_TOKEN: ${{ inputs.sonar-token }}
+      run: |
+        chmod +x ./gradlew
+        ./gradlew build sonar
+      shell: bash
+
+    - name: Get variables
+      id: get-variables
+      env:
+        INIT_SCRIPT: |
+          allprojects {
+            tasks.register('printBootJarDirectory') {
+              doLast {
+                println project.relativePath(bootJar.destinationDirectory.get().asFile)
+              }
+            }
+          
+            tasks.register('printBootJarName') {
+              doLast {
+                println bootJar.archiveFileName.get()
+              }
+            }
+          
+            tasks.register('printVersion') {
+              doLast {
+                println project.version
+              }
+            }
+          }
+      run: |
+        echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
+        echo "jar-directory=$(./gradlew --quiet printBootJarDirectory)" >> $GITHUB_OUTPUT
+        echo "jar-name=$(./gradlew --quiet printBootJarName)" >> $GITHUB_OUTPUT
+        echo "version=$(./gradlew --quiet printVersion)" >> $GITHUB_OUTPUT
+      shell: bash

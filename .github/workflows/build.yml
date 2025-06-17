@@ -15,21 +15,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Build with Gradle
+        id: build
+        uses: ./.github/actions/build-with-gradle
         with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Build and Test with Gradle
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          chmod +x ./gradlew
-          ./gradlew build sonar
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
