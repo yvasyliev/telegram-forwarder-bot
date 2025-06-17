@@ -9,8 +9,11 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.List;
 
 @Configuration
 @Import(AuthenticationConfiguration.class)
@@ -26,6 +29,7 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService(TelegramProperties telegramProperties) {
+        var user = new User("user", "password", List.of());
         return new InMemoryUserDetailsManager(AuthUtils.createAdmin(telegramProperties.adminId()));
     }
 }

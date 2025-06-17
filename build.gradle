@@ -92,5 +92,6 @@ sonar {
         property "sonar.projectKey", "yvasyliev_reddit-telegram-forwarder"
         property "sonar.organization", "yvasyliev"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.sources", "src/main/resources/templates"
     }
 }
