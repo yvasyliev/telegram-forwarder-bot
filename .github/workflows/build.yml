@@ -21,7 +21,6 @@ jobs:
           fetch-depth: 0
 
       - name: Build with Gradle
-        id: build
         uses: ./.github/actions/build-with-gradle
         with:
           sonar-token: ${{ secrets.SONAR_TOKEN }}

@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup SSH
+        id: setup-ssh
         uses: ./.github/actions/setup-ssh
         with:
           ssh_key: ${{ secrets.SSH_KEY }}
@@ -29,4 +30,4 @@ jobs:
 
       - name: Manage service on remote server
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl ${{ inputs.action }} ${{ secrets.SERVICE_NAME }}"
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl ${{ inputs.action }} ${{ secrets.SERVICE_NAME }}"

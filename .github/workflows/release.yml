@@ -9,22 +9,17 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: 21
+          fetch-depth: 0
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Build and Test with Gradle
-        run: |
-          chmod +x ./gradlew
-          ./gradlew build
+      - name: Build with Gradle
+        id: build
+        uses: ./.github/actions/build-with-gradle
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
 
       - name: Setup SSH
+        id: setup-ssh
         uses: ./.github/actions/setup-ssh
         with:
           ssh_key: ${{ secrets.SSH_KEY }}
@@ -33,28 +28,10 @@ jobs:
       - name: Deploy to remote server and create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          INIT_SCRIPT: |
-            allprojects {
-              task printBootJarName {
-                doLast {
-                  println bootJar.archiveFileName.get()
-                }
-              }
-            
-              task printVersion {
-                doLast {
-                  println project.version
-                }
-              }
-            }
           REMOTE: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-          ED25519: ~/.ssh/id_ed25519
         run: |
-          ssh -i $ED25519 $REMOTE "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
-          echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
-          BOOT_JAR_NAME=$(./gradlew --quiet printBootJarName)
-          scp build/libs/$BOOT_JAR_NAME $REMOTE:${{ secrets.SSH_WORKING_DIR }}
-          ssh -i $ED25519 $REMOTE "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
-          ssh -i $ED25519 $REMOTE "sudo systemctl restart ${{ secrets.SERVICE_NAME }}"
-          VERSION=$(./gradlew --quiet printVersion)
-          gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
+          scp ${{ steps.build.outputs.jar-path }} $REMOTE:${{ secrets.SSH_WORKING_DIR }}
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/${{ steps.build.outputs.jar-name }} ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "sudo systemctl restart ${{ secrets.SERVICE_NAME }}"
+          gh release create "v${{ steps.build.outputs.version }}" "${{ steps.build.outputs.jar-path }}" --title "v${{ steps.build.outputs.version }}" --generate-notes

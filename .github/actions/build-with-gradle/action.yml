@@ -8,9 +8,9 @@ inputs:
     required: true
 
 outputs:
-  jar-directory:
-    description: The directory where the JAR file is located
-    value: ${{ steps.get-variables.outputs.jar_directory }}
+  jar-path:
+    description: The path to the generated JAR file
+    value: ${{ steps.get-variables.outputs.jar_path }}
   jar-name:
     description: The name of the generated JAR file
     value: ${{ steps.get-variables.outputs.jar_name }}
@@ -43,9 +43,9 @@ runs:
       env:
         INIT_SCRIPT: |
           allprojects {
-            tasks.register('printBootJarDirectory') {
+            tasks.register('printBootJarPath') {
               doLast {
-                println project.relativePath(bootJar.destinationDirectory.get().asFile)
+                println project.relativePath(bootJar.archiveFile.get().asFile)
               }
             }
           
@@ -63,7 +63,7 @@ runs:
           }
       run: |
         echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
-        echo "jar-directory=$(./gradlew --quiet printBootJarDirectory)" >> $GITHUB_OUTPUT
+        echo "jar-path=$(./gradlew --quiet printBootJarPath)" >> $GITHUB_OUTPUT
         echo "jar-name=$(./gradlew --quiet printBootJarName)" >> $GITHUB_OUTPUT
         echo "version=$(./gradlew --quiet printVersion)" >> $GITHUB_OUTPUT
       shell: bash
