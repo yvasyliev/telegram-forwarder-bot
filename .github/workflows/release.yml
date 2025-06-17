@@ -22,7 +22,7 @@ jobs:
       - name: Build and Test with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew test bootJar
+          ./gradlew test bootJar --scan
 
       - name: Setup SSH
         uses: ./.github/actions/setup-ssh
@@ -33,7 +33,7 @@ jobs:
       - name: Deploy to remote server and create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PRINT_TASKS: |
+          INIT_SCRIPT: |
             allprojects {
               task printBootJarName {
                 doLast {
@@ -49,12 +49,12 @@ jobs:
             }
         run: |
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
-          echo "$PRINT_TASKS" > print-tasks.gradle
-          BOOT_JAR_NAME=$(./gradlew -I print-tasks.gradle -q printBootJarName)
+          echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
+          BOOT_JAR_NAME=$(./gradlew --quiet printBootJarName)
           scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln -s ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
-          VERSION=$(./gradlew -I print-tasks.gradle -q printVersion)
-          gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes     
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
+          VERSION=$(./gradlew --quiet printVersion)
+#          gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes
 
   restart-service:
     needs: release
