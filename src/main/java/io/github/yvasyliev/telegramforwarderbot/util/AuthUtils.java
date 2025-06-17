@@ -11,6 +11,7 @@ import java.util.Collection;
 
 @UtilityClass
 public class AuthUtils {
+    public final String DEFAULT_PASSWORD = "{noop}";
     private final String ROLE_ADMIN = "ROLE_ADMIN";
     private final Collection<? extends GrantedAuthority> ADMIN_AUTHORITIES
             = AuthorityUtils.createAuthorityList(ROLE_ADMIN);
@@ -31,6 +32,6 @@ public class AuthUtils {
     }
 
     public UserDetails createUser(Long userId, Collection<? extends GrantedAuthority> authorities) {
-        return new User(userId.toString(), "{noop}", authorities);
+        return new User(userId.toString(), DEFAULT_PASSWORD, authorities);
     }
 }

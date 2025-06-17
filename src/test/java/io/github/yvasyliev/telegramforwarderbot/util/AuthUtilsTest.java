@@ -24,7 +24,6 @@ class AuthUtilsTest {
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_USER = "ROLE_USER";
     private static final long USER_ID = 123;
-    private static final String PASSWORD = "{noop}";
     private static final Supplier<Stream<Arguments>> testIsAdmin = () -> Stream.of(
             arguments(ROLE_ADMIN, true),
             arguments(ROLE_USER, false)
@@ -51,7 +50,11 @@ class AuthUtilsTest {
 
     @Test
     void testCreateAdmin() {
-        var expected = new User(String.valueOf(USER_ID), PASSWORD, AuthorityUtils.createAuthorityList(ROLE_ADMIN));
+        var expected = new User(
+                String.valueOf(USER_ID),
+                AuthUtils.DEFAULT_PASSWORD,
+                AuthorityUtils.createAuthorityList(ROLE_ADMIN)
+        );
 
         var actual = AuthUtils.createAdmin(USER_ID);
 
@@ -60,7 +63,11 @@ class AuthUtilsTest {
 
     @Test
     void testCreateUser() {
-        var expected = new User(String.valueOf(USER_ID), PASSWORD, AuthorityUtils.createAuthorityList(ROLE_USER));
+        var expected = new User(
+                String.valueOf(USER_ID),
+                AuthUtils.DEFAULT_PASSWORD,
+                AuthorityUtils.createAuthorityList(ROLE_USER)
+        );
 
         var actual = AuthUtils.createUser(USER_ID);
 
@@ -70,7 +77,7 @@ class AuthUtilsTest {
     @Test
     void testCreateUserWithAuthorities() {
         var authorities = AuthorityUtils.createAuthorityList(ROLE_ADMIN, ROLE_USER);
-        var expected = new User(String.valueOf(USER_ID), PASSWORD, authorities);
+        var expected = new User(String.valueOf(USER_ID), AuthUtils.DEFAULT_PASSWORD, authorities);
 
         var actual = AuthUtils.createUser(USER_ID, authorities);
 

@@ -42,14 +42,15 @@ class VideoDownloaderTest {
     @BeforeEach
     void setUp() throws IOException {
         jsoup = mockStatic(Jsoup.class);
-        var videoDownloader = mock(RedditProperties.VideoDownloader.class);
+        var videoDownloaderProperties = new RedditProperties.VideoDownloader(
+                URI.create(VIDEO_DOWNLOADER_URI),
+                CSS_SELECTOR
+        );
         var connection = mock(Connection.class);
         var document = mock(Document.class);
 
         when(redditProperties.userAgent()).thenReturn(USER_AGENT);
-        when(redditProperties.videoDownloader()).thenReturn(videoDownloader);
-        when(videoDownloader.uri()).thenReturn(URI.create(VIDEO_DOWNLOADER_URI));
-        when(videoDownloader.cssSelector()).thenReturn(CSS_SELECTOR);
+        when(redditProperties.videoDownloader()).thenReturn(videoDownloaderProperties);
         when(link.permalink()).thenReturn(URI.create(PERMALINK).toURL());
         jsoup.when(() -> Jsoup.connect(VIDEO_DOWNLOADER_URI + "?url=" + PERMALINK)).thenReturn(connection);
         when(connection.header(HttpHeaders.USER_AGENT, USER_AGENT)).thenReturn(connection);

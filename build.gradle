@@ -86,3 +86,11 @@ compileJava {
             '-Amapstruct.defaultInjectionStrategy=constructor',
     ]
 }
+
+sonar {
+    properties {
+        property "sonar.projectKey", "yvasyliev_reddit-telegram-forwarder"
+        property "sonar.organization", "yvasyliev"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
