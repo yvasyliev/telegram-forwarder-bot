@@ -22,7 +22,8 @@ jobs:
       - name: Build and Test with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew test bootJar --scan
+          ./gradlew build --scan
+          ./gradlew test bootJar
 
       - name: Setup SSH
         uses: ./.github/actions/setup-ssh
