@@ -32,20 +32,29 @@ jobs:
 
       - name: Deploy to remote server
         env:
-          PRINT_BOOT_JAR_NAME: |
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PRINT_TASKS: |
             allprojects {
               task printBootJarName {
                 doLast {
                   println bootJar.archiveFileName.get()
                 }
               }
+            
+              task printVersion {
+                doLast {
+                  println project.version
+                }
+              }
             }
         run: |
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
-          echo "$PRINT_BOOT_JAR_NAME" > print-bootjar.gradle
-          BOOT_JAR_NAME=$(./gradlew -I print-bootjar.gradle -q printBootJarName)
+          echo "PRINT_TASKS" > print-tasks.gradle
+          BOOT_JAR_NAME=$(./gradlew -I print-tasks.gradle -q printBootJarName)
           scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln -s ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
+          VERSION=$(./gradlew -I print-tasks.gradle -q printVersion)
+          gh release create "v$VERSION" "build/libs/$BOOT_JAR_NAME" --title "v$VERSION" --generate-notes     
 
   restart-service:
     needs: release
