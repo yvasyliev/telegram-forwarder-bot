@@ -30,7 +30,7 @@ jobs:
           ssh_key: ${{ secrets.SSH_KEY }}
           ssh_host: ${{ secrets.SSH_HOST }}
 
-      - name: Deploy to remote server
+      - name: Deploy to remote server and create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PRINT_TASKS: |
@@ -49,7 +49,7 @@ jobs:
             }
         run: |
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
-          echo "PRINT_TASKS" > print-tasks.gradle
+          echo "$PRINT_TASKS" > print-tasks.gradle
           BOOT_JAR_NAME=$(./gradlew -I print-tasks.gradle -q printBootJarName)
           scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ln -s ${{ secrets.SSH_WORKING_DIR }}/$BOOT_JAR_NAME ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
