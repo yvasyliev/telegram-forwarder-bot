@@ -48,7 +48,7 @@ jobs:
               }
             }
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
           echo "$PRINT_TASKS" > print-tasks.gradle
           BOOT_JAR_NAME=$(./gradlew -I print-tasks.gradle -q printBootJarName)
           scp build/libs/$BOOT_JAR_NAME ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_WORKING_DIR }}
