@@ -25,13 +25,19 @@ jobs:
           ssh_key: ${{ secrets.SSH_KEY }}
           ssh_host: ${{ secrets.SSH_HOST }}
 
-      - name: Deploy to remote server and create GitHub release
+      - name: Deploy to remote server
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JAR_ALIAS_PATH: ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar
           REMOTE: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
         run: |
-          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "rm ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar || true"
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "rm $JAR_ALIAS_PATH || true"
           scp ${{ steps.build.outputs.jar-path }} $REMOTE:${{ secrets.SSH_WORKING_DIR }}
-          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/${{ steps.build.outputs.jar-name }} ${{ secrets.SSH_WORKING_DIR }}/telegram-forwarder-bot-latest.jar"
-          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "sudo systemctl restart ${{ secrets.SERVICE_NAME }}"
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE 
+          ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/${{ steps.build.outputs.jar-name }} $JAR_ALIAS_PATH
+          sudo systemctl restart ${{ secrets.SERVICE_NAME }}
+
+      - name: Create GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           gh release create "v${{ steps.build.outputs.version }}" "${{ steps.build.outputs.jar-path }}" --title "v${{ steps.build.outputs.version }}" --generate-notes
