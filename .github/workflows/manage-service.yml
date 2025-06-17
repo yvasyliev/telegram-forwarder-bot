@@ -18,7 +18,6 @@ on:
     inputs:
       action:
         description: 'Action to perform'
-        required: true
         default: 'restart'
         type: string
 
