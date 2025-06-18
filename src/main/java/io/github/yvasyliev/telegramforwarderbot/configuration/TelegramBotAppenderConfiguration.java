@@ -1,6 +1,5 @@
 package io.github.yvasyliev.telegramforwarderbot.configuration;
 
-import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.filter.ThresholdFilter;
@@ -10,6 +9,7 @@ import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.filter.Filter;
 import io.github.yvasyliev.telegramforwarderbot.appender.TelegramBotAppender;
 import io.github.yvasyliev.telegramforwarderbot.service.TelegramTemplateEngine;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

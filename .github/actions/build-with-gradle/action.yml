@@ -1,0 +1,69 @@
+name: Build with Gradle
+
+description: Builds the project with Gradle
+
+inputs:
+  sonar-token:
+    description: The SonarQube token for analysis
+    required: true
+
+outputs:
+  jar-path:
+    description: The path to the generated JAR file
+    value: ${{ steps.get-variables.outputs.jar_path }}
+  jar-name:
+    description: The name of the generated JAR file
+    value: ${{ steps.get-variables.outputs.jar_name }}
+  version:
+    description: The version of the project
+    value: ${{ steps.get-variables.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Build with Gradle
+      env:
+        SONAR_TOKEN: ${{ inputs.sonar-token }}
+      run: |
+        chmod +x ./gradlew
+        ./gradlew build sonar
+      shell: bash
+
+    - name: Get variables
+      id: get-variables
+      env:
+        INIT_SCRIPT: |
+          allprojects {
+            tasks.register('printBootJarPath') {
+              doLast {
+                println project.relativePath(bootJar.archiveFile.get().asFile)
+              }
+            }
+          
+            tasks.register('printBootJarName') {
+              doLast {
+                println bootJar.archiveFileName.get()
+              }
+            }
+          
+            tasks.register('printVersion') {
+              doLast {
+                println project.version
+              }
+            }
+          }
+      run: |
+        echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
+        echo "jar-path=$(./gradlew --quiet printBootJarPath)" >> $GITHUB_OUTPUT
+        echo "jar-name=$(./gradlew --quiet printBootJarName)" >> $GITHUB_OUTPUT
+        echo "version=$(./gradlew --quiet printVersion)" >> $GITHUB_OUTPUT
+      shell: bash

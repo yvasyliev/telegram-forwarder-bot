@@ -61,7 +61,7 @@ class TelegramForwarderBotTest {
                 .parseMode(ParseMode.HTML)
                 .build();
 
-        when(templateEngine.process(eq("shutdown"))).thenReturn(text);
+        when(templateEngine.process("shutdown")).thenReturn(text);
 
         bot.shutdown();
 

@@ -1,0 +1,31 @@
+name: Setup SSH
+
+description: Sets up SSH keys and known_hosts
+
+inputs:
+  ssh_key:
+    required: true
+    description: SSH private key
+  ssh_host:
+    required: true
+    description: SSH host
+
+outputs:
+  ssh-key-path:
+    description: The path to the SSH private key
+    value: ${{ steps.setup-ssh.outputs.ssh-key-path }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup SSH
+      id: setup-ssh
+      env:
+        SSH_KEY_PATH: ~/.ssh/id_ed25519
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ inputs.ssh_key }}" > $SSH_KEY_PATH
+        chmod 600 $SSH_KEY_PATH
+        ssh-keyscan -H ${{ inputs.ssh_host }} >> ~/.ssh/known_hosts
+        echo "ssh-key-path=$SSH_KEY_PATH" >> $GITHUB_OUTPUT
+      shell: bash

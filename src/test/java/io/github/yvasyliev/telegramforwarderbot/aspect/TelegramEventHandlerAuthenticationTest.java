@@ -89,7 +89,9 @@ class TelegramEventHandlerAuthenticationTest {
     class AnonymousAuthenticationTests {
         private static final org.springframework.security.core.userdetails.User INTERNAL_USER =
                 new org.springframework.security.core.userdetails.User(
-                        String.valueOf(USER_ID), "{noop}", AuthorityUtils.createAuthorityList("ROLE_USER")
+                        String.valueOf(USER_ID),
+                        AuthUtils.DEFAULT_PASSWORD,
+                        AuthorityUtils.createAuthorityList("ROLE_USER")
                 );
         private static final Authentication EXPECTED_AUTHENTICATION = new AnonymousAuthenticationToken(
                 INTERNAL_USER.getUsername(), INTERNAL_USER, INTERNAL_USER.getAuthorities()

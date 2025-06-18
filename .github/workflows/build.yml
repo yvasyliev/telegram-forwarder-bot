@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build with Gradle
+        uses: ./.github/actions/build-with-gradle
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
