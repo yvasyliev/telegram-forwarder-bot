@@ -11,10 +11,6 @@
         <property name="fileNamePattern" value="[\\/]\.idea[\\/]|.*\.pid|gradlew(\.bat)?"/>
     </module>
 
-    <!--    <module name="BeforeExecutionExclusionFileFilter">-->
-    <!--        <property name="fileNamePattern" value="^(?!.*src).*"/>-->
-    <!--    </module>-->
-
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
     <module name="JavadocPackage"/>
@@ -42,8 +38,8 @@
                             org.mockito.ArgumentMatchers.*"/>
         </module>
         <module name="CatchParameterName"/>
-        <!--                <module name="ClassDataAbstractionCoupling"/>-->
-        <!--                <module name="ClassFanOutComplexity"/>-->
+        <module name="ClassDataAbstractionCoupling"/>
+        <module name="ClassFanOutComplexity"/>
         <module name="CommentsIndentation"/>
         <module name="ConstantName"/>
         <module name="ConstructorsDeclarationGrouping"/>

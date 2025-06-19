@@ -8,4 +8,6 @@
     <suppress checks="LineLength"
               files="README.md|src[/\\]main[/\\]resources[/\\]templates[/\\]\w+\.html|.*\.yml|libs\.versions\.toml"/>
     <!-- TODO: remove README.md suppression when the README.md is updated -->
+    <suppress checks="ClassDataAbstractionCoupling|ClassFanOutComplexity"
+              files="src[/\\]main[/\\]java[/\\]io[/\\]github[/\\]yvasyliev[/\\]telegramforwarderbot[/\\]configuration"/>
 </suppressions>
