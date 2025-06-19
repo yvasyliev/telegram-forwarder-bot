@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
-import org.telegram.telegrambots.meta.api.objects.media.InputMediaAnimation;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
@@ -73,15 +72,11 @@ public class MediaGroupSender {
             boolean hasSpoiler
     ) {
         return switch (type) {
-            case ANIMATION -> InputMediaAnimation.builder()
+            case ANIMATION, VIDEO -> InputMediaVideo.builder()
                     .media(inputStream, filename)
                     .hasSpoiler(hasSpoiler)
                     .build();
             case PHOTO -> InputMediaPhoto.builder()
-                    .media(inputStream, filename)
-                    .hasSpoiler(hasSpoiler)
-                    .build();
-            case VIDEO -> InputMediaVideo.builder()
                     .media(inputStream, filename)
                     .hasSpoiler(hasSpoiler)
                     .build();

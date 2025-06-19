@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
-import org.telegram.telegrambots.meta.api.objects.media.InputMediaAnimation;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
@@ -82,7 +81,7 @@ class MediaGroupSenderTest {
             var animationInputStream = createInputStream();
             var photoInputStream = createInputStream();
             var videoInputStream = createInputStream();
-            var inputMediaAnimation = InputMediaAnimation.builder()
+            var inputMediaAnimationVideo = InputMediaVideo.builder()
                     .media(animationInputStream, animationFilename)
                     .caption(CAPTION)
                     .hasSpoiler(HAS_SPOILER)
@@ -97,7 +96,7 @@ class MediaGroupSenderTest {
                     .build();
             sendMediaGroup = new SendMediaGroup(
                     String.valueOf(ADMIN_ID),
-                    List.of(inputMediaAnimation, inputMediaPhoto, inputMediaVideo)
+                    List.of(inputMediaAnimationVideo, inputMediaPhoto, inputMediaVideo)
             );
 
             inputMedias.add(createInputMediaDTO(InputMediaDTO.Type.ANIMATION, animationInputStream, animationFilename));
