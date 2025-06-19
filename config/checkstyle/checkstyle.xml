@@ -4,7 +4,7 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="SuppressionFilter">
-        <property name="file" value="config/checkstyle/checkstyle-suppressions.xml"/>
+        <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
     </module>
 
     <module name="BeforeExecutionExclusionFileFilter">
@@ -23,7 +23,21 @@
         <module name="AbstractClassName"/>
         <module name="AnnotationUseStyle"/>
         <module name="ArrayTypeStyle"/>
-        <module name="AtclauseOrder"/>
+        <module name="AtclauseOrder">
+            <property name="tagOrder"
+                      value="@deprecated,
+                            @exception,
+                            @param,
+                            @return,
+                            @see,
+                            @serial,
+                            @serialData,
+                            @serialField,
+                            @throws,
+                            @author,
+                            @version,
+                            @since"/>
+        </module>
         <module name="AvoidNestedBlocks">
             <property name="allowInSwitchCase" value="true"/>
         </module>
@@ -96,7 +110,7 @@
         <module name="JavadocVariable">
             <property name="accessModifiers" value="public"/>
         </module>
-        <!--        <module name="LambdaBodyLength"/>-->
+        <module name="LambdaBodyLength"/>
         <module name="LambdaParameterName"/>
         <module name="LeftCurly">
             <property name="ignoreEnums" value="false"/>
@@ -173,22 +187,10 @@
         <module name="VisibilityModifier"/>
         <module name="WhenShouldBeUsed"/>
         <module name="WhitespaceAfter"/>
-        <!--        <module name="WhitespaceAround">-->
-        <!--            <property name="allowEmptyLambdas" value="true"/>-->
-        <!--            <property name="allowEmptyMethods" value="true"/>-->
-        <!--            <property name="allowEmptyTypes" value="true"/>-->
-        <!--        </module>-->
-        <!--        <module name="WriteTag">-->
-        <!--            <property name="tag" value="@author"/>-->
-        <!--            <property name="tagSeverity" value="error"/>-->
-        <!--        </module>-->
-        <!--        <module name="WriteTag">-->
-        <!--            <property name="tag" value="@since"/>-->
-        <!--            <property name="tagSeverity" value="error"/>-->
-        <!--        </module>-->
-        <!--        <module name="WriteTag">-->
-        <!--            <property name="tag" value="@version"/>-->
-        <!--            <property name="tagSeverity" value="error"/>-->
-        <!--        </module>-->
+        <module name="WhitespaceAround">
+            <property name="allowEmptyLambdas" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+        </module>
     </module>
 </module>

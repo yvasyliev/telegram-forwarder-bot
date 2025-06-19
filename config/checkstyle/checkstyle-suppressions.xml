@@ -3,8 +3,9 @@
         "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
         "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 <suppressions>
-    <suppress checks="JavadocPackage|MagicNumber|MultipleStringLiterals|VariableDeclarationUsageDistance"
-              files="[/\\]test[/\\]"/>
+    <suppress
+            checks="JavadocPackage|MagicNumber|MultipleStringLiterals|VariableDeclarationUsageDistance|LambdaBodyLength"
+            files="[/\\]test[/\\]"/>
     <suppress checks="LineLength"
               files="README.md|src[/\\]main[/\\]resources[/\\]templates[/\\]\w+\.html|.*\.yml|libs\.versions\.toml"/>
     <!-- TODO: remove README.md suppression when the README.md is updated -->
