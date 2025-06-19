@@ -12,6 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+/**
+ * Aspect for sending responses to callback queries in Telegram.
+ * It answers the callback query with a predefined text based on the command.
+ */
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -20,8 +24,15 @@ public class CallbackQueryResponseSender {
     private final TelegramProperties telegramProperties;
     private final TelegramClient telegramClient;
 
-    @Before("io.github.yvasyliev.telegramforwarderbot.util.Pointcuts.executeCallbackQueryCommand() && args" +
-            "(callbackQuery, callbackData)")
+    /**
+     * Sends an answer to a callback query.
+     *
+     * @param callbackQuery the callback query to answer
+     * @param callbackData  the data associated with the callback command
+     * @throws TelegramApiException if there is an error sending the answer
+     */
+    @Before("io.github.yvasyliev.telegramforwarderbot.util.Pointcuts.executeCallbackQueryCommand() && args"
+            + "(callbackQuery, callbackData)")
     public void answerCallbackQuery(
             CallbackQuery callbackQuery,
             AbstractCommandCallbackDataDTO callbackData

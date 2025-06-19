@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RedditInstantPropertyServiceTest {
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<Arguments>> testGetLastCreated = () -> {
         var now = Instant.now();
 

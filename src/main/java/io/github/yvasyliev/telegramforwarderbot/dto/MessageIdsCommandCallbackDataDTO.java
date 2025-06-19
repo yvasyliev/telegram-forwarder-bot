@@ -7,6 +7,10 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+/**
+ * DTO for command callback data containing a list of message IDs.
+ * This class is used to handle callbacks that involve multiple messages.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonSerialize(converter = MessageIdsCallbackDataSerializeConverter.class)

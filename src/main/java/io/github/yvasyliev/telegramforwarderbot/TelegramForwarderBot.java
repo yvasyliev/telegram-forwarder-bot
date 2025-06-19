@@ -15,6 +15,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import org.thymeleaf.context.Context;
 
+/**
+ * Telegram bot that forwards messages and handles updates.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class TelegramForwarderBot implements SpringLongPollingBot {
@@ -25,6 +28,11 @@ public class TelegramForwarderBot implements SpringLongPollingBot {
     private final TelegramTemplateEngine templateEngine;
     private final TelegramClient telegramClient;
 
+    /**
+     * Initializes the bot by sending a message to the admin chat indicating that the bot is running.
+     *
+     * @throws TelegramApiException if an error occurs while sending the message
+     */
     @PostConstruct
     public void init() throws TelegramApiException {
         var context = new Context();
@@ -38,6 +46,11 @@ public class TelegramForwarderBot implements SpringLongPollingBot {
         telegramClient.execute(sendMessage);
     }
 
+    /**
+     * Shuts down the bot by sending a shutdown message to the admin chat.
+     *
+     * @throws TelegramApiException if an error occurs while sending the shutdown message
+     */
     @PreDestroy
     public void shutdown() throws TelegramApiException {
         var sendMessage = SendMessage.builder()

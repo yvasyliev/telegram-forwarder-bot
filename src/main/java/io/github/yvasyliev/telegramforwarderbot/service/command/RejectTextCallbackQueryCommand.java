@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
+/**
+ * Rejects a text post by removing caption from the approved posts.
+ */
 @Service("/rejecttext")
 @RequiredArgsConstructor
 public class RejectTextCallbackQueryCommand implements PostControlsCallbackQueryCommand {

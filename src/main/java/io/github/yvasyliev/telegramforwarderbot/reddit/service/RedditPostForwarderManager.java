@@ -14,6 +14,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+/**
+ * Manages the forwarding of Reddit posts based on their type and properties.
+ * It retrieves new posts from a specified subreddit and forwards them using appropriate {@link Forwarder} instances.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

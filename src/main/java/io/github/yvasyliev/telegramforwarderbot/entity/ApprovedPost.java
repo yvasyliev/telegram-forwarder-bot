@@ -18,6 +18,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * Represents an approved post in the system.
+ * Contains a list of message IDs, a flag indicating whether to remove the caption,
+ * and the timestamp when the post was approved.
+ */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "approved_posts")

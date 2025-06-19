@@ -12,11 +12,21 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
+/**
+ * Service for downloading videos from Reddit links.
+ */
 @Service
 @RequiredArgsConstructor
 public class VideoDownloader {
     private final RedditProperties redditProperties;
 
+    /**
+     * Downloads the video from the given Reddit link.
+     *
+     * @param link the Reddit link containing the video
+     * @return the {@link URL} of the downloaded video
+     * @throws IOException if an error occurs while downloading the video
+     */
     public URL getVideoDownloadUrl(Link link) throws IOException {
         var url = UriComponentsBuilder.fromUri(redditProperties.videoDownloader().uri())
                 .queryParam("url", link.permalink())

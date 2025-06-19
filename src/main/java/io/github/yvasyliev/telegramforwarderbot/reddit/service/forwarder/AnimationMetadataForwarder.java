@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+/**
+ * Forwards animation metadata.
+ */
 @Service
 @RequiredArgsConstructor
 public class AnimationMetadataForwarder implements MetadataForwarder {

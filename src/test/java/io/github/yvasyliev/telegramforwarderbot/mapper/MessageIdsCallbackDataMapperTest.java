@@ -32,6 +32,7 @@ class MessageIdsCallbackDataMapperTest {
                 setMessageCount(5);
                 setCommand(COMMAND);
             }};
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<Arguments>> testMapMessageIdsCommandCallbackDataDTO = () -> {
         var callbackData = new MessageIdsCommandCallbackDataDTO();
         var expected = new MessageIdsTelegramCommandCallbackDataDTO();
@@ -46,10 +47,12 @@ class MessageIdsCallbackDataMapperTest {
                 arguments(callbackData, expected)
         );
     };
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<Arguments>> testMapMessageIdsTelegramCommandCallbackDataDTO = () -> Stream.of(
             arguments(null, null),
             arguments(MESSAGE_IDS_TELEGRAM_COMMAND_CALLBACK_DATA_DTO, MESSAGE_IDS_COMMAND_CALLBACK_DATA_DTO)
     );
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<List<String>>> testGetSize =
             () -> Stream.of(List.of("a", "b", "c", "d"), List.of(), null);
 

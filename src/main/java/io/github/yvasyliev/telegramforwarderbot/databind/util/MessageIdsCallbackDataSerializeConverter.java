@@ -6,6 +6,11 @@ import io.github.yvasyliev.telegramforwarderbot.dto.MessageIdsTelegramCommandCal
 import io.github.yvasyliev.telegramforwarderbot.mapper.MessageIdsCallbackDataMapper;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Converter for serializing {@link MessageIdsCommandCallbackDataDTO} to
+ * {@link MessageIdsTelegramCommandCallbackDataDTO}.
+ * This converter uses a mapper to perform the conversion.
+ */
 @RequiredArgsConstructor
 public class MessageIdsCallbackDataSerializeConverter
         extends StdConverter<MessageIdsCommandCallbackDataDTO, MessageIdsTelegramCommandCallbackDataDTO> {

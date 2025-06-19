@@ -14,12 +14,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import org.thymeleaf.context.Context;
 
+/**
+ * Appender that sends log messages to a Telegram chat.
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class TelegramBotAppender extends AppenderBase<ILoggingEvent> {
-    private static final String FORBIDDEN_LOG_MESSAGE = "Send /start command to the bot in Telegram to allow it to " +
-            "send log messages to you, or provide logging.telegram-bot-appender.enabled=false property to disable " +
-            "bot appender.";
+    private static final String FORBIDDEN_LOG_MESSAGE = "Send /start command to the bot in Telegram to allow it to "
+            + "send log messages to you, or provide logging.telegram-bot-appender.enabled=false property to disable "
+            + "bot appender.";
     private final TelegramClient telegramClient;
     private final TelegramTemplateEngine templateEngine;
     private final long adminId;
