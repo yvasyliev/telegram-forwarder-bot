@@ -3,7 +3,7 @@
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in this project, please report it using the
-[Report a Vulnerability](security/advisories/new) tab on GitHub.
+[Report a Vulnerability](https://github.com/yvasyliev/telegram-forwarder-bot/security/advisories/new) tab on GitHub.
 
 Do **not** disclose security issues publicly until they have been reviewed and addressed.
 
