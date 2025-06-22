@@ -3,14 +3,14 @@
 A Spring Boot-based Telegram bot that forwards posts from external sources (e.g., Reddit) to a Telegram channel.
 Currently, the bot can only forward posts from a single subreddit.
 
-## Requirements
+## 📋 Requirements
 
 * Java 21
 * A [Reddit](https://www.reddit.com/) account.
 * A [Telegram](https://telegram.org/) account.
 * A [Telegram Channel](https://telegram.org/tour/channels) to forward posts to.
 
-## Quick Start
+## 🚀 Quick Start
 
 1. Go to https://www.reddit.com/prefs/apps and create an app.
 
@@ -38,12 +38,12 @@ Currently, the bot can only forward posts from a single subreddit.
    java -jar $PATH_TO_JAR_FILE
    ```
 
-## Application Properties
+## ⚙️ Application Properties
 
 The bot is built with Spring Boot and is configurable with the application properties like a regular Spring Boot
 application. It's recommended to store any secrets/tokens in environment variables.
 
-### Mandatory Properties
+### 🔒 Mandatory Properties
 
 Without these properties, the bot will not start:
 
@@ -58,7 +58,7 @@ Without these properties, the bot will not start:
 * `telegram.channel-username`: The username (with `@` prefix!) or the ID of the Telegram channel to forward posts to.
   Example: `@my_channel` or `-1001234567890`.
 
-### Optional Properties
+### 🧩 Optional Properties
 
 You can override the default values of these properties:
 
@@ -75,7 +75,7 @@ You can override the default values of these properties:
 
 Check the [application.yml](src/main/resources/application.yml) for even more configuration options.
 
-## Building from Source
+## 🛠️ Building from Source
 
 To build the bot from source, you need to have JDK 21 installed. You can use the following commands to build the bot
 (assuming you have cloned the repository and are in the project root directory):
@@ -94,7 +94,7 @@ To build the bot from source, you need to have JDK 21 installed. You can use the
 
 The command will compile the code, run tests, and create an executable JAR file in the `build/libs` directory.
 
-## Features
+## ✨ Features
 
 * The bot sends posts to the admin user for moderation before forwarding them to the channel.
 * The admin user can manage the posts by interacting with the inline buttons sent by the bot.
@@ -103,15 +103,15 @@ The command will compile the code, run tests, and create an executable JAR file 
     * Approve the post, but remove the caption.
     * Reject the post.
 * Only approved posts are forwarded to the Telegram channel.
-* The bot uses Spring Security features to prevent from unauthorized command execution. Only the admin user can `/stop`
-  the bot.
+* The bot uses Spring Security features to prevent unauthorized command execution. Only the admin user can `/stop` the
+  bot.
 * The bot stores the state of forwarded posts in an H2 database, so it can be restarted without losing the state. By
   default,
   the database is stored in the `data.mv.db` file next to the JAR file.
 * The bot supports logging to a Telegram chat, so you can receive logs and errors directly in Telegram.
 * The bot sends notifications to the admin user every time it starts or stops.
 
-### Bot Commands
+### 💬 Bot Commands
 
 | Command  | Description                           |
 |:--------:|:--------------------------------------|
@@ -119,7 +119,13 @@ The command will compile the code, run tests, and create an executable JAR file 
 | `/start` | The same as `/help`.                  |
 | `/stop`  | Stops the bot.                        |
 
-## Limitations
+### 🖼️ Screenshots
+
+![start](assets/start.jpg) ![new](assets/new.jpg) ![approve](assets/approved.jpg)
+![text-rejected](assets/text-rejected.jpg) ![rejected](assets/rejected.jpg) ![stop](assets/stop.jpg)
+![channel](assets/channel.jpg)
+
+## ⚠️ Limitations
 
 * The bot currently supports only one subreddit.
 * The bot does not support forwarding posts of all types (e.g., it does not support forwarding polls).
@@ -127,19 +133,24 @@ The command will compile the code, run tests, and create an executable JAR file 
 * Only one admin user can be configured for moderation.
 * The bot takes up to 60 seconds to shut down gracefully. The bot may notify you that it has stopped after the `/stop`
   command, but the Java process will actually continue running for a few seconds more, so please be patient and wait
-  when the process exits with the code `0`.
+  until the process exits with the code `0`.
 
-## Long-Term Plans
+## 🗺️ Long-Term Plans
 
 * Support X (Twitter) and Instagram as external sources.
 * Select medias to forward from a media group (e.g., forward only first two images from a group of 10 images) by the
   inline buttons.
 
-## Getting Help
+## 🆘 Getting Help
 
-If you have any questions, issues or suggestions, feel free check the
+If you have any questions, issues or suggestions, feel free to check the
 [Issues](https://github.com/yvasyliev/telegram-forwarder-bot/issues) section of the repository or create a new issue.
 
-## License
+## 🤝 Contributing
+
+We welcome contributions of any kinds! Please read our [contribution guidelines](.github/CONTRIBUTING.md) before
+submitting a pull request.
+
+## ⚖️ License
 
 This project is licensed under the [MIT License](https://opensource.org/license/mit).

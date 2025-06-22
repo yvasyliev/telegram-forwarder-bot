@@ -269,12 +269,10 @@ public record Link(
     }
 
     public record FlairRichtext(
-            @JsonProperty("a") String emoji, @JsonProperty("u") URL url, @JsonProperty("t") Type type
+            @JsonProperty("a") String emoji,
+            @JsonProperty("u") URL url,
+            @JsonProperty("t") String type
     ) {
-        public enum Type {
-            @JsonProperty("emoji") EMOJI,
-            @JsonProperty("test") TEXT
-        }
     }
 
     public record MediaEmbed(
