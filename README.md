@@ -1,117 +1,164 @@
-![reddit-telegram-forwarder-logo](assets/reddit-telegram-forwarder-logo.png)
+# 🤖 Telegram Forwarder Bot
 
-# Reddit-Telegram Forwarder
+A Spring Boot-based Telegram bot that forwards posts from external sources (e.g., Reddit) to a Telegram channel.
+Currently, the bot can only forward posts from a single subreddit.
 
-Spring Boot-based Java application to forward Reddit posts to Telegram channel.
+## 📋 Requirements
 
-# Requirements
+* Java 21
+* A [Reddit](https://www.reddit.com/) account.
+* A [Telegram](https://telegram.org/) account.
+* A [Telegram Channel](https://telegram.org/tour/channels) to forward posts to.
 
-- `Java 21`
-- `Maven`
-- [Reddit](https://www.reddit.com/login/) profile
-- [Telegram](https://web.telegram.org/a/) profile
-- Telegram channel
-- A chat connected to your Telegram channel
-
-# Quickstart
+## 🚀 Quick Start
 
 1. Go to https://www.reddit.com/prefs/apps and create an app.
-    * Application type must be `script`.
 
-      ![create-reddit-app](assets/create-reddit-app.gif)
-2. Create Telegram Bot. You'll need a bot token.
-    * [How Do I Create a Bot?](https://core.telegram.org/bots#how--o-i-create-a-bot)
-3. Get the app.
-    * Clone and build the project:
-        ```shell
-        git clone https://github.com/yvasyliev/reddit-telegram-repeater.git
-        mvn clean package -Dmaven.test.skip
-        cd target
-        ```
-    * Or
-      download [executable JAR](https://github.com/yvasyliev/reddit-telegram-forwarder/releases/latest/download/reddit-telegram-forwarder-3.2.7.jar)
-      from the [latest release](https://github.com/yvasyliev/reddit-telegram-forwarder/releases/latest).
-4. Run the app:
-   ```shell
-   java -jar reddit-telegram-forwarder-3.2.7.jar \
-   --reddit.client.id=${REDDIT_CLIENT_ID} \
-   --reddit.client.secret=${REDDIT_CLIENT_SECRET} \
-   --reddit.password=${REDDIT_PASSWORD} \
-   --reddit.subreddit=${SUBBREDDIT_NAME} \
-   --reddit.username=${REDDIT_USERNAME} \
-   --telegram.admin.id=${TELEGRAM_ADMIN_ID} \
-   --telegram.bot.token=${TELEGRAM_BOT_TOKEN} \
-   --telegram.bot.username=${TELEGRAM_BOT_USERNAME} \
-   --telegram.channel.id=${TELEGRAM_CHANNEL_ID} \
-   --telegram.chat.id=${TELEGRAM_CHAT_ID}
+    * `name`: Your app name.
+    * `type`: `script`.
+    * `redirect uri`: Any valid URL (e.g., your GitHub repository URL).
+    * Other fields are optional.
+
+2. Create a new Telegram bot using [BotFather](https://t.me/botfather) and get the bot token.
+
+    * [How Do I Create a Bot?](https://core.telegram.org/bots#how-do-i-create-a-bot)
+
+3. Add the bot to your Telegram channel as an administrator with the permission to post messages.
+
+4. **Important:** Send `/start` message to the bot in Telegram before running it for the first time.
+
+5. Download an executable JAR file from
+   the [latest release](https://github.com/yvasyliev/telegram-forwarder-bot/releases/latest).
+
+6. Provide the [mandatory application properties](#mandatory-properties).
+
+7. Run the bot:
+
+   ```bash
+   java -jar $PATH_TO_JAR_FILE
    ```
-    * Don't forget to replace `${...}` placeholders with correct values.
 
-# How it works
+## ⚙️ Application Properties
 
-This a console application built with `Spring Boot` (not Web!).
-There is a
-method [ScheduledPostManager#shareNewPosts](src/main/java/com/github/yvasyliev/service/telegram/ScheduledPostManager.java#L26)
-annotated with `@Scheduled`.
-This method retrieves subreddit new posts using [Reddit API](https://www.reddit.com/dev/api/) and forwards them to
-Telegram channel using [Telegram Bots API](https://core.telegram.org/bots/api).
-By default, `shareNewPosts()` is invoked once per minute, and it can be configured by environment variables (see [Application variables](#application-variables)).
+The bot is built with Spring Boot and is configurable with the application properties like a regular Spring Boot
+application. It's recommended to store any secrets/tokens in environment variables.
 
-If post author is in block list or the post is marked as NSFW, the post will be sent to admin for validation. Admin can
-either accept or reject posts.
+### 🔒 Mandatory Properties
 
-Block list is stored in `SQLite` database. All database configs and management are handled automatically
-by `Spring Boot Data`.
-No user actions required.
+Without these properties, the bot will not start:
 
-Additionally, this application runs
-a [Long Polling Bot](src/main/java/com/github/yvasyliev/bots/telegram/RedditTelegramForwarderBot.java) that helps you
-with application management.
-The bot can accept suggested user posts (see [Bot commands](#bot-commands)).
+* `reddit.subreddit`: The name of the subreddit to forward posts from without the `r/` prefix.
+* `reddit.username`: Your Reddit username without the `u/` prefix. Required to access the Reddit API.
+* `spring.security.oauth2.client.registration.reddit.client-id`: Your Reddit app client ID.
+* `spring.security.oauth2.client.registration.reddit.client-secret`: Your Reddit app client secret.
+* `telegram.admin-id`: Your Telegram user ID (not your username!). The bot will send you posts for moderation before
+  forwarding them to the channel, and important errors. Example: `390000000`.
+  [How to find your User ID in Telegram?](https://www.google.com/search?q=How+to+find+your+User+ID+in+Telegram%3F)
+* `telegram.bot.token`: Your Telegram bot token. Example: `123456789:ABCdefGhIJKlmnoPQRstuVWXyZ`.
+* `telegram.channel-username`: The username (with `@` prefix!) or the ID of the Telegram channel to forward posts to.
+  Example: `@my_channel` or `-1001234567890`.
 
-# Application variables
+### 🧩 Optional Properties
 
-As you noticed, the application relies on a set of variables.
-Since it's a `Spring Boot` project, these variables can be passed as command line arguments (see [Quickstart](#quickstart)), defined in [application.properties](src/main/resources/application.properties) or set
-globally as environment variables (see [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config)
-for more details).
+You can override the default values of these properties:
 
-|                   Variable                   | Required | Default value | Description                                                                                                                                                                                                                                               | Example                                          |
-|:--------------------------------------------:|:--------:|:-------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------|
-| `delayed.blocking.executor.delay.in.seconds` | `false`  |     `20`      | Delay in seconds used to postpone sending messages in order to avoid "too many requests" errors in Telegram.                                                                                                                                              | `20`                                             |
-|      `http.request.timeout.in.minutes`       | `false`  |      `2`      | Timeout in minutes applied to Reddit API call.                                                                                                                                                                                                            | `5`                                              | 
-|     `reddit.authors.blocked.by.default`      | `false`  |    `false`    | `true` - check Reddit autor against Block list. `false` - ignore Block list and ask admin to validate every post.                                                                                                                                         | `true`                                           |
-|              `reddit.client.id`              |  `true`  |       -       | Reddit `client_id`.                                                                                                                                                                                                                                       | `pW134F0XNuueG4W78x9uGA`                         |
-|            `reddit.client.secret`            |  `true`  |       -       | Reddit client `secret`.                                                                                                                                                                                                                                   | `fsdT6VkTgf1WMfSW6Pd5t4DRvfVueB`                 |
-|              `reddit.password`               |  `true`  |       -       | Reddit profile password.                                                                                                                                                                                                                                  | `ETD1fqx%cfk6odj#boj`                            |
-|              `reddit.subreddit`              |  `true`  |       -       | Subreddit name without `r/` prefix.                                                                                                                                                                                                                       | `cats`                                           |
-|              `reddit.username`               |  `true`  |       -       | Reddit profile username.                                                                                                                                                                                                                                  | `RedditProfileUsername000`                       |
-|             `telegram.admin.id`              |  `true`  |       -       | Telegram user ID (Telegram channel admin ID). Bot will send error logs directly to user. <ul><li>[How to find your User ID in Telegram?](https://www.google.com/search?q=How+to+find+your+User+ID+in+Telegram%3F)</li></ul>                               | `280531210`                                      |
-|           `telegram.bot.username`            |  `true`  |       -       | Telegram bot username.                                                                                                                                                                                                                                    | `SubredditForwarderBot`                          |
-|             `telegram.bot.token`             |  `true`  |       -       | Telegram bot token.                                                                                                                                                                                                                                       | `4336854599:BBFqVLRq9ixVdxORFWQgaSywzCfRo5-tBus` |
-|            `telegram.channel.id`             |  `true`  |       -       | Telegram channel ID. Subreddit posts will be sent to this channel. <ul><li>[How to get the channel ID](https://gist.github.com/mraaroncruz/e76d19f7d61d59419002db54030ebe35#new-improved-next-steps)</li></ul>                                            | `-1001572613876` or `@SubredditPostChannel`      |
-|              `telegram.chat.id`              |  `true`  |       -       | The ID of the chat where users can leave comments under posts. Bot will send additional photos to this chat if orginal subreddit post contains more than 10 images. <ul><li>[How to get chat ID](https://stackoverflow.com/a/69302407/21234935)</li></ul> | `-1003121089009` or `@SubbredditPostChannelChat` |
-| `telegram.schedule.posting.delay.in.minutes` | `false`  |      `1`      | How often (in minutes) the application should scan subreddit for new posts.                                                                                                                                                                               | `5`                                              |
-|     `telegram.schedule.posting.enabled`      | `false`  |    `true`     | Should application start forwarding right after startup or not. Can be paused/resumed via [Bot commands](#bot-commands).                                                                                                                                  | `false`                                          |
+* `logging.telegram-bot-appender.enabled`: Whether to enable the Telegram bot logging appender. If disabled, the bot
+  will not send any logs to the admin user. Default: `true`.
+* `logging.telegram-bot-appender.level`: The logging level for the Telegram bot logging appender. Defines the severity
+  of log statements that will be sent to the admin user. Default: `warn`.
+* `scheduler.post-forward.enabled`: Whether to forward posts from the external sources to the admin user for
+  moderation. Default: `true`.
+* `scheduler.post-forward.fixed-delay`: The fixed delay between post forwarding attempts. Defines how often the
+  bot checks for new posts to forward to the admin user. Default: `1m` (1 minute).
+* `scheduler.post-publisher.cron`: The Spring cron expression for the post publisher scheduler. Defines how often the
+  bot forwards approved posts to the Telegram channel. Default: `0 30 8-21 * * *` (every 60 minutes from 8:30 to 21:30).
 
-# Bot commands
+Check the [application.yml](src/main/resources/application.yml) for even more configuration options.
 
-There are two types of commands:
+## 🛠️ Building from Source
 
-- `user` - available for all users;
-- `admin` - available for admin only.
+To build the bot from source, you need to have JDK 21 installed. You can use the following commands to build the bot
+(assuming you have cloned the repository and are in the project root directory):
 
-|     Command      |  Type   | Description                                                                                                                                                                                                                                                                                         |
-|:----------------:|:-------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|  `/blockauthor`  | `admin` | Add Reddit user to Block list.                                                                                                                                                                                                                                                                      |
-|    `/cancel`     | `user`  | Cancel current command.                                                                                                                                                                                                                                                                             |
-| `/contactadmin`  | `user`  | Send message to admin.                                                                                                                                                                                                                                                                              |
-|     `/done`      | `user`  | Same as `/cancel`.                                                                                                                                                                                                                                                                                  |
-|  `/getblocked`   | `admin` | Show block list.                                                                                                                                                                                                                                                                                    |
-|     `/help`      | `user`  | Show list of commands.                                                                                                                                                                                                                                                                              |
-| `/pauseposting`  | `admin` | Pause posts forwarding.                                                                                                                                                                                                                                                                             |
-| `/resumeposting` | `admin` | Resume posts forwarding.                                                                                                                                                                                                                                                                            |
-|     `/start`     | `user`  | Same as `/help`.                                                                                                                                                                                                                                                                                    |
-|     `/stop`      | `admin` | Completely stop the application. <ul><li>You can start it again by executing `java -jar ...`.</li><li>It takes up to ~30 seconds to stop all the processes.</li><li>Some exceptions can be thrown because of interrupted threads or closed application context. It's fine to ignore them.</li></ul> |
-|  `/suggestpost`  | `user`  | Suggest a post to channel. The post will be sent to admin for validation.                                                                                                                                                                                                                           |
-| `/unblockauthor` | `admin` | Remove Reddit user from block list.                                                                                                                                                                                                                                                                 |
+* On Linux/macOS:
+
+  ```bash
+  ./gradlew build
+  ```
+
+* On Windows:
+
+  ```bash
+  gradlew.bat build
+  ```
+
+The command will compile the code, run tests, and create an executable JAR file in the `build/libs` directory.
+
+## ✨ Features
+
+* The bot sends posts to the admin user for moderation before forwarding them to the channel.
+* The admin user can manage the posts by interacting with the inline buttons sent by the bot.
+* For each post, the admin user can:
+    * Approve the post.
+    * Approve the post, but remove the caption.
+    * Reject the post.
+* Only approved posts are forwarded to the Telegram channel.
+* The bot uses Spring Security features to prevent unauthorized command execution. Only the admin user can `/stop` the
+  bot.
+* The bot stores the state of forwarded posts in an H2 database, so it can be restarted without losing the state. By
+  default,
+  the database is stored in the `data.mv.db` file next to the JAR file.
+* The bot supports logging to a Telegram chat, so you can receive logs and errors directly in Telegram.
+* The bot sends notifications to the admin user every time it starts or stops.
+
+### 💬 Bot Commands
+
+| Command  | Description                           |
+|:--------:|:--------------------------------------|
+| `/help`  | Sends the list of available commands. |
+| `/start` | The same as `/help`.                  |
+| `/stop`  | Stops the bot.                        |
+
+
+<details>
+<summary>🖼️ Screenshots</summary>
+
+<img alt="start" src="assets/start.jpg" width="250"/>
+<img alt="new" src="assets/new.jpg" width="250"/>
+<img alt="approved" src="assets/approved.jpg" width="250"/>
+<img alt="text-rejected" src="assets/text-rejected.jpg" width="250"/>
+<img alt="rejected" src="assets/rejected.jpg" width="250"/>
+<img alt="stop" src="assets/stop.jpg" width="250"/>
+<img alt="channel" src="assets/channel.jpg" width="250"/>
+
+</details>
+
+## ⚠️ Limitations
+
+* The bot currently supports only one subreddit.
+* The bot does not support forwarding posts of all types (e.g., it does not support forwarding polls).
+* Only one Telegram channel can be configured for forwarding posts.
+* Only one admin user can be configured for moderation.
+* The bot takes up to 60 seconds to shut down gracefully. The bot may notify you that it has stopped after the `/stop`
+  command, but the Java process will actually continue running for a few seconds more, so please be patient and wait
+  until the process exits with the code `0`.
+
+## 🗺️ Long-Term Plans
+
+* Support X (Twitter) and Instagram as external sources.
+* Select medias to forward from a media group (e.g., forward only first two images from a group of 10 images) by the
+  inline buttons.
+
+## 🆘 Getting Help
+
+If you have any questions, issues or suggestions, feel free to check the
+[Issues](https://github.com/yvasyliev/telegram-forwarder-bot/issues) section of the repository or create a new issue.
+
+## 🤝 Contributing
+
+We welcome contributions of any kinds! Please read our [contribution guidelines](.github/CONTRIBUTING.md) before
+submitting a pull request.
+
+## ⚖️ License
+
+This project is licensed under the [MIT License](https://opensource.org/license/mit).

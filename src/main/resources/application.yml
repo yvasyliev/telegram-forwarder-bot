@@ -13,8 +13,6 @@ reddit:
 spring:
   thymeleaf:
     enable-spring-el-compiler: true
-  config:
-    use-legacy-processing: true
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:./data

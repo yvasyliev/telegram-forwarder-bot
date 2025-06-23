@@ -602,23 +602,10 @@ public record Link(
      * @param type  the type of the flair (e.g., emoji, text)
      */
     public record FlairRichtext(
-            @JsonProperty("a") String emoji, @JsonProperty("u") URL url, @JsonProperty("t") Type type
+            @JsonProperty("a") String emoji,
+            @JsonProperty("u") URL url,
+            @JsonProperty("t") String type
     ) {
-        /**
-         * Represents the type of flair.
-         * This can be used to determine if the flair is an emoji or text.
-         */
-        public enum Type {
-            /**
-             * Represents an emoji flair.
-             */
-            @JsonProperty("emoji") EMOJI,
-
-            /**
-             * Represents a text flair.
-             */
-            @JsonProperty("test") TEXT
-        }
     }
 
     /**
