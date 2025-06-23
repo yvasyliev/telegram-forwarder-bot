@@ -27,7 +27,7 @@ runs:
     - name: Build with Gradle
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
-      run: ./gradlew build sonar
+      run: ./gradlew build sonar --scan
       shell: bash
 
     - name: Get variables
