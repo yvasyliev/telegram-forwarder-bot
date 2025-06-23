@@ -25,6 +25,9 @@ runs:
       run: |
         mkdir -p ~/.ssh
         echo "${{ inputs.ssh_key }}" > "$SSH_KEY_PATH"
+        cd ~/.ssh
+        pwd
+        ls
         chmod 600 "$SSH_KEY_PATH"
         ssh-keyscan -H ${{ inputs.ssh_host }} >> ~/.ssh/known_hosts
         echo "ssh-key-path=$SSH_KEY_PATH" >> $GITHUB_OUTPUT
