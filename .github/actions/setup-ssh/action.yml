@@ -21,7 +21,7 @@ runs:
     - name: Setup SSH
       id: setup-ssh
       env:
-        SSH_KEY_PATH: ~/.ssh/id_ed25519
+        SSH_KEY_PATH: $HOME/.ssh/id_ed25519
       run: |
         mkdir -p ~/.ssh
         echo "${{ inputs.ssh_key }}" > $SSH_KEY_PATH
