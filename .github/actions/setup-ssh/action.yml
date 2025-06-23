@@ -24,11 +24,11 @@ runs:
         SSH_KEY_PATH: ~/.ssh/id_ed25519
       run: |
         mkdir -p ~/.ssh
-        echo "${{ inputs.ssh_key }}" > "$SSH_KEY_PATH"
         cd ~/.ssh
         pwd
         ls
-        chmod 600 "$SSH_KEY_PATH"
+        echo "${{ inputs.ssh_key }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H ${{ inputs.ssh_host }} >> ~/.ssh/known_hosts
-        echo "ssh-key-path=$SSH_KEY_PATH" >> $GITHUB_OUTPUT
+        echo "ssh-key-path=~/.ssh/id_ed25519" >> $GITHUB_OUTPUT
       shell: bash
