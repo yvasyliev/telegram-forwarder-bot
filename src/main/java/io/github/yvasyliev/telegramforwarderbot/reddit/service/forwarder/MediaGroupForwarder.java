@@ -14,6 +14,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+/**
+ * Forwards media groups from Reddit links to Telegram.
+ * Handles both animated images and photos, forwarding them in groups
+ * according to the specified maximum size in the Telegram properties.
+ */
 @Service
 @RequiredArgsConstructor
 public class MediaGroupForwarder implements Forwarder {

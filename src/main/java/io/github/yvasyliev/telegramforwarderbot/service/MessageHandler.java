@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * Handles incoming Telegram messages and executes the corresponding command.
+ * It checks if the message is a command and retrieves the command name from the message entities.
+ * If the command is found, it executes the corresponding {@link MessageCommand}.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

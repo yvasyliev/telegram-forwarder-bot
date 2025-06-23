@@ -10,6 +10,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+/**
+ * Service for forwarding video links to Telegram.
+ */
 @Service
 @RequiredArgsConstructor
 public class VideoForwarder implements Forwarder {

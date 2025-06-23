@@ -44,6 +44,7 @@ class TelegramBotAppenderTest {
             .text(RENDERED)
             .parseMode(ParseMode.HTML)
             .build();
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<TelegramApiException>> shouldLogError = () -> {
         var response = mock(ApiResponse.class);
 

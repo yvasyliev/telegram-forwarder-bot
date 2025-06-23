@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.net.URL;
 
+/**
+ * Forwards image animations from Reddit links.
+ */
 @Service
 public class ImageAnimationForwarder extends AbstractAnimationForwarder {
     public ImageAnimationForwarder(AnimationSender animationSender) {

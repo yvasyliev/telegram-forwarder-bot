@@ -10,6 +10,9 @@ import org.thymeleaf.context.AbstractContext;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.expression.ThymeleafEvaluationContext;
 
+/**
+ * Service for processing Telegram templates using Thymeleaf.
+ */
 @Service
 @RequiredArgsConstructor
 public class TelegramTemplateEngine {
@@ -18,10 +21,24 @@ public class TelegramTemplateEngine {
     private final EvaluationContext evaluationContext;
     private final ITemplateEngine templateEngine;
 
+    /**
+     * Processes the given template with the empty context.
+     *
+     * @param template the template to process
+     * @return the processed template as a String
+     */
     public String process(String template) {
         return process(template, new Context());
     }
 
+    /**
+     * Processes the given template with the provided context.
+     * This method sets the Telegram properties and appender properties as variables in the context.
+     *
+     * @param template the template to process
+     * @param context  the context to use for processing
+     * @return the processed template as a String
+     */
     public String process(String template, AbstractContext context) {
         context.setVariable("telegramProperties", telegramProperties);
         context.setVariable("appenderProperties", appenderProperties);

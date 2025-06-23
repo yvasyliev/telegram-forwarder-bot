@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * Forwards links from Reddit to Telegram.
+ */
 @Service
 @RequiredArgsConstructor
 public class LinkForwarder implements Forwarder {

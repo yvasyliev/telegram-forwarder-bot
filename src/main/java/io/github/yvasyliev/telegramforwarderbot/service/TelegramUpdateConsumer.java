@@ -14,6 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * Service for consuming updates from Telegram and handling them accordingly.
+ * It processes incoming updates, such as messages and callback queries, and delegates
+ * the handling to the appropriate event handlers.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

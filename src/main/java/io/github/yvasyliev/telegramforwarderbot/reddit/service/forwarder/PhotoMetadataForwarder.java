@@ -11,6 +11,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+/**
+ * Forwards a photo from a Reddit link metadata to a Telegram chat.
+ */
 @Service
 @RequiredArgsConstructor
 public class PhotoMetadataForwarder implements MetadataForwarder {

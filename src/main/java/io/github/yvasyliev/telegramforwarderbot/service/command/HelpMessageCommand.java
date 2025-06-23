@@ -8,6 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+/**
+ * Command to send a help message to the user.
+ * This command is typically used to provide users with information on how to use the bot.
+ */
 @RequiredArgsConstructor
 public class HelpMessageCommand implements MessageCommand {
     private final TelegramTemplateEngine templateEngine;

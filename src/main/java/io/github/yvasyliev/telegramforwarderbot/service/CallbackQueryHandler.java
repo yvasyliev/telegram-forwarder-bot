@@ -10,6 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
+/**
+ * Handles incoming Telegram callback queries by mapping them to commands.
+ * It retrieves the command bean from the application context and executes it.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

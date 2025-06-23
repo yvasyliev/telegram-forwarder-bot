@@ -8,6 +8,11 @@ import io.github.yvasyliev.telegramforwarderbot.databind.util.RadixSerializeConv
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Data Transfer Object (DTO) for handling message IDs in Telegram command callbacks.
+ * This class extends the abstract class {@link AbstractTelegramCommandCallbackDataDTO}
+ * and includes fields for the first message ID and the count of messages.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public non-sealed class MessageIdsTelegramCommandCallbackDataDTO extends AbstractTelegramCommandCallbackDataDTO {

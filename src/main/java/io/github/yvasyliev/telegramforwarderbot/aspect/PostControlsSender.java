@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Aspect that sends a post control keyboard after sending a post or media group.
+ * It builds the keyboard buttons based on the configured post controls and sends it to the chat.
+ */
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -30,6 +34,11 @@ public class PostControlsSender {
     private final CallbackDataConverter callbackDataConverter;
     private final TelegramClient telegramClient;
 
+    /**
+     * After returning advice that sends a post control keyboard after sending a single post.
+     *
+     * @param message the {@link Message} that was sent
+     */
     @AfterReturning(
             pointcut = "io.github.yvasyliev.telegramforwarderbot.util.Pointcuts.sendPost()",
             returning = "message"
@@ -38,6 +47,11 @@ public class PostControlsSender {
         sendPostControlKeyboard(List.of(message));
     }
 
+    /**
+     * After returning advice that sends a post control keyboard after sending a media group.
+     *
+     * @param messages the {@link List} of {@link Message} that were sent
+     */
     @AfterReturning(
             pointcut = "io.github.yvasyliev.telegramforwarderbot.util.Pointcuts.sendMediaGroup()",
             returning = "messages"
