@@ -9,6 +9,12 @@ import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Converts a Reddit permalink to a URL.
+ *
+ * <p>
+ * This converter uses the base host from {@link RedditProperties} to construct the full URL.
+ */
 @RequiredArgsConstructor
 public class PermalinkDeserializerConverter extends StdConverter<String, URL> {
     private final RedditProperties redditProperties;

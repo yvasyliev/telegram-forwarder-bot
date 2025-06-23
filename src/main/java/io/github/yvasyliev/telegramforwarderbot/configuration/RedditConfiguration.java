@@ -22,9 +22,26 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Configuration class for setting up the Reddit service client.
+ *
+ * <p>
+ * This configuration uses OAuth2 for authentication and sets up a {@link RedditService} bean
+ * that can be used to interact with the Reddit API.
+ */
 @Configuration
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
 public class RedditConfiguration {
+    /**
+     * Creates a {@link RedditService} bean configured with OAuth2 client properties and
+     * a custom HTTP request interceptor.
+     *
+     * @param oAuth2ClientProperties  the OAuth2 client properties
+     * @param redditProperties        the Reddit properties containing API host and user agent
+     * @param objectMapper            the Jackson ObjectMapper for JSON serialization/deserialization
+     * @param boolIntArgumentResolver custom argument resolver for boolean to integer conversion
+     * @return a configured {@link RedditService} instance
+     */
     @Bean
     public RedditService redditService(
             OAuth2ClientProperties oAuth2ClientProperties,

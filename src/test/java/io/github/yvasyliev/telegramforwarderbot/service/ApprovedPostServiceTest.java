@@ -47,16 +47,19 @@ class ApprovedPostServiceTest {
     class SaveTests {
         private static final List<Integer> MESSAGE_IDS = List.of(1, 2, 3);
         private static final boolean REMOVE_CAPTION = true;
+        @SuppressWarnings("checkstyle:Indentation")
         private static final ApprovedPost APPROVED_POST = new ApprovedPost() {{
             setMessageIds(MESSAGE_IDS);
             setRemoveCaption(REMOVE_CAPTION);
         }};
+        @SuppressWarnings("checkstyle:Indentation")
         private static final ApprovedPost EXPECTED = new ApprovedPost() {{
             setId(123L);
             setMessageIds(MESSAGE_IDS);
             setRemoveCaption(REMOVE_CAPTION);
             setApprovedAt(Instant.now());
         }};
+        @SuppressWarnings("checkstyle:ConstantName")
         private static final Supplier<Stream<Optional<ApprovedPost>>> testSave = () -> {
             var post = new ApprovedPost();
 

@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 class RedditPostForwarderManagerTest {
     private static final String SUBREDDIT = "testSubreddit";
     private static final Instant CREATED = Instant.now();
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Exception[] shouldCatchCheckedException = {new IOException(), new TelegramApiException()};
     private PostForwarderManager forwarderManager;
     @Mock
@@ -173,34 +174,6 @@ class RedditPostForwarderManagerTest {
         verify(mediaGroupForwarder).forward(link);
     }
 
-    @Nested
-    class ShouldNotForwardTests {
-        @AfterEach
-        void tearDown() {
-            verifyNoInteractions(
-                    mediaGroupForwarder,
-                    videoForwarder,
-                    imageAnimationForwarder,
-                    photoForwarder,
-                    linkForwarder,
-                    videoAnimationForwarder
-            );
-        }
-
-        @Test
-        void testWhenNoForwarderFound() {
-            forwarderManager.forward();
-        }
-
-        @Test
-        void testWhenUnhandledPostHint() {
-            when(link.hasPostHint()).thenReturn(true);
-            when(link.postHint()).thenReturn(Link.PostHint.GALLERY);
-
-            forwarderManager.forward();
-        }
-    }
-
     private void shouldForwardImage(boolean hasGif, Forwarder forwarder) throws TelegramApiException, IOException {
         var preview = mock(Link.Preview.class);
         var image = mock(Link.Preview.Image.class);
@@ -234,5 +207,33 @@ class RedditPostForwarderManagerTest {
         forwarderManager.forward();
 
         verify(forwarder).forward(link);
+    }
+
+    @Nested
+    class ShouldNotForwardTests {
+        @AfterEach
+        void tearDown() {
+            verifyNoInteractions(
+                    mediaGroupForwarder,
+                    videoForwarder,
+                    imageAnimationForwarder,
+                    photoForwarder,
+                    linkForwarder,
+                    videoAnimationForwarder
+            );
+        }
+
+        @Test
+        void testWhenNoForwarderFound() {
+            forwarderManager.forward();
+        }
+
+        @Test
+        void testWhenUnhandledPostHint() {
+            when(link.hasPostHint()).thenReturn(true);
+            when(link.postHint()).thenReturn(Link.PostHint.GALLERY);
+
+            forwarderManager.forward();
+        }
     }
 }

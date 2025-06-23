@@ -24,6 +24,7 @@ class AuthUtilsTest {
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_USER = "ROLE_USER";
     private static final long USER_ID = 123;
+    @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<Arguments>> testIsAdmin = () -> Stream.of(
             arguments(ROLE_ADMIN, true),
             arguments(ROLE_USER, false)
@@ -46,7 +47,6 @@ class AuthUtilsTest {
             assertEquals(expected, actual);
         }
     }
-
 
     @Test
     void testCreateAdmin() {

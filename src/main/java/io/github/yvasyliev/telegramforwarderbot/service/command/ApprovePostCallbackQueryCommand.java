@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
+/**
+ * Approves a post by saving its message IDs.
+ */
 @Service("/approvepost")
 @RequiredArgsConstructor
 public class ApprovePostCallbackQueryCommand implements PostControlsCallbackQueryCommand {

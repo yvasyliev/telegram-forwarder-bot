@@ -12,12 +12,24 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.IOException;
 
+/**
+ * Service for sending video files to a Telegram chat.
+ */
 @Service
 @RequiredArgsConstructor
 public class VideoSender {
     private final TelegramProperties telegramProperties;
     private final TelegramClient telegramClient;
 
+    /**
+     * Sends a video file to the admin chat.
+     *
+     * @param video   the video file to send
+     * @param caption the caption for the video
+     * @return the sent message
+     * @throws IOException          if an error occurs while reading the video file
+     * @throws TelegramApiException if an error occurs while sending the video
+     */
     public Message sendVideo(InputFileDTO video, String caption) throws IOException, TelegramApiException {
         try (var inputStream = video.fileSupplier().get()) {
             var sendVideo = SendVideo.builder()

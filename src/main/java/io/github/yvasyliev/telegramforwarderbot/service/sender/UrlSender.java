@@ -13,21 +13,33 @@ import org.thymeleaf.context.Context;
 
 import java.net.URL;
 
+/**
+ * Service for sending URLs to a Telegram chat.
+ */
 @Service
 @RequiredArgsConstructor
 public class UrlSender {
+    private static final String URL = "url";
     private final TelegramProperties telegramProperties;
     private final TelegramTemplateEngine templateEngine;
     private final TelegramClient telegramClient;
 
+    /**
+     * Sends a message containing a URL to the admin chat.
+     *
+     * @param url     the URL to send
+     * @param message the message to accompany the URL
+     * @return the sent message
+     * @throws TelegramApiException if an error occurs while sending the message
+     */
     public Message sendUrl(URL url, String message) throws TelegramApiException {
         var context = new Context();
         context.setVariable("text", message);
-        context.setVariable("url", url);
+        context.setVariable(URL, url);
 
         var sendMessage = SendMessage.builder()
                 .chatId(telegramProperties.adminId())
-                .text(templateEngine.process("url", context))
+                .text(templateEngine.process(URL, context))
                 .parseMode(ParseMode.HTML)
                 .build();
         return telegramClient.execute(sendMessage);

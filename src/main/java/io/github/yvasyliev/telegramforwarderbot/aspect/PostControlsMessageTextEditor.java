@@ -14,6 +14,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+/**
+ * Aspect that edits the text of the post controls message after executing a callback query command.
+ * It updates the message text based on the command executed and handles specific Telegram API exceptions.
+ */
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -22,8 +26,14 @@ public class PostControlsMessageTextEditor {
     private final TelegramProperties telegramProperties;
     private final TelegramClient telegramClient;
 
-    @AfterReturning("io.github.yvasyliev.telegramforwarderbot.util.Pointcuts.executePostControlsCallbackQueryCommand" +
-            "() && args(callbackQuery, callbackData)")
+    /**
+     * After returning advice that edits the post controls message text after executing a callback query command.
+     *
+     * @param callbackQuery the callback query that triggered the command
+     * @param callbackData  the data associated with the command
+     */
+    @AfterReturning("io.github.yvasyliev.telegramforwarderbot.util.Pointcuts.executePostControlsCallbackQueryCommand"
+            + "() && args(callbackQuery, callbackData)")
     public void editPostControlsMessageText(CallbackQuery callbackQuery, AbstractCommandCallbackDataDTO callbackData) {
         var postControls = telegramProperties.postControls();
         var messageText = postControls.buttons().get(callbackData.getCommand()).messageText();

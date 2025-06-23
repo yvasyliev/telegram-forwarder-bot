@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Abstract class for forwarding animations.
+ */
 @RequiredArgsConstructor
 public abstract class AbstractAnimationForwarder implements Forwarder {
     private final AnimationSender animationSender;

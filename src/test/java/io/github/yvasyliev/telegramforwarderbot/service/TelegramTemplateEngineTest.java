@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class TelegramTemplateEngineTest {
     private static final String TEMPLATE_NAME = "templateName";
     private static final String EXPECTED = "expected";
-    @InjectMocks TelegramTemplateEngine telegramTemplateEngine;
+    @InjectMocks private TelegramTemplateEngine telegramTemplateEngine;
     @Mock private TelegramProperties telegramProperties;
     @Mock private TelegramBotAppenderProperties appenderProperties;
     @Mock private EvaluationContext evaluationContext;

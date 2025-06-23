@@ -12,6 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+/**
+ * Stops the bot and sends a shutdown message to the chat.
+ * This command can only be executed by users with the {@code ADMIN} role.
+ */
 @Service("/stop")
 @RequiredArgsConstructor
 public class StopCommand implements MessageCommand {

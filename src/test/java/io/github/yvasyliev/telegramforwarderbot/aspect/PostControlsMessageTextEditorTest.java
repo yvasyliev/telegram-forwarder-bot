@@ -83,6 +83,7 @@ class PostControlsMessageTextEditorTest {
     @Nested
     class TelegramApiExceptionTests {
         private static final String IGNORED_API_RESPONSE = "Ignored test error";
+        @SuppressWarnings("checkstyle:ConstantName")
         private static final TelegramApiException[] shouldLogError = {
                 new TelegramApiException(),
                 new TelegramApiRequestException(null, ApiResponse.builder().errorDescription("Test error").build())
