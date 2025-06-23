@@ -21,21 +21,13 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: 21
-
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: ./.github/actions/setup-gradle
 
     - name: Build with Gradle
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
-      run: |
-        chmod +x ./gradlew
-        ./gradlew build sonar
+      run: ./gradlew build sonar
       shell: bash
 
     - name: Get variables
