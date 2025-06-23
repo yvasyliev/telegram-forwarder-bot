@@ -119,11 +119,19 @@ The command will compile the code, run tests, and create an executable JAR file 
 | `/start` | The same as `/help`.                  |
 | `/stop`  | Stops the bot.                        |
 
-### 🖼️ Screenshots
 
-![start](assets/start.jpg) ![new](assets/new.jpg) ![approve](assets/approved.jpg)
-![text-rejected](assets/text-rejected.jpg) ![rejected](assets/rejected.jpg) ![stop](assets/stop.jpg)
-![channel](assets/channel.jpg)
+<details>
+<summary>🖼️ Screenshots</summary>
+
+<img alt="start" src="assets/start.jpg" width="250"/>
+<img alt="new" src="assets/new.jpg" width="250"/>
+<img alt="approved" src="assets/approved.jpg" width="250"/>
+<img alt="text-rejected" src="assets/text-rejected.jpg" width="250"/>
+<img alt="rejected" src="assets/rejected.jpg" width="250"/>
+<img alt="stop" src="assets/stop.jpg" width="250"/>
+<img alt="channel" src="assets/channel.jpg" width="250"/>
+
+</details>
 
 ## ⚠️ Limitations
 
