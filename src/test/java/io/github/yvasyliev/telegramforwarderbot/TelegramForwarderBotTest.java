@@ -33,7 +33,7 @@ class TelegramForwarderBotTest {
 
     @Test
     void testInit() throws TelegramApiException {
-        var username = "testBot";
+        var firstName = "TestBot";
         var text = "Bot is running";
         var context = new Context();
         var sendMessage = SendMessage.builder()
@@ -42,9 +42,9 @@ class TelegramForwarderBotTest {
                 .parseMode(ParseMode.HTML)
                 .build();
 
-        context.setVariable("botName", username);
+        context.setVariable("botName", firstName);
 
-        when(me.getUserName()).thenReturn(username);
+        when(me.getFirstName()).thenReturn(firstName);
         when(templateEngine.process(eq("running"), refEq(context))).thenReturn(text);
 
         bot.init();

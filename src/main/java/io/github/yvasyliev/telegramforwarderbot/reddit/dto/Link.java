@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.github.yvasyliev.telegramforwarderbot.reddit.databind.util.PermalinkDeserializerConverter;
+import io.github.yvasyliev.telegramforwarderbot.reddit.deser.std.EditedDeserializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -176,7 +177,7 @@ public record Link(
         @JsonProperty("is_created_from_ads_ui") Boolean isCreatedFromAdsUi,
         @JsonProperty("author_premium") Boolean authorPremium,
         @JsonProperty("thumbnail") String thumbnail,
-        @JsonProperty("edited") Boolean edited,
+        @JsonProperty("edited") @JsonDeserialize(using = EditedDeserializer.class) Instant edited,
         @JsonProperty("author_flair_css_class") String authorFlairCssClass,
         @JsonProperty("author_flair_richtext") List<FlairRichtext> authorFlairRichtext,
         @JsonProperty("gildings") Map<String, Integer> gildings,

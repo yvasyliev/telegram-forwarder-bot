@@ -36,7 +36,7 @@ public class TelegramForwarderBot implements SpringLongPollingBot {
     @PostConstruct
     public void init() throws TelegramApiException {
         var context = new Context();
-        context.setVariable("botName", me.getUserName());
+        context.setVariable("botName", me.getFirstName());
         var sendMessage = SendMessage.builder()
                 .chatId(adminId)
                 .text(templateEngine.process("running", context))
