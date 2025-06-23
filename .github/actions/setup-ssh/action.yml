@@ -21,11 +21,11 @@ runs:
     - name: Setup SSH
       id: setup-ssh
       env:
-        SSH_KEY_PATH: $HOME/.ssh/id_ed25519
+        SSH_KEY_PATH: ~/.ssh/id_ed25519
       run: |
         mkdir -p ~/.ssh
-        echo "${{ inputs.ssh_key }}" > $SSH_KEY_PATH
-        chmod 600 $SSH_KEY_PATH
+        echo "${{ inputs.ssh_key }}" > "$SSH_KEY_PATH"
+        chmod 600 "$SSH_KEY_PATH"
         ssh-keyscan -H ${{ inputs.ssh_host }} >> ~/.ssh/known_hosts
         echo "ssh-key-path=$SSH_KEY_PATH" >> $GITHUB_OUTPUT
       shell: bash
