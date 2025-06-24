@@ -2,9 +2,13 @@ name: Release
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   release:
+    if: startsWith(github.event.head_ref, 'release/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources

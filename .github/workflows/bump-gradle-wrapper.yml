@@ -1,0 +1,54 @@
+name: Bump Gradle Wrapper
+
+on:
+  schedule:
+    - cron: '0 0 28 * *' # Runs at 00:00 UTC on the 28th of every month
+  workflow_dispatch:
+
+jobs:
+  gradle-wrapper-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Gradle
+        uses: ./.github/actions/setup-gradle
+
+      - name: Get old Gradle version
+        id: old-version
+        run: |
+          OLD_VERSION=$(./gradlew --version | grep 'Gradle ' | awk '{print $2}')
+          echo "old-version=$OLD_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Bump Gradle wrapper
+        run: |
+          ./gradlew wrapper --gradle-version latest
+          ./gradlew wrapper
+
+      - name: Get new Gradle version
+        id: new-version
+        run: |
+          NEW_VERSION=$(./gradlew --version | grep 'Gradle ' | awk '{print $2}')
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.old-version.outputs.old-version != steps.new-version.outputs.new-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="feature/gradle"
+          git checkout -b "$BRANCH"
+          git add .
+          git commit -m "Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}"
+          git push origin "$BRANCH"
+
+      - name: Create Pull Request
+        if: steps.old-version.outputs.old-version != steps.new-version.outputs.new-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
+          gh pr create --title "Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}" --body "Bumps [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}" --base "$DEFAULT_BRANCH"

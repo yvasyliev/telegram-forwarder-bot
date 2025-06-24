@@ -1,0 +1,77 @@
+name: Bump Telegram Forwarder Bot
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # Runs at 00:00 on the 1st of every month (UTC)
+  workflow_dispatch:
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest release version
+        id: get-release
+        run: |
+          LATEST_RELEASE=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          echo "latest-release=${LATEST_RELEASE#v}" >> $GITHUB_OUTPUT
+
+      - name: Get merged PRs since latest release
+        id: get-prs
+        run: |
+          SINCE=$(gh release view "v${{ steps.get-release.outputs.latest-release }}" --json publishedAt --jq '.publishedAt')
+          PRS=$(gh pr list --state merged --search "label:patch label:minor label:major merged:>${SINCE}" --json number,labels,mergedAt)
+          echo "prs=$PRS" >> $GITHUB_OUTPUT
+
+      - name: Get bump type
+        id: get-bump-type
+        run: |
+          PRS='${{ steps.get-prs.outputs.prs }}'
+          if echo "$PRS" | jq -e '. | length == 0' >/dev/null; then
+            echo "bump-type=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          LABEL=patch
+          if echo "$PRS" | jq -e '[.[].labels[].name] | index("minor")' >/dev/null; then
+            LABEL=minor
+          fi
+          if echo "$PRS" | jq -e '[.[].labels[].name] | index("major")' >/dev/null; then
+            LABEL=major
+          fi
+          echo "bump-type=$LABEL" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        if: steps.get-bump-type.outputs.bump-type != ''
+        id: bump-version
+        run: |
+          BUMP_TYPE=${{ steps.get-bump-type.outputs.bump-type }}
+          VERSION=${{ steps.get-release.outputs.latest-release }}
+          echo "old-version=$VERSION" >> $GITHUB_OUTPUT
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          if [ "$BUMP_TYPE" = "major" ]; then
+            MAJOR=$((MAJOR+1)); MINOR=0; PATCH=0
+          elif [ "$BUMP_TYPE" = "minor" ]; then
+            MINOR=$((MINOR+1)); PATCH=0
+          elif [ "$BUMP_TYPE" = "patch" ]; then
+            PATCH=$((PATCH+1))
+          fi
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          sed -i "s/^version = '.*'/version = '$NEW_VERSION'/" build.gradle
+
+      - name: Create Pull Request
+        if: steps.get-bump-type.outputs.bump-type != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
+          NEW_BRANCH="release/v${{ steps.bump-version.outputs.new-version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$NEW_BRANCH"
+          git add build.gradle
+          git commit -m "Bump io.github.yvasyliev.telegramforwarderbot from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}"
+          git push origin "$NEW_BRANCH"
+          gh pr create --title "Bump io.github.yvasyliev.telegramforwarderbot from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}" --body "Bumps [io.github.yvasyliev.telegramforwarderbot](https://github.com/yvasyliev/telegram-forwarder-bot) from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}" --base "$DEFAULT_BRANCH"
