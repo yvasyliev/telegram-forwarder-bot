@@ -11,6 +11,10 @@ on:
       - synchronize
       - reopened
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
