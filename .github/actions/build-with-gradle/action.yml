@@ -10,10 +10,10 @@ inputs:
 outputs:
   jar-path:
     description: The path to the generated JAR file
-    value: ${{ steps.get-variables.outputs.jar_path }}
+    value: ${{ steps.get-variables.outputs.jar-path }}
   jar-name:
     description: The name of the generated JAR file
-    value: ${{ steps.get-variables.outputs.jar_name }}
+    value: ${{ steps.get-variables.outputs.jar-name }}
   version:
     description: The version of the project
     value: ${{ steps.get-variables.outputs.version }}

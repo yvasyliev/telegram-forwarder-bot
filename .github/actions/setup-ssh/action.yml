@@ -20,13 +20,8 @@ runs:
   steps:
     - name: Setup SSH
       id: setup-ssh
-      env:
-        SSH_KEY_PATH: ~/.ssh/id_ed25519
       run: |
         mkdir -p ~/.ssh
-        cd ~/.ssh
-        pwd
-        ls
         echo "${{ inputs.ssh_key }}" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H ${{ inputs.ssh_host }} >> ~/.ssh/known_hosts
