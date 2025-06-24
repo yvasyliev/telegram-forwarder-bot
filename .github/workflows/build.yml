@@ -2,6 +2,7 @@ name: Build
 
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     branches:
       - master
@@ -36,4 +37,4 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
           gh pr review --approve "$PR_URL"
-          gh pr merge --squash --auto "$PR_URL"
+          gh pr merge --squash --auto --delete-branch "$PR_URL"

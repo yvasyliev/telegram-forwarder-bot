@@ -8,6 +8,9 @@ on:
 jobs:
   gradle-wrapper-bump:
     runs-on: ubuntu-latest
+    outputs:
+      old-version: ${{ steps.old-version.outputs.old-version }}
+      new-version: ${{ steps.new-version.outputs.new-version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,3 +55,9 @@ jobs:
         run: |
           DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
           gh pr create --title "Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}" --body "Bumps [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}" --base "$DEFAULT_BRANCH"
+
+  build:
+    needs: gradle-wrapper-bump
+    if: needs.gradle-wrapper-bump.outputs.new-version != needs.gradle-wrapper-bump.outputs.old-version
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
