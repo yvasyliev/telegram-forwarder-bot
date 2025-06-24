@@ -20,6 +20,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          echo "${{ github.head_ref }}"
+          echo "${{ github.ref }}"
+
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
