@@ -32,9 +32,7 @@ jobs:
         run: |
           ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "rm $JAR_ALIAS_PATH || true"
           scp ${{ steps.build.outputs.jar-path }} $REMOTE:${{ secrets.SSH_WORKING_DIR }}
-          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE 
-          ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/${{ steps.build.outputs.jar-name }} $JAR_ALIAS_PATH
-          sudo systemctl restart ${{ secrets.SERVICE_NAME }}
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} $REMOTE "ln --symbolic ${{ secrets.SSH_WORKING_DIR }}/${{ steps.build.outputs.jar-name }} $JAR_ALIAS_PATH && sudo systemctl restart ${{ secrets.SERVICE_NAME }}"
 
       - name: Create GitHub release
         env:
