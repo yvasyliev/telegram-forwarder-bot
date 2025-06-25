@@ -48,7 +48,7 @@ disclose them responsibly.
 2. Create a branch in your fork in which you develop your contribution (one branch per feature/fix).
 3. Create meaningful and well-separated commits.
 4. Make sure your contribution follows the contribution guidelines above.
-5. Create a pull request from your feature branch to the correct default branch of this project.
+5. Create a pull request from your feature branch to the <ins>default</ins> branch of this project.
 
 **Do not commit secrets** such as passwords, API keys, or credentials.
 

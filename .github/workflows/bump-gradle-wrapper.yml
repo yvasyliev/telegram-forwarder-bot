@@ -1,12 +1,10 @@
 name: Bump Gradle Wrapper
 
 on:
-  schedule:
-    - cron: '0 0 28 * *' # Runs at 00:00 UTC on the 28th of every month
   workflow_dispatch:
 
 jobs:
-  gradle-wrapper-bump:
+  bump-gradle-wrapper:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
