@@ -1,8 +1,6 @@
 name: Bump Telegram Forwarder Bot
 
 on:
-  schedule:
-    - cron: '0 0 1 * *' # Runs at 00:00 on the 1st of every month (UTC)
   workflow_dispatch:
 
 jobs:

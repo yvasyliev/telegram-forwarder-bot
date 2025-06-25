@@ -2,7 +2,6 @@ name: Build
 
 on:
   workflow_dispatch:
-  workflow_call:
   push:
     branches:
       - master
@@ -20,10 +19,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "${{ github.head_ref }}"
-          echo "${{ github.ref }}"
-
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
@@ -33,12 +28,3 @@ jobs:
         uses: ./.github/actions/build-with-gradle
         with:
           sonar-token: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Approve and merge bot PRs automatically
-        if: ${{ contains(fromJSON('["dependabot[bot]", "github-actions[bot]"]'), github.actor) && github.event_name == 'pull_request'}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-        run: |
-          gh pr review --approve "$PR_URL"
-          gh pr merge --squash --auto --delete-branch "$PR_URL"

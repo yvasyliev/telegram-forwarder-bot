@@ -1,12 +1,10 @@
 name: Publish Javadoc
 
 on:
-  release:
-    types: [ published ]
   workflow_dispatch:
 
 jobs:
-  build:
+  publish-javadoc:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -15,17 +13,20 @@ jobs:
       - name: Setup Gradle
         uses: ./.github/actions/setup-gradle
 
-      - name: Deploy to GitHub Pages
+      - name: Generate Javadoc
+        run: ./gradlew javadoc
+
+      - name: Copy Javadoc to docs
         run: |
-          ./gradlew javadoc
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin gh-pages || true
-          git checkout gh-pages || git checkout --orphan gh-pages
           mkdir -p docs
           rm -rf docs/*
           cp -r build/docs/javadoc/* docs/
-          git add docs
-          COMMIT_MSG="Update Javadoc ${{ github.event.release.tag_name && format('for release {0}', github.event.release.tag_name) || '(manual trigger)' }}"
-          git commit -m "$COMMIT_MSG" || echo "No changes to commit"
+
+      - name: Commit and push Javadoc
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b gh-pages
+          git add .
+          git commit -m "Update Javadoc" || echo "No changes to commit"
           git push origin gh-pages
