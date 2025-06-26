@@ -35,13 +35,13 @@ public class RedditPostForwarderManager implements PostForwarderManager {
     @Override
     public void forward() {
         var lastCreated = redditInstantPropertyService.getLastCreated();
-        redditService.getSubredditNew(redditProperties.subreddit(), true)
+        redditService.getSubredditNew(redditProperties.subreddit())
                 .data()
                 .children()
                 .stream()
                 .map(Thing::data)
                 .filter(link -> link.created().isAfter(lastCreated))
-                .sorted(Link::compareTo)
+                .sorted()
                 .forEach(this::forwardPost);
     }
 
@@ -67,24 +67,24 @@ public class RedditPostForwarderManager implements PostForwarderManager {
             return mediaGroupForwarder;
         }
 
-        if (link.hasPostHint()) {
-            return switch (link.postHint()) {
-                case HOSTED_VIDEO -> videoForwarder;
-                case IMAGE -> link.preview().images().getFirst().variants().hasGif()
-                        ? imageAnimationForwarder
-                        : photoForwarder;
-                case LINK -> linkForwarder;
-                case RICH_VIDEO -> {
-                    var redditVideo = link.preview().redditVideoPreview();
-                    yield redditVideo != null && redditVideo.isGif() ? videoAnimationForwarder : linkForwarder;
-                }
-                default -> {
-                    log.warn("Unhandled post hint: {}", link.postHint());
-                    yield null;
-                }
-            };
+        if (!link.hasPostHint()) {
+            return null;
         }
 
-        return null;
+        return switch (link.postHint()) {
+            case HOSTED_VIDEO -> videoForwarder;
+            case IMAGE -> link.preview().images().getFirst().variants().hasGif()
+                    ? imageAnimationForwarder
+                    : photoForwarder;
+            case LINK -> linkForwarder;
+            case RICH_VIDEO -> {
+                var redditVideo = link.preview().redditVideoPreview();
+                yield redditVideo != null && redditVideo.isGif() ? videoAnimationForwarder : linkForwarder;
+            }
+            default -> {
+                log.warn("Unhandled post hint: {}", link.postHint());
+                yield null;
+            }
+        };
     }
 }

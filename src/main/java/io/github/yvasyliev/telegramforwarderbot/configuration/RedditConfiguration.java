@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.client.web.client.OAuth2ClientHttpReq
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
-import org.springframework.web.service.invoker.HttpServiceArgumentResolver;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 import java.util.List;
@@ -39,15 +38,13 @@ public class RedditConfiguration {
      * @param oAuth2ClientProperties  the OAuth2 client properties
      * @param redditProperties        the Reddit properties containing API host and user agent
      * @param objectMapper            the Jackson ObjectMapper for JSON serialization/deserialization
-     * @param boolIntArgumentResolver custom argument resolver for boolean to integer conversion
      * @return a configured {@link RedditService} instance
      */
     @Bean
     public RedditService redditService(
             OAuth2ClientProperties oAuth2ClientProperties,
             RedditProperties redditProperties,
-            ObjectMapper objectMapper,
-            HttpServiceArgumentResolver boolIntArgumentResolver
+            ObjectMapper objectMapper
     ) {
         var clientRegistrations = List.copyOf(new OAuth2ClientPropertiesMapper(oAuth2ClientProperties)
                 .asClientRegistrations()
@@ -73,9 +70,7 @@ public class RedditConfiguration {
                 )
                 .build();
         var restClientAdapter = RestClientAdapter.create(restClient);
-        var httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(restClientAdapter)
-                .customArgumentResolver(boolIntArgumentResolver)
-                .build();
+        var httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(restClientAdapter).build();
         return httpServiceProxyFactory.createClient(RedditService.class);
     }
 }

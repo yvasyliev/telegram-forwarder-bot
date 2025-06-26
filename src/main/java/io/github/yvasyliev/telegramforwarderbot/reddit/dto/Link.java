@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import io.github.yvasyliev.telegramforwarderbot.reddit.databind.util.PermalinkDeserializerConverter;
+import io.github.yvasyliev.telegramforwarderbot.reddit.deser.std.PermalinkDeserializer;
 import io.github.yvasyliev.telegramforwarderbot.reddit.deser.std.EditedDeserializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -235,7 +235,7 @@ public record Link(
         @JsonProperty("mod_reports") ArrayNode modReports,
         @JsonProperty("author_patreon_flair") Boolean authorPatreonFlair,
         @JsonProperty("author_flair_text_color") String authorFlairTextColor,
-        @JsonProperty("permalink") @JsonDeserialize(converter = PermalinkDeserializerConverter.class) URL permalink,
+        @JsonProperty("permalink") @JsonDeserialize(using = PermalinkDeserializer.class) URL permalink,
         @JsonProperty("parent_whitelist_status") String parentWhitelistStatus,
         @JsonProperty("stickied") Boolean stickied,
         @JsonProperty("url") URL url,

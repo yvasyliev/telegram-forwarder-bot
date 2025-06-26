@@ -31,8 +31,8 @@ disclose them responsibly.
   structure must be used wherever possible.
 * Document your source code! It's easy because one can most likely just stick to the online API reference. This is a
   requirement. Not because your contributed source code is unreadable. Instead, the aim is to keep the Javadoc complete
-  and - accompanying this - to keep this project as accessible as possible to developers like yourself. Please ensure you
-  have documented all public classes, methods, and fields in your contribution.
+  and - accompanying this - to keep this project as accessible as possible to developers like yourself. Please ensure
+  you have documented all public classes, methods, and fields in your contribution.
 * Unit tests help to assure that functionality works. Please ensure that your contribution is covered by unit tests.
 * Make sure that your contribution does not break the build. You can check this by running the following command:
 

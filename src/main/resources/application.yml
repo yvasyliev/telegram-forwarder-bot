@@ -11,8 +11,6 @@ reddit:
     css-selector: a.download__item__info__actions__button
 
 spring:
-  thymeleaf:
-    enable-spring-el-compiler: true
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:./data
@@ -40,6 +38,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  thymeleaf:
+    enable-spring-el-compiler: true
 
 telegram:
   bot:

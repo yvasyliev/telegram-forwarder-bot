@@ -35,30 +35,18 @@ class RedditPostForwarderManagerTest {
     @SuppressWarnings("checkstyle:ConstantName")
     private static final Exception[] shouldCatchCheckedException = {new IOException(), new TelegramApiException()};
     private PostForwarderManager forwarderManager;
-    @Mock
-    private RedditInstantPropertyService propertyService;
-    @Mock
-    private RedditService redditService;
-    @Mock
-    private RedditProperties redditProperties;
-    @Mock
-    private Forwarder mediaGroupForwarder;
-    @Mock
-    private Forwarder videoForwarder;
-    @Mock
-    private Forwarder imageAnimationForwarder;
-    @Mock
-    private Forwarder photoForwarder;
-    @Mock
-    private Forwarder linkForwarder;
-    @Mock
-    private Forwarder videoAnimationForwarder;
-    @Mock
-    private Thing<Listing> subredditNew;
-    @Mock
-    private Thing<Link> child;
-    @Mock
-    private Link link;
+    @Mock private RedditInstantPropertyService propertyService;
+    @Mock private RedditService redditService;
+    @Mock private RedditProperties redditProperties;
+    @Mock private Forwarder mediaGroupForwarder;
+    @Mock private Forwarder videoForwarder;
+    @Mock private Forwarder imageAnimationForwarder;
+    @Mock private Forwarder photoForwarder;
+    @Mock private Forwarder linkForwarder;
+    @Mock private Forwarder videoAnimationForwarder;
+    @Mock private Thing<Listing> subredditNew;
+    @Mock private Thing<Link> child;
+    @Mock private Link link;
 
     @BeforeEach
     void setUp() {
@@ -77,7 +65,7 @@ class RedditPostForwarderManagerTest {
 
         when(propertyService.getLastCreated()).thenReturn(Instant.EPOCH);
         when(redditProperties.subreddit()).thenReturn(SUBREDDIT);
-        when(redditService.getSubredditNew(SUBREDDIT, true)).thenReturn(subredditNew);
+        when(redditService.getSubredditNew(SUBREDDIT)).thenReturn(subredditNew);
         when(subredditNew.data()).thenReturn(listing);
         when(listing.children()).thenReturn(List.of(child));
         when(child.data()).thenReturn(link);

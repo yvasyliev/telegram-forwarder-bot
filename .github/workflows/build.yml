@@ -1,5 +1,9 @@
 name: Build
 
+permissions:
+  pull-requests: write
+  contents: write
+
 on:
   workflow_dispatch:
   push:
@@ -10,10 +14,6 @@ on:
       - opened
       - synchronize
       - reopened
-
-permissions:
-  pull-requests: write
-  contents: write
 
 jobs:
   build:
