@@ -1,6 +1,9 @@
 name: Manage Remote Service
 run-name: Manage Remote Service - ${{ inputs.action }}
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
