@@ -39,13 +39,13 @@ public class VideoDownloader {
                 .select(redditProperties.videoDownloader().cssSelector())
                 .first();
 
-        if (downloadInfo == null) {
-            throw new IOException("Video URL is not parsable. URL: %s, CSS Selector: %s".formatted(
-                    url,
-                    redditProperties.videoDownloader().cssSelector()
-            ));
+        if (downloadInfo != null) {
+            return URI.create(downloadInfo.attr("href")).toURL();
         }
 
-        return URI.create(downloadInfo.attr("href")).toURL();
+        throw new IOException("Video URL is not parsable. URL: %s, CSS Selector: %s".formatted(
+                url,
+                redditProperties.videoDownloader().cssSelector()
+        ));
     }
 }
