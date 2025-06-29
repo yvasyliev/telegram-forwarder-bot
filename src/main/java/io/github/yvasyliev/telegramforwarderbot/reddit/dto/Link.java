@@ -469,7 +469,12 @@ public record Link(
             /**
              * Represents a valid metadata status.
              */
-            @JsonProperty("valid") VALID
+            @JsonProperty("valid") VALID,
+
+            /**
+             * Represents an unprocessed metadata status.
+             */
+            @JsonProperty("unprocessed") UNPROCESSED
         }
 
         /**
