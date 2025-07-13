@@ -1,3 +1,0 @@
-*🔙 Reply from admin:*
-
-%s

@@ -1,0 +1,36 @@
+name: Manage Remote Service
+run-name: Manage Remote Service - ${{ inputs.action }}
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        default: 'restart'
+        type: choice
+        options:
+          - restart
+          - start
+          - stop
+
+jobs:
+  manage-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        id: setup-ssh
+        uses: ./.github/actions/setup-ssh
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_host: ${{ secrets.SSH_HOST }}
+
+      - name: Manage service on remote server
+        run: |
+          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl ${{ inputs.action }} ${{ secrets.SERVICE_NAME }}"
