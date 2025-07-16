@@ -113,7 +113,7 @@ import java.util.Map;
  * @param isRobotIndexable           indicates if the post is indexable by robots
  * @param reportReasons              the reasons for reporting the post, if applicable
  * @param author                     the username of the author of the post
- * @param discussionType             the type of discussion for the post (e.g., chat, Q&A)
+ * @param discussionType             the type of discussion for the post (e.g., chat, Q{@literal &}A)
  * @param numComments                the number of comments on the post
  * @param sendReplies                indicates if replies to the post should be sent
  * @param whitelistStatus            the whitelist status of the post
