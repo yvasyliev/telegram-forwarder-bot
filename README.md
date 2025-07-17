@@ -119,7 +119,6 @@ The command will compile the code, run tests, and create an executable JAR file 
 | `/start` | The same as `/help`.                  |
 | `/stop`  | Stops the bot.                        |
 
-
 <details>
 <summary>🖼️ Screenshots</summary>
 
@@ -148,6 +147,10 @@ The command will compile the code, run tests, and create an executable JAR file 
 * Support X (Twitter) and Instagram as external sources.
 * Select medias to forward from a media group (e.g., forward only first two images from a group of 10 images) by the
   inline buttons.
+
+## 📚 Documentation
+
+[Javadoc Reference](https://yvasyliev.github.io/telegram-forwarder-bot)
 
 ## 🆘 Getting Help
 
