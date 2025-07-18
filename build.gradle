@@ -99,6 +99,7 @@ sonar {
         property "sonar.projectKey", "io.github.yvasyliev.telegramforwarderbot:telegram-forwarder-bot"
         property "sonar.organization", "yvasyliev"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.sources", "src/main/"
     }
 }
 
