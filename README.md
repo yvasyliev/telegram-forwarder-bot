@@ -220,11 +220,9 @@ The command will compile the code, run tests, and create an executable JAR file 
 
 ## 🗺️ Long-Term Plans
 
-* Extract Telegram bot and post source services into separate modules to allow for easier extension and
-  customization (e.g., don't use Reddit as source).
-* Support multiple subreddits.
-* Support multiple Telegram channels.
-* Support multiple admin users.
+* Extract Telegram bot and post source services into separate modules to allow easier extension and customization
+  (e.g., exclude Reddit as source).
+* Support multiple subreddits, Telegram channels and admin users.
 * Support X (Twitter) and Instagram as external sources.
 * Select medias to forward from a media group (e.g., forward only first two images from a group of 10 images) by the
   inline buttons.
