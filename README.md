@@ -64,12 +64,16 @@ Without these properties, the bot will not start:
     <td>Your Reddit username without the <code>u/</code> prefix. Required to access the Reddit API.</td>
   </tr>
   <tr>
-    <td><code>spring.security.oauth2.client.registration.reddit.client-id</code></td>
+    <td>
+      <div style="max-width: 200px;"><code>spring.security.oauth2.client.registration.reddit.client-id</code></div>
+    </td>
     <td><code>1234567890abcdef1234567890abcdef</code></td>
     <td>Your Reddit app client ID.</td>
   </tr>
   <tr>
-    <td><code>spring.security.oauth2.client.registration.client-secret</code></td>
+    <td>
+      <div style="max-width: 200px;"><code>spring.security.oauth2.client.registration.reddit.client-secret</code></div>
+    </td>
     <td><code>abcdef1234567890abcdef1234567890</code></td>
     <td>Your Reddit app client secret.</td>
   </tr>
