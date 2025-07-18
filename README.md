@@ -50,39 +50,33 @@ Without these properties, the bot will not start:
 <table>
   <tr>
     <th>Property</th>
-    <th>Example</th>
     <th>Description</th>
   </tr>
   <tr>
     <td><code>reddit.subreddit</code></td>
-    <td><code>my_subreddit</code></td>
     <td>The name of the subreddit to forward posts from without the <code>r/</code> prefix.</td>
   </tr>
   <tr>
     <td><code>reddit.username</code></td>
-    <td><code>my_username</code></td>
     <td>Your Reddit username without the <code>u/</code> prefix. Required to access the Reddit API.</td>
   </tr>
   <tr>
     <td>
-      <div style="max-width: 200px;"><code>spring.security.oauth2.client.registration.reddit.client-id</code></div>
+      <div><code>spring.security.oauth2.client.registration.reddit.client-id</code></div>
     </td>
-    <td><code>1234567890abcdef1234567890abcdef</code></td>
     <td>Your Reddit app client ID.</td>
   </tr>
   <tr>
     <td>
-      <div style="max-width: 200px;"><code>spring.security.oauth2.client.registration.reddit.client-secret</code></div>
+      <div><code>spring.security.oauth2.client.registration.reddit.client-secret</code></div>
     </td>
-    <td><code>abcdef1234567890abcdef1234567890</code></td>
     <td>Your Reddit app client secret.</td>
   </tr>
   <tr>
     <td><code>telegram.admin-id</code></td>
-    <td><code>390000000</code></td>
     <td>
       Your Telegram user ID (not your username!). The bot will send you posts for moderation before forwarding them to
-      the channel, and important errors.
+      the channel, and important errors. Example: <code>390000000</code>
       <ul>
         <li>
           <a href="https://www.google.com/search?q=How+to+find+your+User+ID+in+Telegram%3F">
@@ -94,18 +88,14 @@ Without these properties, the bot will not start:
   </tr>
   <tr>
     <td><code>telegram.bot.token</code></td>
-    <td><code>123456789:ABCdefGhIJKlmnoPQRstuVWXyZ</code></td>
-    <td>Your Telegram bot token.</td>
+    <td>Your Telegram bot token. Example: <code>123456789:ABCdefGhIJKlmnoPQRstuVWXyZ</code></td>
   </tr>
   <tr>
     <td><code>telegram.channel-username</code></td>
     <td>
-      <ul>
-        <li><code>@my_channel</code></li>
-        <li><code>-1001234567890</code></li>
-      </ul>
+      The username (with <code>@</code> prefix!) or the ID of the Telegram channel to forward posts to. Example:
+      <code>@my_channel</code> or <code>-1001234567890</code>
     </td>
-    <td>The username (with <code>@</code> prefix!) or the ID of the Telegram channel to forward posts to.</td>
   </tr>
 </table>
 
