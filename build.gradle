@@ -30,7 +30,6 @@ repositories {
 dependencies {
     implementation libs.bundles.telegrambots
     implementation 'org.apache.commons:commons-collections4:4.5.0'
-    implementation 'org.hibernate.orm:hibernate-community-dialects'
     implementation 'org.jsoup:jsoup:1.21.1'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -100,7 +99,6 @@ sonar {
         property "sonar.projectKey", "io.github.yvasyliev.telegramforwarderbot:telegram-forwarder-bot"
         property "sonar.organization", "yvasyliev"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.sources", "src/main/resources/templates"
     }
 }
 
