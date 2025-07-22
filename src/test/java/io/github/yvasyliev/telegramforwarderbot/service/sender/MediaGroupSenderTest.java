@@ -125,7 +125,7 @@ class MediaGroupSenderTest {
         }
 
         @Test
-        void shouldCloseInputStreamsWhenTelegramApiException() throws IOException, TelegramApiException {
+        void shouldCloseInputStreamsWhenTelegramApiException() throws TelegramApiException {
             when(telegramClient.execute(sendMediaGroup)).thenThrow(TelegramApiException.class);
 
             assertThrows(TelegramApiException.class, () -> sender.sendMediaGroup(inputMedias, CAPTION));
