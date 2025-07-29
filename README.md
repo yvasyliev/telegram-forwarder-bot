@@ -47,31 +47,106 @@ application. It's recommended to store any secrets/tokens in environment variabl
 
 Without these properties, the bot will not start:
 
-* `reddit.subreddit`: The name of the subreddit to forward posts from without the `r/` prefix.
-* `reddit.username`: Your Reddit username without the `u/` prefix. Required to access the Reddit API.
-* `spring.security.oauth2.client.registration.reddit.client-id`: Your Reddit app client ID.
-* `spring.security.oauth2.client.registration.reddit.client-secret`: Your Reddit app client secret.
-* `telegram.admin-id`: Your Telegram user ID (not your username!). The bot will send you posts for moderation before
-  forwarding them to the channel, and important errors. Example: `390000000`.
-  [How to find your User ID in Telegram?](https://www.google.com/search?q=How+to+find+your+User+ID+in+Telegram%3F)
-* `telegram.bot.token`: Your Telegram bot token. Example: `123456789:ABCdefGhIJKlmnoPQRstuVWXyZ`.
-* `telegram.channel-username`: The username (with `@` prefix!) or the ID of the Telegram channel to forward posts to.
-  Example: `@my_channel` or `-1001234567890`.
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>reddit.subreddit</code></td>
+    <td>The name of the subreddit to forward posts from without the <code>r/</code> prefix.</td>
+  </tr>
+  <tr>
+    <td><code>reddit.username</code></td>
+    <td>Your Reddit username without the <code>u/</code> prefix. Required to access the Reddit API.</td>
+  </tr>
+  <tr>
+    <td>
+      <div><code>spring.security.oauth2.client.registration.reddit.client-id</code></div>
+    </td>
+    <td>Your Reddit app client ID.</td>
+  </tr>
+  <tr>
+    <td>
+      <div><code>spring.security.oauth2.client.registration.reddit.client-secret</code></div>
+    </td>
+    <td>Your Reddit app client secret.</td>
+  </tr>
+  <tr>
+    <td><code>telegram.admin-id</code></td>
+    <td>
+      Your Telegram user ID (not your username!). The bot will send you posts for moderation before forwarding them to
+      the channel, and important errors. Example: <code>390000000</code>
+      <ul>
+        <li>
+          <a href="https://www.google.com/search?q=How+to+find+your+User+ID+in+Telegram%3F">
+            How to find your User ID in Telegram?
+          </a>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td><code>telegram.bot.token</code></td>
+    <td>Your Telegram bot token. Example: <code>123456789:ABCdefGhIJKlmnoPQRstuVWXyZ</code></td>
+  </tr>
+  <tr>
+    <td><code>telegram.channel-username</code></td>
+    <td>
+      The username (with <code>@</code> prefix!) or the ID of the Telegram channel to forward posts to. Example:
+      <code>@my_channel</code> or <code>-1001234567890</code>
+    </td>
+  </tr>
+</table>
 
 ### 🧩 Optional Properties
 
 You can override the default values of these properties:
 
-* `logging.telegram-bot-appender.enabled`: Whether to enable the Telegram bot logging appender. If disabled, the bot
-  will not send any logs to the admin user. Default: `true`.
-* `logging.telegram-bot-appender.level`: The logging level for the Telegram bot logging appender. Defines the severity
-  of log statements that will be sent to the admin user. Default: `warn`.
-* `scheduler.post-forward.enabled`: Whether to forward posts from the external sources to the admin user for
-  moderation. Default: `true`.
-* `scheduler.post-forward.fixed-delay`: The fixed delay between post forwarding attempts. Defines how often the
-  bot checks for new posts to forward to the admin user. Default: `1m` (1 minute).
-* `scheduler.post-publisher.cron`: The Spring cron expression for the post publisher scheduler. Defines how often the
-  bot forwards approved posts to the Telegram channel. Default: `0 30 8-21 * * *` (every 60 minutes from 8:30 to 21:30).
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Default Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>logging.telegram-bot-appender.enabled</code></td>
+    <td><code>true</code></td>
+    <td>
+      Whether to enable the Telegram bot logging appender. If disabled, the bot will not send any logs to the admin
+      user.
+    </td>
+  </tr>
+  <tr>
+    <td><code>logging.telegram-bot-appender.level</code></td>
+    <td><code>warn</code></td>
+    <td>
+      The logging level for the Telegram bot logging appender. Defines the severity of log statements that will be sent
+      to the admin user.
+    </td>
+  </tr>
+  <tr>
+    <td><code>scheduler.post-forward.enabled</code></td>
+    <td><code>true</code></td>
+    <td>Whether to forward posts from external sources to the admin user for moderation.</td>
+  </tr>
+  <tr>
+    <td><code>scheduler.post-forward.fixed-delay</code></td>
+    <td><code>1m</code> (1 minute)</td>
+    <td>
+      The fixed delay between post forwarding attempts. Defines how often the bot checks for new posts to forward to
+      the admin user.
+    </td>
+  </tr>
+  <tr>
+    <td><code>scheduler.post-publisher.cron</code></td>
+    <td><code>0 30 8-21 * * *</code> (every 60 minutes from 8:30 to 21:30)</td>
+    <td>
+      The Spring cron expression for the post publisher scheduler. Defines how often the bot forwards approved posts
+      to the Telegram channel.
+    </td>
+  </tr>
+</table>
 
 Check the [application.yml](src/main/resources/application.yml) for even more configuration options.
 
@@ -144,6 +219,9 @@ The command will compile the code, run tests, and create an executable JAR file 
 
 ## 🗺️ Long-Term Plans
 
+* Extract Telegram bot and post source services into separate modules to allow easier extension and customization
+  (e.g., exclude Reddit as source).
+* Support multiple subreddits, Telegram channels and admin users.
 * Support X (Twitter) and Instagram as external sources.
 * Select medias to forward from a media group (e.g., forward only first two images from a group of 10 images) by the
   inline buttons.
