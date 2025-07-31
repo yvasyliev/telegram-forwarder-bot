@@ -1,3 +1,16 @@
+[![Build](https://github.com/yvasyliev/telegram-forwarder-bot/actions/workflows/build.yml/badge.svg)](https://github.com/yvasyliev/telegram-forwarder-bot/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=bugs)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=coverage)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=io.github.yvasyliev.telegramforwarderbot%3Atelegram-forwarder-bot)
+
 # 🤖 Telegram Forwarder Bot
 
 A Spring Boot-based Telegram bot that forwards posts from external sources (e.g., Reddit) to a Telegram channel.
@@ -30,7 +43,7 @@ Currently, the bot can only forward posts from a single subreddit.
 5. Download an executable JAR file from
    the [latest release](https://github.com/yvasyliev/telegram-forwarder-bot/releases/latest).
 
-6. Provide the [mandatory application properties](#mandatory-properties).
+6. Provide the [mandatory application properties](#-mandatory-properties).
 
 7. Run the bot:
 
