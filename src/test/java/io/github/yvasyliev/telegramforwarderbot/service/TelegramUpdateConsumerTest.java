@@ -19,13 +19,14 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class TelegramUpdateConsumerTest {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private TelegramUpdateConsumer updateConsumer;
     @Mock private TelegramEventHandler<Message> messageHandler;
     @Mock private TelegramEventHandler<CallbackQuery> callbackQueryHandler;
 
     @BeforeEach
     void setUp() {
-        updateConsumer = new TelegramUpdateConsumer(messageHandler, callbackQueryHandler, new ObjectMapper());
+        updateConsumer = new TelegramUpdateConsumer(messageHandler, callbackQueryHandler, objectMapper);
     }
 
     @Test
@@ -71,5 +72,17 @@ class TelegramUpdateConsumerTest {
         assertDoesNotThrow(() -> updateConsumer.consume(List.of(update)));
 
         verify(messageHandler).handle(message);
+    }
+
+    @Test
+    void shouldIgnoreJsonProcessingException() {
+        var update = new Update() {
+            @Override
+            public Message getMessage() {
+                throw new RuntimeException("Simulated exception");
+            }
+        };
+
+        assertDoesNotThrow(() -> updateConsumer.consume(List.of(update)));
     }
 }
