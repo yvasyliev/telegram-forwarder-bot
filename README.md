@@ -161,7 +161,7 @@ You can override the default values of these properties:
   </tr>
 </table>
 
-Check the [application.yml](src/main/resources/application.yml) for even more configuration options.
+Check the [application.yml](telegram-forwarder-bot/src/main/resources/application.yml) for even more configuration options.
 
 ## 🛠️ Building from Source
 
