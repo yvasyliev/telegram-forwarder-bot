@@ -5,7 +5,7 @@ logging:
 
 reddit:
   api-host: https://oauth.reddit.com
-  host: https://www.reddit.coms
+  host: https://www.reddit.com
   user-agent: java:$group:v\${telegram.bot.version} (by /u/\${reddit.username})
   video-downloader:
     uri: https://rapidsave.com/info

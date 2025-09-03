@@ -32,6 +32,7 @@ dependencies {
     implementation project(':telegram-forwarder-starter')
     implementation project(':telegram-forwarder-starter-logging')
     implementation project(':telegram-forwarder-starter-thymeleaf')
+    implementation project(':telegram-forwarder-starter-reddit')
     implementation 'org.apache.commons:commons-collections4:4.5.0'
     implementation 'org.jsoup:jsoup:1.21.1'
     implementation 'org.mapstruct:mapstruct:1.6.3'
