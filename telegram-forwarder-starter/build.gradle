@@ -4,6 +4,7 @@ plugins {
 //    id 'java-library'
     id 'org.springframework.boot' apply false
 //    id 'io.spring.dependency-management'
+    id 'jacoco'
 }
 
 //java {
@@ -42,7 +43,25 @@ dependencies {
 test {
     useJUnitPlatform()
     jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
-//    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+    }
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+//                'io/github/yvasyliev/telegramforwarderbot/configuration/**',
+//                'io/github/yvasyliev/telegramforwarderbot/dto/**',
+//                'io/github/yvasyliev/telegramforwarderbot/entity/**',
+//                'io/github/yvasyliev/telegramforwarderbot/reddit/dto/**',
+//                'io/github/yvasyliev/telegramforwarderbot/reddit/entity/**',
+//                'io/github/yvasyliev/telegramforwarderbot/util/Pointcuts.class',
+//                'io/github/yvasyliev/telegramforwarderbot/TelegramForwarderBotApplication.class'
+        ])
+    }))
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -7,8 +7,5 @@ import org.thymeleaf.spring6.ISpringTemplateEngine;
 
 @RequiredArgsConstructor
 public class TelegramTemplateEngine implements ITemplateEngine {
-    @Delegate
-    private final ISpringTemplateEngine delegate;
-
-
+    @Delegate private final ISpringTemplateEngine delegate;
 }

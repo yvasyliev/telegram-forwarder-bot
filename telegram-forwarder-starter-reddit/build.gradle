@@ -4,6 +4,7 @@ plugins {
 //    id 'java-library'
     id 'org.springframework.boot' apply false
 //    id 'io.spring.dependency-management'
+    id 'jacoco'
 }
 
 //java {
@@ -47,7 +48,20 @@ dependencies {
 test {
     useJUnitPlatform()
     jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
-//    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+    }
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                'io/github/yvasyliev/telegramforwarder/reddit/configuration/**',
+                'io/github/yvasyliev/telegramforwarder/reddit/dto/**'
+        ])
+    }))
 }
 
 tasks.withType(JavaCompile).configureEach {
