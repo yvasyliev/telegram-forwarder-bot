@@ -1,5 +1,5 @@
 [versions]
-telegrambots = "9.0.0"
+telegrambots = "9.1.0"
 
 [libraries]
 telegrambots-client = { module = "org.telegram:telegrambots-client", version.ref = "telegrambots" }
