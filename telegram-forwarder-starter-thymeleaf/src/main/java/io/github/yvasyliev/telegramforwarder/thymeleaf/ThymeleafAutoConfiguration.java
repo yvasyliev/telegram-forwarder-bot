@@ -11,9 +11,20 @@ import org.thymeleaf.spring6.expression.ThymeleafEvaluationContext;
 
 import java.util.List;
 
+/**
+ * Auto-configuration class for setting up Thymeleaf integration in the Telegram Forwarder application.
+ * This configuration provides beans for customizing the Thymeleaf template context and integrating a Telegram-specific
+ * template engine.
+ */
 @AutoConfiguration
 @EnableAspectJAutoProxy
 public class ThymeleafAutoConfiguration {
+    /**
+     * Creates a {@link TemplateContextCustomizer} bean that sets up the Thymeleaf evaluation context.
+     *
+     * @param applicationContext the Spring application context
+     * @return a {@link TemplateContextCustomizer} that adds the Thymeleaf evaluation context to the template context
+     */
     @Bean
     @ConditionalOnMissingBean(name = "thymeleafEvaluationContextSetter")
     public TemplateContextCustomizer thymeleafEvaluationContextSetter(ApplicationContext applicationContext) {
@@ -25,12 +36,25 @@ public class ThymeleafAutoConfiguration {
         );
     }
 
+    /**
+     * Creates a {@link TelegramTemplateEngine} bean that delegates to the provided Spring template engine.
+     *
+     * @param delegate the Spring template engine to delegate to
+     * @return a new instance of {@link TelegramTemplateEngine}
+     */
     @Bean
     @ConditionalOnMissingBean
     public TelegramTemplateEngine telegramTemplateEngine(ISpringTemplateEngine delegate) {
         return new TelegramTemplateEngine(delegate);
     }
 
+    /**
+     * Creates a {@link TelegramTemplateEngineInterceptor} bean that applies the provided context customizers
+     * to the Thymeleaf template context.
+     *
+     * @param contextCustomizers a list of context customizers to apply
+     * @return a new instance of {@link TelegramTemplateEngineInterceptor}
+     */
     @Bean
     @ConditionalOnMissingBean
     public TelegramTemplateEngineInterceptor telegramTemplateEngineInterceptor(

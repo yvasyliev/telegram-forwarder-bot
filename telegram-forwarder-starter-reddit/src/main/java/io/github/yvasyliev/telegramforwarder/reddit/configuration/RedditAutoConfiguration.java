@@ -32,14 +32,35 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         RedditServiceConfiguration.class
 })
 public class RedditAutoConfiguration {
+    /**
+     * Creates a {@link RedditInstantPropertyService} bean if one is not already present in the application context.
+     *
+     * @param repository the repository used by the service
+     * @return a new instance of {@link RedditInstantPropertyService}
+     */
     @Bean
     @ConditionalOnMissingBean
     public RedditInstantPropertyService redditInstantPropertyService(RedditInstantPropertyRepository repository) {
         return new RedditInstantPropertyService(repository);
     }
 
+    /**
+     * Creates a {@link PostForwarderManager} bean for managing Reddit post forwarding.
+     *
+     * @param instantPropertyService        the service for managing instant properties
+     * @param redditService                 the Reddit service client
+     * @param redditProperties              the Reddit configuration properties
+     * @param redditMediaGroupForwarder     the forwarder for media groups
+     * @param redditVideoForwarder          the forwarder for videos
+     * @param redditImageAnimationForwarder the forwarder for image animations
+     * @param redditPhotoForwarder          the forwarder for photos
+     * @param redditLinkForwarder           the forwarder for links
+     * @param redditVideoAnimationForwarder the forwarder for video animations
+     * @return a new instance of {@link PostForwarderManager} for Reddit
+     */
     @Bean
     @ConditionalOnMissingBean(name = "redditPostForwarderManager")
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public PostForwarderManager redditPostForwarderManager(
             RedditInstantPropertyService instantPropertyService,
             RedditService redditService,
@@ -64,6 +85,12 @@ public class RedditAutoConfiguration {
         );
     }
 
+    /**
+     * Creates a {@link VideoDownloader} bean for downloading videos from Reddit.
+     *
+     * @param redditProperties the Reddit configuration properties
+     * @return a new instance of {@link VideoDownloader}
+     */
     @Bean
     @ConditionalOnMissingBean
     public VideoDownloader videoDownloader(RedditProperties redditProperties) {

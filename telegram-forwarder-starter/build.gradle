@@ -1,69 +1,11 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
 plugins {
-//    id 'java-library'
+    id 'java-library'
     id 'org.springframework.boot' apply false
-//    id 'io.spring.dependency-management'
-    id 'jacoco'
-}
-
-//java {
-//    toolchain {
-//        languageVersion = JavaLanguageVersion.of(21)
-//    }
-//}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    mockitoAgent
-}
-
-dependencyManagement {
-    imports {
-        mavenBom SpringBootPlugin.BOM_COORDINATES
-    }
 }
 
 dependencies {
     implementation libs.bundles.telegrambots
-    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    mockitoAgent('org.mockito:mockito-core') {
-        transitive = false
-    }
-}
-
-test {
-    useJUnitPlatform()
-    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
-    finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true
-    }
-    classDirectories.setFrom(files(classDirectories.files.collect {
-        fileTree(dir: it, exclude: [
-//                'io/github/yvasyliev/telegramforwarderbot/configuration/**',
-//                'io/github/yvasyliev/telegramforwarderbot/dto/**',
-//                'io/github/yvasyliev/telegramforwarderbot/entity/**',
-//                'io/github/yvasyliev/telegramforwarderbot/reddit/dto/**',
-//                'io/github/yvasyliev/telegramforwarderbot/reddit/entity/**',
-//                'io/github/yvasyliev/telegramforwarderbot/util/Pointcuts.class',
-//                'io/github/yvasyliev/telegramforwarderbot/TelegramForwarderBotApplication.class'
-        ])
-    }))
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs.add("-parameters")
 }

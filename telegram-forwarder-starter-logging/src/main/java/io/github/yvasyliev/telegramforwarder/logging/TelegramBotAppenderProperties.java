@@ -11,9 +11,10 @@ import org.springframework.validation.annotation.Validated;
  * This class holds the necessary properties to configure the logging appender
  * that sends log messages to a Telegram bot.
  *
- * @param pattern       the log message pattern to be used
+ * @param chatId        the chat ID where log messages will be sent
  * @param level         the minimum log level for messages to be sent
  * @param maxTextLength the maximum length of text messages sent to Telegram
+ * @param pattern       the log message pattern to be used
  */
 @ConfigurationProperties("logging.telegram-bot-appender")
 @Validated

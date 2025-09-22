@@ -22,6 +22,9 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Configuration class for setting up the Reddit service client.
+ */
 @Configuration
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
 public class RedditServiceConfiguration {

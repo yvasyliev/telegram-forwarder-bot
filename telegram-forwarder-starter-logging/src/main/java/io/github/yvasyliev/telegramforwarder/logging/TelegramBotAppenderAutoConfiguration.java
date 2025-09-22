@@ -107,6 +107,11 @@ public class TelegramBotAppenderAutoConfiguration {
         return thresholdFilter;
     }
 
+    /**
+     * Creates a {@link TemplateContextCustomizer} that sets the bot appender properties in the template context.
+     *
+     * @return the configured {@link TemplateContextCustomizer}
+     */
     @Bean
     @ConditionalOnMissingBean(name = "telegramBotAppenderPropertiesSetter")
     public TemplateContextCustomizer telegramBotAppenderPropertiesSetter() {
