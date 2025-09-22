@@ -20,6 +20,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class RedditPostForwarderManager implements PostForwarderManager {
+    private static final Forwarder NOOP_FORWARDER = link -> log.warn(
+            "No forwarder found for link: {}",
+            link.permalink()
+    );
     private final RedditInstantPropertyService instantPropertyService;
     private final RedditService redditService;
     private final RedditProperties redditProperties;
@@ -45,16 +49,11 @@ public class RedditPostForwarderManager implements PostForwarderManager {
 
     private void forwardPost(Link link) {
         var sourceLink = ObjectUtils.defaultIfNull(CollectionUtils.lastElement(link.crosspostParentList()), link);
-        var forwarder = getForwarder(sourceLink);
 
-        if (forwarder != null) {
-            try {
-                forwarder.forward(sourceLink);
-            } catch (IOException | TelegramApiException e) {
-                log.error("Failed to fetch post: {}", link.permalink(), e);
-            }
-        } else {
-            log.warn("No forwarder found for link: {}", sourceLink.permalink());
+        try {
+            getForwarder(sourceLink).forward(sourceLink);
+        } catch (IOException | TelegramApiException e) {
+            log.error("Failed to fetch post: {}", link.permalink(), e);
         }
 
         instantPropertyService.saveLastCreated(link.created());
@@ -66,7 +65,7 @@ public class RedditPostForwarderManager implements PostForwarderManager {
         }
 
         if (!link.hasPostHint()) {
-            return null;
+            return NOOP_FORWARDER;
         }
 
         return switch (link.postHint()) {
@@ -81,7 +80,7 @@ public class RedditPostForwarderManager implements PostForwarderManager {
             }
             default -> {
                 log.warn("Unhandled post hint: {}", link.postHint());
-                yield null;
+                yield NOOP_FORWARDER;
             }
         };
     }
