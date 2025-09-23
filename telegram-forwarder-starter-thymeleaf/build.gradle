@@ -4,10 +4,9 @@ plugins {
 }
 
 dependencies {
-    implementation libs.bundles.telegrambots
+    api 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
     implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 jacocoTestReport {

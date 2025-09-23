@@ -3,6 +3,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     id 'org.springframework.boot' version '3.5.4' apply false
     id 'io.spring.dependency-management' version '1.1.7' apply false
+    id 'org.sonarqube' version '6.2.0.5505'
 }
 
 allprojects {
@@ -38,12 +39,6 @@ subprojects {
             }
         }
 
-        checkstyle {
-            ignoreFailures = false
-            maxWarnings = 0
-//            sourceSets = [project.sourceSets.main]
-        }
-
         configurations {
             compileOnly {
                 extendsFrom annotationProcessor
@@ -52,21 +47,24 @@ subprojects {
         }
 
         dependencies {
-            implementation 'org.springframework.boot:spring-boot-starter'
             annotationProcessor 'org.projectlombok:lombok'
+
             testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
             testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
             mockitoAgent('org.mockito:mockito-core') {
                 transitive = false
             }
+
             checkstyle 'com.puppycrawl.tools:checkstyle:11.0.0'
             checkstyle 'com.github.sevntu-checkstyle:sevntu-checks:1.44.1'
+        }
 
-            test {
-                useJUnitPlatform()
-                jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
-                finalizedBy jacocoTestReport
-            }
+        test {
+            useJUnitPlatform()
+            jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+            finalizedBy jacocoTestReport
         }
 
         jacocoTestReport {
@@ -75,5 +73,18 @@ subprojects {
                 xml.required = true
             }
         }
+
+        checkstyle {
+            ignoreFailures = false
+            maxWarnings = 0
+        }
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "io.github.yvasyliev.telegramforwarderbot:telegram-forwarder-bot"
+        property "sonar.organization", "yvasyliev"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
