@@ -44,14 +44,13 @@ public class RedditPostForwarderManager implements PostForwarderManager {
                 .map(Thing::data)
                 .filter(link -> link.created().isAfter(lastCreated))
                 .sorted()
+                .map(link -> ObjectUtils.defaultIfNull(CollectionUtils.lastElement(link.crosspostParentList()), link))
                 .forEach(this::forwardPost);
     }
 
     private void forwardPost(Link link) {
-        var sourceLink = ObjectUtils.defaultIfNull(CollectionUtils.lastElement(link.crosspostParentList()), link);
-
         try {
-            getForwarder(sourceLink).forward(sourceLink);
+            getForwarder(link).forward(link);
         } catch (IOException | TelegramApiException e) {
             log.error("Failed to fetch post: {}", link.permalink(), e);
         }
