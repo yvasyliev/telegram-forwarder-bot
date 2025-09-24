@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = 'io.github.yvasyliev.telegramforwarder'
-    version = '4.1.0'
+    version = '5.0.0'
 
     repositories {
         mavenCentral()
@@ -83,7 +83,7 @@ subprojects {
 
 sonar {
     properties {
-        property "sonar.projectKey", "io.github.yvasyliev.telegramforwarderbot:telegram-forwarder-bot"
+        property "sonar.projectKey", "io.github.yvasyliev.telegramforwarder:telegram-forwarder-bot"
         property "sonar.organization", "yvasyliev"
         property "sonar.host.url", "https://sonarcloud.io"
     }
