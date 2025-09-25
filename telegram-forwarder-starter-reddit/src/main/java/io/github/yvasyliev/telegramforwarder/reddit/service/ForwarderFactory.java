@@ -5,6 +5,8 @@ import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.function.Function;
+
 /**
  * Factory class for obtaining the appropriate {@link Forwarder} based on the properties of a given {@link Link}.
  * It selects the correct forwarder implementation depending on whether the link contains gallery data,
@@ -12,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RequiredArgsConstructor
 @Slf4j
-public class ForwarderFactory {
+public class ForwarderFactory implements Function<Link, Forwarder> {
     private static final Forwarder NOOP_FORWARDER = link -> log.warn(
             "No forwarder found for link: {}",
             link.permalink()
@@ -24,13 +26,8 @@ public class ForwarderFactory {
     private final Forwarder linkForwarder;
     private final Forwarder videoAnimationForwarder;
 
-    /**
-     * Returns the appropriate {@link Forwarder} for the given {@link Link}.
-     *
-     * @param link the link to evaluate
-     * @return the corresponding forwarder, or a no-op forwarder if none matches
-     */
-    public Forwarder forLink(Link link) {
+    @Override
+    public Forwarder apply(Link link) {
         if (link.hasGalleryData()) {
             return mediaGroupForwarder;
         }

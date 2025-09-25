@@ -54,7 +54,7 @@ class RedditPostForwarderManagerTest {
         when(child.data()).thenReturn(link);
         when(link.created()).thenReturn(CREATED);
         when(link.sourceLink()).thenReturn(link);
-        when(forwarderFactory.forLink(link)).thenReturn(forwarder);
+        when(forwarderFactory.apply(link)).thenReturn(forwarder);
     }
 
     @AfterEach

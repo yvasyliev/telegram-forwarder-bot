@@ -45,14 +45,14 @@ class ForwarderFactoryTest {
     void shouldReturnMediaGroupForwarderWhenLinkHasGalleryData() {
         when(link.hasGalleryData()).thenReturn(true);
 
-        var actual = forwarderFactory.forLink(link);
+        var actual = forwarderFactory.apply(link);
 
         assertEquals(mediaGroupForwarder, actual);
     }
 
     @Test
     void shouldReturnNoopForwarderWhenLinkHasNoPostHint() {
-        var actual = forwarderFactory.forLink(link);
+        var actual = forwarderFactory.apply(link);
 
         assertThatActualIsNoopForwarder(actual);
     }
@@ -81,7 +81,7 @@ class ForwarderFactoryTest {
         void shouldReturnVideoForwarderWhenLinkPostHintIsHostedVideo() {
             when(link.postHint()).thenReturn(Link.PostHint.HOSTED_VIDEO);
 
-            var actual = forwarderFactory.forLink(link);
+            var actual = forwarderFactory.apply(link);
 
             assertEquals(videoForwarder, actual);
         }
@@ -100,7 +100,7 @@ class ForwarderFactoryTest {
         void shouldReturnLinkForwarderWhenLinkPostHintIsLink() {
             when(link.postHint()).thenReturn(Link.PostHint.LINK);
 
-            var actual = forwarderFactory.forLink(link);
+            var actual = forwarderFactory.apply(link);
 
             assertEquals(linkForwarder, actual);
         }
@@ -109,7 +109,7 @@ class ForwarderFactoryTest {
         void shouldReturnNoopForwarderWhenLinkPostHintIsUnhandled() {
             when(link.postHint()).thenReturn(Link.PostHint.GALLERY);
 
-            var actual = forwarderFactory.forLink(link);
+            var actual = forwarderFactory.apply(link);
 
             assertThatActualIsNoopForwarder(actual);
         }
@@ -128,7 +128,7 @@ class ForwarderFactoryTest {
             when(image.variants()).thenReturn(variants);
             when(variants.hasGif()).thenReturn(hasGif);
 
-            var actual = forwarderFactory.forLink(link);
+            var actual = forwarderFactory.apply(link);
 
             assertEquals(expected, actual);
         }
@@ -145,7 +145,7 @@ class ForwarderFactoryTest {
 
             @Test
             void shouldReturnLinkForwarderWhenLinkPostHintIsRichVideoAndRedditVideoIsNull() {
-                var actual = forwarderFactory.forLink(link);
+                var actual = forwarderFactory.apply(link);
 
                 assertEquals(linkForwarder, actual);
             }
@@ -166,7 +166,7 @@ class ForwarderFactoryTest {
                 when(preview.redditVideoPreview()).thenReturn(redditVideo);
                 when(redditVideo.isGif()).thenReturn(isGif);
 
-                var actual = forwarderFactory.forLink(link);
+                var actual = forwarderFactory.apply(link);
 
                 assertEquals(expected, actual);
             }

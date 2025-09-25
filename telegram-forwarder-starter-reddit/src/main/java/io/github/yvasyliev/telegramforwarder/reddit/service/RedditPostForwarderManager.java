@@ -39,7 +39,7 @@ public class RedditPostForwarderManager implements PostForwarderManager {
 
     private void forwardPost(Link link) {
         try {
-            forwarderFactory.forLink(link).forward(link);
+            forwarderFactory.apply(link).forward(link);
         } catch (IOException | TelegramApiException e) {
             log.error("Failed to fetch post: {}", link.permalink(), e);
         }
