@@ -18,19 +18,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class RedditPostForwarderManager implements PostForwarderManager {
-    private static final Forwarder NOOP_FORWARDER = link -> log.warn(
-            "No forwarder found for link: {}",
-            link.permalink()
-    );
     private final RedditInstantPropertyService instantPropertyService;
     private final RedditService redditService;
     private final RedditProperties redditProperties;
-    private final Forwarder mediaGroupForwarder;
-    private final Forwarder videoForwarder;
-    private final Forwarder imageAnimationForwarder;
-    private final Forwarder photoForwarder;
-    private final Forwarder linkForwarder;
-    private final Forwarder videoAnimationForwarder;
+    private final ForwarderFactory forwarderFactory;
 
     @Override
     public void forward() {
@@ -48,37 +39,11 @@ public class RedditPostForwarderManager implements PostForwarderManager {
 
     private void forwardPost(Link link) {
         try {
-            getForwarder(link).forward(link);
+            forwarderFactory.forLink(link).forward(link);
         } catch (IOException | TelegramApiException e) {
             log.error("Failed to fetch post: {}", link.permalink(), e);
         }
 
         instantPropertyService.saveLastCreated(link.created());
-    }
-
-    private Forwarder getForwarder(Link link) {
-        if (link.hasGalleryData()) {
-            return mediaGroupForwarder;
-        }
-
-        if (!link.hasPostHint()) {
-            return NOOP_FORWARDER;
-        }
-
-        return switch (link.postHint()) {
-            case HOSTED_VIDEO -> videoForwarder;
-            case IMAGE -> link.preview().images().getFirst().variants().hasGif()
-                    ? imageAnimationForwarder
-                    : photoForwarder;
-            case LINK -> linkForwarder;
-            case RICH_VIDEO -> {
-                var redditVideo = link.preview().redditVideoPreview();
-                yield redditVideo != null && redditVideo.isGif() ? videoAnimationForwarder : linkForwarder;
-            }
-            default -> {
-                log.warn("Unhandled post hint: {}", link.postHint());
-                yield NOOP_FORWARDER;
-            }
-        };
     }
 }

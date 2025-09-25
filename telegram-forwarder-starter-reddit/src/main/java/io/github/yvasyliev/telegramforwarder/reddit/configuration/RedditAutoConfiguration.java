@@ -2,6 +2,7 @@ package io.github.yvasyliev.telegramforwarder.reddit.configuration;
 
 import io.github.yvasyliev.telegramforwarder.core.service.PostForwarderManager;
 import io.github.yvasyliev.telegramforwarder.reddit.repository.RedditInstantPropertyRepository;
+import io.github.yvasyliev.telegramforwarder.reddit.service.ForwarderFactory;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditInstantPropertyService;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostForwarderManager;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditService;
@@ -45,17 +46,43 @@ public class RedditAutoConfiguration {
     }
 
     /**
-     * Creates a {@link PostForwarderManager} bean for managing Reddit post forwarding.
+     * Creates a {@link ForwarderFactory} bean if one is not already present in the application context.
      *
-     * @param instantPropertyService        the service for managing instant properties
-     * @param redditService                 the Reddit service client
-     * @param redditProperties              the Reddit configuration properties
      * @param redditMediaGroupForwarder     the forwarder for media groups
      * @param redditVideoForwarder          the forwarder for videos
      * @param redditImageAnimationForwarder the forwarder for image animations
      * @param redditPhotoForwarder          the forwarder for photos
      * @param redditLinkForwarder           the forwarder for links
      * @param redditVideoAnimationForwarder the forwarder for video animations
+     * @return a new instance of {@link ForwarderFactory}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public ForwarderFactory forwarderFactory(
+            Forwarder redditMediaGroupForwarder,
+            Forwarder redditVideoForwarder,
+            Forwarder redditImageAnimationForwarder,
+            Forwarder redditPhotoForwarder,
+            Forwarder redditLinkForwarder,
+            Forwarder redditVideoAnimationForwarder
+    ) {
+        return new ForwarderFactory(
+                redditMediaGroupForwarder,
+                redditVideoForwarder,
+                redditImageAnimationForwarder,
+                redditPhotoForwarder,
+                redditLinkForwarder,
+                redditVideoAnimationForwarder
+        );
+    }
+
+    /**
+     * Creates a {@link PostForwarderManager} bean for managing Reddit post forwarding.
+     *
+     * @param instantPropertyService the service for managing instant properties
+     * @param redditService          the Reddit service client
+     * @param redditProperties       the Reddit configuration properties
+     * @param forwarderFactory       the factory for obtaining appropriate forwarders
      * @return a new instance of {@link PostForwarderManager} for Reddit
      */
     @Bean
@@ -65,23 +92,13 @@ public class RedditAutoConfiguration {
             RedditInstantPropertyService instantPropertyService,
             RedditService redditService,
             RedditProperties redditProperties,
-            Forwarder redditMediaGroupForwarder,
-            Forwarder redditVideoForwarder,
-            Forwarder redditImageAnimationForwarder,
-            Forwarder redditPhotoForwarder,
-            Forwarder redditLinkForwarder,
-            Forwarder redditVideoAnimationForwarder
+            ForwarderFactory forwarderFactory
     ) {
         return new RedditPostForwarderManager(
                 instantPropertyService,
                 redditService,
                 redditProperties,
-                redditMediaGroupForwarder,
-                redditVideoForwarder,
-                redditImageAnimationForwarder,
-                redditPhotoForwarder,
-                redditLinkForwarder,
-                redditVideoAnimationForwarder
+                forwarderFactory
         );
     }
 
