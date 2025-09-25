@@ -14,7 +14,7 @@ import java.net.URL;
  * Abstract class for forwarding animations.
  */
 @RequiredArgsConstructor
-public abstract class AbstractAnimationForwarder implements Forwarder {
+public abstract class AbstractAnimationForwarder implements LinkForwarder {
     private final PostSender<InputFileDTO, Message> animationSender;
 
     @Override

@@ -18,8 +18,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class LinkForwarderTest {
-    @InjectMocks private LinkForwarder forwarder;
+class UrlForwarderTest {
+    @InjectMocks private UrlForwarder forwarder;
     @Mock private PostSender<URL, Message> sender;
 
     @Test

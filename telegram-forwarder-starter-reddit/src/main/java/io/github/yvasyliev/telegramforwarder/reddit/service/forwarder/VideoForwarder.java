@@ -14,7 +14,7 @@ import java.io.IOException;
  * Service for forwarding video links to Telegram.
  */
 @RequiredArgsConstructor
-public class VideoForwarder implements Forwarder {
+public class VideoForwarder implements LinkForwarder {
     private final PostSender<InputFileDTO, Message> videoSender;
     private final VideoDownloader videoDownloader;
 
