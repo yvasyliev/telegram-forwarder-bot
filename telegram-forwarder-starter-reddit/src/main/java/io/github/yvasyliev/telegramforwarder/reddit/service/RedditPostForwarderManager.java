@@ -7,8 +7,6 @@ import io.github.yvasyliev.telegramforwarder.reddit.dto.Thing;
 import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -44,7 +42,7 @@ public class RedditPostForwarderManager implements PostForwarderManager {
                 .map(Thing::data)
                 .filter(link -> link.created().isAfter(lastCreated))
                 .sorted()
-                .map(link -> ObjectUtils.defaultIfNull(CollectionUtils.lastElement(link.crosspostParentList()), link))
+                .map(Link::sourceLink)
                 .forEach(this::forwardPost);
     }
 
