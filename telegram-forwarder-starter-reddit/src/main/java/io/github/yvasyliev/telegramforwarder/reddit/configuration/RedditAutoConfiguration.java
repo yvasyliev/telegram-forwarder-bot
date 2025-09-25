@@ -7,7 +7,7 @@ import io.github.yvasyliev.telegramforwarder.reddit.service.RedditInstantPropert
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostForwarderManager;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditService;
 import io.github.yvasyliev.telegramforwarder.reddit.service.VideoDownloader;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.provider.ForwarderProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -15,6 +15,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import java.util.List;
 
 /**
  * Configuration class for setting up the Reddit service client.
@@ -29,6 +31,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("io.github.yvasyliev.telegramforwarder.reddit.entity")
 @Import({
         ForwarderConfiguration.class,
+        ForwarderProviderConfiguration.class,
         MetadataForwarderConfiguration.class,
         RedditServiceConfiguration.class
 })
@@ -48,32 +51,29 @@ public class RedditAutoConfiguration {
     /**
      * Creates a {@link ForwarderFactory} bean if one is not already present in the application context.
      *
-     * @param redditMediaGroupForwarder     the forwarder for media groups
-     * @param redditVideoForwarder          the forwarder for videos
-     * @param redditImageAnimationForwarder the forwarder for image animations
-     * @param redditPhotoForwarder          the forwarder for photos
-     * @param redditLinkForwarder           the forwarder for links
-     * @param redditVideoAnimationForwarder the forwarder for video animations
+     * @param redditMediaGroupForwarderProvider  the provider for media group forwarders
+     * @param redditHostedVideoForwarderProvider the provider for hosted video forwarders
+     * @param redditImageForwarderProvider       the provider for image forwarders
+     * @param redditLinkForwarderProvider        the provider for link forwarders
+     * @param redditRichVideoForwarderProvider   the provider for rich video forwarders
      * @return a new instance of {@link ForwarderFactory}
      */
     @Bean
     @ConditionalOnMissingBean
     public ForwarderFactory forwarderFactory(
-            Forwarder redditMediaGroupForwarder,
-            Forwarder redditVideoForwarder,
-            Forwarder redditImageAnimationForwarder,
-            Forwarder redditPhotoForwarder,
-            Forwarder redditLinkForwarder,
-            Forwarder redditVideoAnimationForwarder
+            ForwarderProvider redditMediaGroupForwarderProvider,
+            ForwarderProvider redditHostedVideoForwarderProvider,
+            ForwarderProvider redditImageForwarderProvider,
+            ForwarderProvider redditLinkForwarderProvider,
+            ForwarderProvider redditRichVideoForwarderProvider
     ) {
-        return new ForwarderFactory(
-                redditMediaGroupForwarder,
-                redditVideoForwarder,
-                redditImageAnimationForwarder,
-                redditPhotoForwarder,
-                redditLinkForwarder,
-                redditVideoAnimationForwarder
-        );
+        return new ForwarderFactory(List.of(
+                redditMediaGroupForwarderProvider,
+                redditHostedVideoForwarderProvider,
+                redditImageForwarderProvider,
+                redditLinkForwarderProvider,
+                redditRichVideoForwarderProvider
+        ));
     }
 
     /**
