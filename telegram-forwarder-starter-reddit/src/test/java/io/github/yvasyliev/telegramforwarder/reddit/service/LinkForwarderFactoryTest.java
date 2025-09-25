@@ -1,8 +1,8 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
-import io.github.yvasyliev.telegramforwarder.reddit.service.provider.ForwarderProvider;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.provider.LinkForwarderProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -17,14 +17,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ForwarderFactoryTest {
+class LinkForwarderFactoryTest {
     @Mock private Link link;
 
     @Test
     void shouldReturnForwarder() {
-        var forwarderProvider = mock(ForwarderProvider.class);
-        var forwarderFactory = new ForwarderFactory(List.of(forwarderProvider));
-        var expected = mock(Forwarder.class);
+        var forwarderProvider = mock(LinkForwarderProvider.class);
+        var forwarderFactory = new LinkForwarderFactory(List.of(forwarderProvider));
+        var expected = mock(LinkForwarder.class);
 
         when(forwarderProvider.apply(link)).thenReturn(expected);
 
@@ -35,7 +35,7 @@ class ForwarderFactoryTest {
 
     @Test
     void shouldReturnNoopForwarder() {
-        var forwarderFactory = new ForwarderFactory(List.of());
+        var forwarderFactory = new LinkForwarderFactory(List.of());
 
         var actual = forwarderFactory.apply(link);
 

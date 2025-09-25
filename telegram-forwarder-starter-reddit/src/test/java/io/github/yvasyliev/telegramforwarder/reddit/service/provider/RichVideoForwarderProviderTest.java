@@ -1,7 +1,7 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service.provider;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RichVideoForwarderProviderTest {
     private RichVideoForwarderProvider richVideoForwarderProvider;
-    @Mock private Forwarder videoAnimationForwarder;
-    @Mock private Forwarder linkForwarder;
+    @Mock private LinkForwarder videoAnimationForwarder;
+    @Mock private LinkForwarder linkForwarder;
     @Mock private Link link;
 
     @BeforeEach
@@ -61,7 +61,7 @@ class RichVideoForwarderProviderTest {
             shouldReturnForwarderBasedOnIsGif(false, linkForwarder);
         }
 
-        private void shouldReturnForwarderBasedOnIsGif(boolean isGif, Forwarder expected) {
+        private void shouldReturnForwarderBasedOnIsGif(boolean isGif, LinkForwarder expected) {
             var redditVideoPreview = mock(Link.RedditVideo.class);
 
             when(preview.redditVideoPreview()).thenReturn(redditVideoPreview);

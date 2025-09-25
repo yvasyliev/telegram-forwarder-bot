@@ -1,7 +1,7 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service.provider;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class HostedVideoForwarderProviderTest {
     @InjectMocks private HostedVideoForwarderProvider forwarderProvider;
-    @Mock private Forwarder videoForwarder;
+    @Mock private LinkForwarder videoForwarder;
     @Mock private Link link;
 
     @Test

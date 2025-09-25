@@ -4,7 +4,7 @@ import io.github.yvasyliev.telegramforwarder.reddit.configuration.RedditProperti
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Listing;
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Thing;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,20 +27,20 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class RedditPostForwarderManagerTest {
+class LinkForwarderManagerTest {
     private static final String SUBREDDIT = "testSubreddit";
     private static final Instant CREATED = Instant.now();
     @SuppressWarnings("checkstyle:ConstantName")
     private static final Exception[] shouldCatchCheckedException = {new IOException(), new TelegramApiException()};
-    @InjectMocks private RedditPostForwarderManager forwarderManager;
+    @InjectMocks private LinkForwarderManager forwarderManager;
     @Mock private RedditInstantPropertyService propertyService;
     @Mock private RedditService redditService;
     @Mock private RedditProperties redditProperties;
-    @Mock private ForwarderFactory forwarderFactory;
+    @Mock private LinkForwarderFactory forwarderFactory;
     @Mock private Thing<Listing> subredditNew;
     @Mock private Thing<Link> child;
     @Mock private Link link;
-    @Mock private Forwarder forwarder;
+    @Mock private LinkForwarder forwarder;
 
     @BeforeEach
     void setUp() {
@@ -65,7 +65,7 @@ class RedditPostForwarderManagerTest {
 
     @Test
     void shouldForwardLink() {
-        forwarderManager.forward();
+        forwarderManager.run();
     }
 
     @ParameterizedTest
@@ -73,6 +73,6 @@ class RedditPostForwarderManagerTest {
     void shouldCatchCheckedException(Exception e) throws TelegramApiException, IOException {
         doThrow(e).when(forwarder).forward(link);
 
-        assertDoesNotThrow(forwarderManager::forward);
+        assertDoesNotThrow(forwarderManager::run);
     }
 }

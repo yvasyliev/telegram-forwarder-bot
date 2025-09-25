@@ -2,12 +2,12 @@ package io.github.yvasyliev.telegramforwarder.reddit.configuration;
 
 import io.github.yvasyliev.telegramforwarder.core.service.PostForwarderManager;
 import io.github.yvasyliev.telegramforwarder.reddit.repository.RedditInstantPropertyRepository;
-import io.github.yvasyliev.telegramforwarder.reddit.service.ForwarderFactory;
+import io.github.yvasyliev.telegramforwarder.reddit.service.LinkForwarderFactory;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditInstantPropertyService;
-import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostForwarderManager;
+import io.github.yvasyliev.telegramforwarder.reddit.service.LinkForwarderManager;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditService;
 import io.github.yvasyliev.telegramforwarder.reddit.service.VideoDownloader;
-import io.github.yvasyliev.telegramforwarder.reddit.service.provider.ForwarderProvider;
+import io.github.yvasyliev.telegramforwarder.reddit.service.provider.LinkForwarderProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -49,31 +49,15 @@ public class RedditAutoConfiguration {
     }
 
     /**
-     * Creates a {@link ForwarderFactory} bean if one is not already present in the application context.
+     * Creates a {@link LinkForwarderFactory} bean if one is not already present in the application context.
      *
-     * @param redditMediaGroupForwarderProvider  the provider for media group forwarders
-     * @param redditHostedVideoForwarderProvider the provider for hosted video forwarders
-     * @param redditImageForwarderProvider       the provider for image forwarders
-     * @param redditLinkForwarderProvider        the provider for link forwarders
-     * @param redditRichVideoForwarderProvider   the provider for rich video forwarders
-     * @return a new instance of {@link ForwarderFactory}
+     * @param forwarderProviders the list of forwarder providers
+     * @return a new instance of {@link LinkForwarderFactory}
      */
     @Bean
     @ConditionalOnMissingBean
-    public ForwarderFactory forwarderFactory(
-            ForwarderProvider redditMediaGroupForwarderProvider,
-            ForwarderProvider redditHostedVideoForwarderProvider,
-            ForwarderProvider redditImageForwarderProvider,
-            ForwarderProvider redditLinkForwarderProvider,
-            ForwarderProvider redditRichVideoForwarderProvider
-    ) {
-        return new ForwarderFactory(List.of(
-                redditMediaGroupForwarderProvider,
-                redditHostedVideoForwarderProvider,
-                redditImageForwarderProvider,
-                redditLinkForwarderProvider,
-                redditRichVideoForwarderProvider
-        ));
+    public LinkForwarderFactory redditLinkForwarderFactory(List<LinkForwarderProvider> forwarderProviders) {
+        return new LinkForwarderFactory(forwarderProviders);
     }
 
     /**
@@ -86,15 +70,15 @@ public class RedditAutoConfiguration {
      * @return a new instance of {@link PostForwarderManager} for Reddit
      */
     @Bean
-    @ConditionalOnMissingBean(name = "redditPostForwarderManager")
+    @ConditionalOnMissingBean(name = "redditLinkForwarderManager")
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public PostForwarderManager redditPostForwarderManager(
+    public PostForwarderManager redditLinkForwarderManager(
             RedditInstantPropertyService instantPropertyService,
             RedditService redditService,
             RedditProperties redditProperties,
-            ForwarderFactory forwarderFactory
+            LinkForwarderFactory forwarderFactory
     ) {
-        return new RedditPostForwarderManager(
+        return new LinkForwarderManager(
                 instantPropertyService,
                 redditService,
                 redditProperties,

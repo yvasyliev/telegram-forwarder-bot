@@ -1,15 +1,16 @@
 package io.github.yvasyliev.telegramforwarder.reddit.configuration;
 
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
-import io.github.yvasyliev.telegramforwarder.reddit.service.provider.ForwarderProvider;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.provider.LinkForwarderProvider;
 import io.github.yvasyliev.telegramforwarder.reddit.service.provider.HostedVideoForwarderProvider;
 import io.github.yvasyliev.telegramforwarder.reddit.service.provider.ImageForwarderProvider;
-import io.github.yvasyliev.telegramforwarder.reddit.service.provider.LinkForwarderProvider;
+import io.github.yvasyliev.telegramforwarder.reddit.service.provider.UrlForwarderProvider;
 import io.github.yvasyliev.telegramforwarder.reddit.service.provider.MediaGroupForwarderProvider;
 import io.github.yvasyliev.telegramforwarder.reddit.service.provider.RichVideoForwarderProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 /**
  * Configuration class for Reddit forwarder providers.
@@ -17,70 +18,77 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ForwarderProviderConfiguration {
     /**
-     * Creates a {@link ForwarderProvider} bean for providing a media group forwarder.
+     * Creates a {@link LinkForwarderProvider} bean for providing a media group forwarder.
      *
-     * @param redditMediaGroupForwarder the {@link Forwarder} used to forward media groups
-     * @return a {@link ForwarderProvider} for media groups
+     * @param redditMediaGroupForwarder the {@link LinkForwarder} used to forward media groups
+     * @return a {@link LinkForwarderProvider} for media groups
      */
     @Bean
     @ConditionalOnMissingBean(name = "redditMediaGroupForwarderProvider")
-    public ForwarderProvider redditMediaGroupForwarderProvider(Forwarder redditMediaGroupForwarder) {
+    @Order(0)
+    public LinkForwarderProvider redditMediaGroupForwarderProvider(LinkForwarder redditMediaGroupForwarder) {
         return new MediaGroupForwarderProvider(redditMediaGroupForwarder);
     }
 
     /**
-     * Creates a {@link ForwarderProvider} bean for providing a hosted video forwarder.
+     * Creates a {@link LinkForwarderProvider} bean for providing a hosted video forwarder.
      *
-     * @param redditVideoForwarder the {@link Forwarder} used to forward hosted videos
-     * @return a {@link ForwarderProvider} for hosted videos
+     * @param redditVideoForwarder the {@link LinkForwarder} used to forward hosted videos
+     * @return a {@link LinkForwarderProvider} for hosted videos
      */
     @Bean
     @ConditionalOnMissingBean(name = "redditHostedVideoForwarderProvider")
-    public ForwarderProvider redditHostedVideoForwarderProvider(Forwarder redditVideoForwarder) {
+    @Order(1)
+    public LinkForwarderProvider redditHostedVideoForwarderProvider(LinkForwarder redditVideoForwarder) {
         return new HostedVideoForwarderProvider(redditVideoForwarder);
     }
 
     /**
-     * Creates a {@link ForwarderProvider} bean for providing an image forwarder.
+     * Creates a {@link LinkForwarderProvider} bean for providing an image forwarder.
      *
-     * @param redditImageAnimationForwarder the {@link Forwarder} used to forward image animations
-     * @param redditPhotoForwarder          the {@link Forwarder} used to forward photos
-     * @return a {@link ForwarderProvider} for images
+     * @param redditImageAnimationForwarder the {@link LinkForwarder} used to forward image animations
+     * @param redditPhotoForwarder          the {@link LinkForwarder} used to forward photos
+     * @return a {@link LinkForwarderProvider} for images
      */
     @Bean
     @ConditionalOnMissingBean(name = "redditImageForwarderProvider")
-    public ForwarderProvider redditImageForwarderProvider(
-            Forwarder redditImageAnimationForwarder,
-            Forwarder redditPhotoForwarder
+    @Order(2)
+    public LinkForwarderProvider redditImageForwarderProvider(
+            LinkForwarder redditImageAnimationForwarder,
+            LinkForwarder redditPhotoForwarder
     ) {
         return new ImageForwarderProvider(redditImageAnimationForwarder, redditPhotoForwarder);
     }
 
     /**
-     * Creates a {@link ForwarderProvider} bean for providing a link forwarder.
+     * Creates a {@link LinkForwarderProvider} bean for providing a link forwarder.
      *
-     * @param redditLinkForwarder the {@link Forwarder} used to forward links
-     * @return a {@link ForwarderProvider} for links
+     * @param redditUrlForwarder the {@link LinkForwarder} used to forward links
+     * @return a {@link LinkForwarderProvider} for links
      */
     @Bean
-    @ConditionalOnMissingBean(name = "redditLinkForwarderProvider")
-    public ForwarderProvider redditLinkForwarderProvider(Forwarder redditLinkForwarder) {
-        return new LinkForwarderProvider(redditLinkForwarder);
+    @ConditionalOnMissingBean(name = "redditUrlForwarderProvider")
+    @Order(3)
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public LinkForwarderProvider redditUrlForwarderProvider(LinkForwarder redditUrlForwarder) {
+        return new UrlForwarderProvider(redditUrlForwarder);
     }
 
     /**
-     * Creates a {@link ForwarderProvider} bean for providing a rich video forwarder.
+     * Creates a {@link LinkForwarderProvider} bean for providing a rich video forwarder.
      *
-     * @param redditVideoAnimationForwarder the {@link Forwarder} used to forward video animations
-     * @param redditLinkForwarder           the {@link Forwarder} used to forward links
-     * @return a {@link ForwarderProvider} for rich videos
+     * @param redditVideoAnimationForwarder the {@link LinkForwarder} used to forward video animations
+     * @param redditUrlForwarder           the {@link LinkForwarder} used to forward links
+     * @return a {@link LinkForwarderProvider} for rich videos
      */
     @Bean
     @ConditionalOnMissingBean(name = "redditRichVideoForwarderProvider")
-    public ForwarderProvider redditRichVideoForwarderProvider(
-            Forwarder redditVideoAnimationForwarder,
-            Forwarder redditLinkForwarder
+    @Order(4)
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public LinkForwarderProvider redditRichVideoForwarderProvider(
+            LinkForwarder redditVideoAnimationForwarder,
+            LinkForwarder redditUrlForwarder
     ) {
-        return new RichVideoForwarderProvider(redditVideoAnimationForwarder, redditLinkForwarder);
+        return new RichVideoForwarderProvider(redditVideoAnimationForwarder, redditUrlForwarder);
     }
 }

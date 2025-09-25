@@ -1,7 +1,7 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service.provider;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +18,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ImageForwarderProviderTest {
     private ImageForwarderProvider forwarderProvider;
-    @Mock private Forwarder imageAnimationForwarder;
-    @Mock private Forwarder photoForwarder;
+    @Mock private LinkForwarder imageAnimationForwarder;
+    @Mock private LinkForwarder photoForwarder;
     @Mock private Link link;
 
     @BeforeEach
@@ -44,7 +44,7 @@ class ImageForwarderProviderTest {
         shouldReturnForwarderBasedOnGifPresence(false, photoForwarder);
     }
 
-    private void shouldReturnForwarderBasedOnGifPresence(boolean hasGif, Forwarder expected) {
+    private void shouldReturnForwarderBasedOnGifPresence(boolean hasGif, LinkForwarder expected) {
         var preview = mock(Link.Preview.class);
         var image = mock(Link.Preview.Image.class);
         var variants = mock(Link.Variants.class);

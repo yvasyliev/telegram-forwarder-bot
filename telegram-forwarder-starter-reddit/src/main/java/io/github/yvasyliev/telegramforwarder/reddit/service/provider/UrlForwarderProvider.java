@@ -5,15 +5,15 @@ import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwar
 import lombok.RequiredArgsConstructor;
 
 /**
- * Provides a {@link LinkForwarder} for links with the post hint of {@link Link.PostHint#HOSTED_VIDEO}.
+ * Provides a {@link LinkForwarder} for links with the post hint of {@link Link.PostHint#LINK}.
  * If the link does not have this post hint, it returns {@code null}.
  */
 @RequiredArgsConstructor
-public class HostedVideoForwarderProvider implements LinkForwarderProvider {
-    private final LinkForwarder videoForwarder;
+public class UrlForwarderProvider implements LinkForwarderProvider {
+    private final LinkForwarder linkForwarder;
 
     @Override
     public LinkForwarder apply(Link link) {
-        return Link.PostHint.HOSTED_VIDEO.equals(link.postHint()) ? videoForwarder : null;
+        return Link.PostHint.LINK.equals(link.postHint()) ? linkForwarder : null;
     }
 }

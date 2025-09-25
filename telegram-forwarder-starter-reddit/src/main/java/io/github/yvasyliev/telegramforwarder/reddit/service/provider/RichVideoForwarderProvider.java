@@ -1,11 +1,11 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service.provider;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.LinkForwarder;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Provides a {@link Forwarder} for links with the post hint of {@link Link.PostHint#RICH_VIDEO}.
+ * Provides a {@link LinkForwarder} for links with the post hint of {@link Link.PostHint#RICH_VIDEO}.
  * If the link does not have this post hint, it returns {@code null}.
  *
  * <p>
@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
  * linkForwarder}.
  */
 @RequiredArgsConstructor
-public class RichVideoForwarderProvider implements ForwarderProvider {
-    private final Forwarder videoAnimationForwarder;
-    private final Forwarder linkForwarder;
+public class RichVideoForwarderProvider implements LinkForwarderProvider {
+    private final LinkForwarder videoAnimationForwarder;
+    private final LinkForwarder linkForwarder;
 
     @Override
-    public Forwarder apply(Link link) {
+    public LinkForwarder apply(Link link) {
         if (!Link.PostHint.RICH_VIDEO.equals(link.postHint())) {
             return null;
         }
