@@ -47,7 +47,7 @@ dependencies {
     mockitoAgent('org.mockito:mockito-core') {
         transitive = false
     }
-    checkstyle 'com.puppycrawl.tools:checkstyle:11.0.0'
+    checkstyle 'com.puppycrawl.tools:checkstyle:11.1.0'
     checkstyle 'com.github.sevntu-checkstyle:sevntu-checks:1.44.1'
 }
 
