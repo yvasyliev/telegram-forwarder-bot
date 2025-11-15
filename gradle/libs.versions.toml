@@ -1,7 +1,9 @@
 [versions]
+commons-collections4 = "4.5.0"
 telegrambots = "9.0.0"
 
 [libraries]
+commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collections4" }
 telegrambots-client = { module = "org.telegram:telegrambots-client", version.ref = "telegrambots" }
 telegrambots-spring-boot-starter = { module = "org.telegram:telegrambots-springboot-longpolling-starter", version.ref = "telegrambots" }
 

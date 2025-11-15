@@ -6,8 +6,4 @@
     <suppress
             checks="JavadocPackage|MagicNumber|MultipleStringLiterals|VariableDeclarationUsageDistance|LambdaBodyLength"
             files="[/\\]test[/\\]"/>
-    <suppress checks="LineLength"
-              files="src[/\\]main[/\\]resources[/\\]templates[/\\]\w+\.html|.*\.yml|libs\.versions\.toml"/>
-    <suppress checks="ClassDataAbstractionCoupling|ClassFanOutComplexity"
-              files="src[/\\]main[/\\]java[/\\]io[/\\]github[/\\]yvasyliev[/\\]telegramforwarderbot[/\\]configuration"/>
 </suppressions>

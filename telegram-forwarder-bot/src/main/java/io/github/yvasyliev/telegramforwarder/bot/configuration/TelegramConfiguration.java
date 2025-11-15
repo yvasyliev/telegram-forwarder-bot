@@ -107,6 +107,11 @@ public class TelegramConfiguration {
         return new HelpMessageCommand(templateEngine, telegramClient);
     }
 
+    /**
+     * Creates a {@link TemplateContextCustomizer} bean that sets the Telegram properties in the template context.
+     *
+     * @return a {@link TemplateContextCustomizer} instance that sets Telegram properties
+     */
     @Bean
     public TemplateContextCustomizer telegramPropertiesSetter() {
         return context -> context.setVariable("telegramProperties", telegramProperties);

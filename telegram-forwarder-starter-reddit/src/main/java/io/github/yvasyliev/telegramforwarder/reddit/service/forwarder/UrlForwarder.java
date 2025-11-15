@@ -1,0 +1,23 @@
+package io.github.yvasyliev.telegramforwarder.reddit.service.forwarder;
+
+import io.github.yvasyliev.telegramforwarder.core.service.PostSender;
+import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
+import lombok.RequiredArgsConstructor;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.io.IOException;
+import java.net.URL;
+
+/**
+ * Forwards links from Reddit to Telegram.
+ */
+@RequiredArgsConstructor
+public class UrlForwarder implements LinkForwarder {
+    private final PostSender<URL, Message> urlSender;
+
+    @Override
+    public void forward(Link link) throws IOException, TelegramApiException {
+        urlSender.send(link.url(), link.title());
+    }
+}

@@ -26,7 +26,7 @@ class PostForwardSchedulerTest {
 
     @AfterEach
     void tearDown() {
-        verify(postForwarderManager).forward();
+        verify(postForwarderManager).run();
     }
 
     @Test
@@ -36,7 +36,7 @@ class PostForwardSchedulerTest {
 
     @Test
     void shouldHandleExceptionDuringForwarding() {
-        doThrow(RuntimeException.class).when(postForwarderManager).forward();
+        doThrow(RuntimeException.class).when(postForwarderManager).run();
 
         assertDoesNotThrow(postForwardScheduler::forwardPosts);
     }

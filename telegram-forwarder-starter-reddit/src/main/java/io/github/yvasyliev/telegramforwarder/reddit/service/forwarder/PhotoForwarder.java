@@ -13,7 +13,7 @@ import java.io.IOException;
  * Forwards a photo from a Reddit link to a Telegram chat.
  */
 @RequiredArgsConstructor
-public class PhotoForwarder implements Forwarder {
+public class PhotoForwarder implements LinkForwarder {
     private final PostSender<InputFileDTO, Message> photoSender;
 
     @Override
