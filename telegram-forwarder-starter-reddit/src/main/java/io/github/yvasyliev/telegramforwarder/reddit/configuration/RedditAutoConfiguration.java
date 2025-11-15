@@ -7,8 +7,10 @@ import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostForwarderM
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditService;
 import io.github.yvasyliev.telegramforwarder.reddit.service.VideoDownloader;
 import io.github.yvasyliev.telegramforwarder.reddit.service.forwarder.Forwarder;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * that can be used to interact with the Reddit API.
  */
 @AutoConfiguration
+@ConditionalOnProperty(prefix = "reddit", name = "enabled", havingValue = BooleanUtils.TRUE, matchIfMissing = true)
 @EnableConfigurationProperties(RedditProperties.class)
 @EnableJpaRepositories("io.github.yvasyliev.telegramforwarder.reddit.repository")
 @EntityScan("io.github.yvasyliev.telegramforwarder.reddit.entity")
