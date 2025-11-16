@@ -30,7 +30,7 @@ public class PostForwardScheduler {
     public void forwardPosts() {
         postForwarderManagers.forEach(postForwarderManager -> {
             try {
-                postForwarderManager.forward();
+                postForwarderManager.run();
             } catch (Exception e) {
                 log.error("Failed to fetch posts", e);
             }

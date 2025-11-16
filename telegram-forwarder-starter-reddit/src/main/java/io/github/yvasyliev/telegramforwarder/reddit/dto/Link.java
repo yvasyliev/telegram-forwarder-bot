@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import io.github.yvasyliev.telegramforwarder.reddit.deser.std.PermalinkDeserializer;
 import io.github.yvasyliev.telegramforwarder.reddit.deser.std.EditedDeserializer;
+import io.github.yvasyliev.telegramforwarder.reddit.deser.std.PermalinkDeserializer;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.util.CollectionUtils;
 
 import java.net.URL;
 import java.time.Duration;
@@ -271,6 +273,16 @@ public record Link(
      */
     public boolean hasPostHint() {
         return postHint != null;
+    }
+
+    /**
+     * Gets the source link for the post.
+     * If the post is a crosspost, it returns the original post; otherwise, it returns the current post.
+     *
+     * @return the source {@link Link} of the post.
+     */
+    public Link sourceLink() {
+        return ObjectUtils.defaultIfNull(CollectionUtils.lastElement(crosspostParentList), this);
     }
 
     @Override

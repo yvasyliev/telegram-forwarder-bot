@@ -21,7 +21,7 @@ import java.util.List;
  * according to the specified maximum size in the Telegram properties.
  */
 @RequiredArgsConstructor
-public class MediaGroupForwarder implements Forwarder {
+public class MediaGroupForwarder implements LinkForwarder {
     private final TelegramMediaProperties mediaProperties;
     private final MetadataForwarder animationMetadataForwarder;
     private final MetadataForwarder photoMetadataForwarder;
