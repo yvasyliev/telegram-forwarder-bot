@@ -139,6 +139,11 @@ You can override the default values of these properties:
     </td>
   </tr>
   <tr>
+    <td><code>reddit.enabled</code></td>
+    <td><code>true</code></td>
+    <td>Whether to enable Reddit as a post source.</td>
+  </tr>
+  <tr>
     <td><code>scheduler.post-forward.enabled</code></td>
     <td><code>true</code></td>
     <td>Whether to forward posts from external sources to the admin user for moderation.</td>
@@ -196,8 +201,7 @@ The command will compile the code, run tests, and create an executable JAR file 
 * The bot uses Spring Security features to prevent unauthorized command execution. Only the admin user can `/stop` the
   bot.
 * The bot stores the state of forwarded posts in an H2 database, so it can be restarted without losing the state. By
-  default,
-  the database is stored in the `data.mv.db` file next to the JAR file.
+  default, the database is stored in the `data.mv.db` file next to the JAR file.
 * The bot supports logging to a Telegram chat, so you can receive logs and errors directly in Telegram.
 * The bot sends notifications to the admin user every time it starts or stops.
 
