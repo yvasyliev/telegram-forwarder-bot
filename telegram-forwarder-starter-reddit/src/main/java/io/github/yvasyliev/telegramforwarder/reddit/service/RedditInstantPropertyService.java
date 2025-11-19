@@ -36,8 +36,10 @@ public class RedditInstantPropertyService {
     @Transactional
     public RedditInstantProperty saveLastCreated(Instant value) {
         var instantProperty = new RedditInstantProperty();
+
         instantProperty.setName(RedditInstantProperty.RedditInstantPropertyName.LAST_CREATED);
         instantProperty.setValue(value);
+
         return repository.save(instantProperty);
     }
 }

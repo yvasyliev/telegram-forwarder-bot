@@ -1,74 +1,113 @@
 package io.github.yvasyliev.telegramforwarder.reddit.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.yvasyliev.telegramforwarder.reddit.service.RedditService;
+import io.github.yvasyliev.telegramforwarder.core.service.PostForwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.repository.RedditInstantPropertyRepository;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditClient;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditInstantPropertyService;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditLinkService;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostForwarder;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostSenderResolver;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditResolvingPostSender;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditVideoDownloader;
+import io.github.yvasyliev.telegramforwarder.reddit.service.factory.RedditPostSenderFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
-import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.client.OAuth2ClientHttpRequestInterceptor;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.support.RestClientAdapter;
-import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
- * Configuration class for setting up the Reddit service client.
+ * Configuration class for Reddit services.
  */
 @Configuration
-@EnableConfigurationProperties(OAuth2ClientProperties.class)
+@EnableConfigurationProperties(RedditProperties.class)
 public class RedditServiceConfiguration {
     /**
-     * Creates a {@link RedditService} bean configured with OAuth2 client properties and
-     * a custom HTTP request interceptor.
+     * Creates a {@link RedditInstantPropertyService} bean if one is not already present.
      *
-     * @param oAuth2ClientProperties the OAuth2 client properties
-     * @param redditProperties       the Reddit properties containing API host and user agent
-     * @param objectMapper           the Jackson ObjectMapper for JSON serialization/deserialization
-     * @return a configured {@link RedditService} instance
+     * @param repository the {@link RedditInstantPropertyRepository} to be used by the service
+     * @return an instance of {@link RedditInstantPropertyService}
      */
     @Bean
     @ConditionalOnMissingBean
-    public RedditService redditService(
-            OAuth2ClientProperties oAuth2ClientProperties,
-            RedditProperties redditProperties,
-            ObjectMapper objectMapper
-    ) {
-        var clientRegistrations = List.copyOf(new OAuth2ClientPropertiesMapper(oAuth2ClientProperties)
-                .asClientRegistrations()
-                .values()
-        );
-        var clientRegistrationRepository = new InMemoryClientRegistrationRepository(clientRegistrations);
-        var authorizedClientService = new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-        var authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
-                clientRegistrationRepository,
-                authorizedClientService
-        );
-        var oAuth2ClientHttpRequestInterceptor = new OAuth2ClientHttpRequestInterceptor(authorizedClientManager);
-        oAuth2ClientHttpRequestInterceptor.setClientRegistrationIdResolver(request -> "reddit");
+    public RedditInstantPropertyService redditInstantPropertyService(RedditInstantPropertyRepository repository) {
+        return new RedditInstantPropertyService(repository);
+    }
 
-        var restClient = RestClient.builder()
-                .baseUrl(redditProperties.apiHost())
-                .defaultHeader(HttpHeaders.USER_AGENT, redditProperties.userAgent())
-                .requestInterceptor(oAuth2ClientHttpRequestInterceptor)
-                .messageConverters(converters -> Objects.requireNonNull(CollectionUtils.findValueOfType(
-                                converters,
-                                AbstractJackson2HttpMessageConverter.class
-                        )).setObjectMapper(objectMapper)
-                )
-                .build();
-        var restClientAdapter = RestClientAdapter.create(restClient);
-        var httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(restClientAdapter).build();
-        return httpServiceProxyFactory.createClient(RedditService.class);
+    /**
+     * Creates a {@link RedditPostSenderResolver} bean if one is not already present.
+     *
+     * @param redditPostSenderFactories the list of {@link RedditPostSenderFactory} instances
+     * @return an instance of {@link RedditPostSenderResolver}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public RedditPostSenderResolver redditPostSenderResolver(
+            List<RedditPostSenderFactory> redditPostSenderFactories
+    ) {
+        return new RedditPostSenderResolver(redditPostSenderFactories);
+    }
+
+    /**
+     * Creates a {@link RedditResolvingPostSender} bean if one is not already present.
+     *
+     * @param redditLinkService         the {@link RedditLinkService} to be used by the sender
+     * @param redditResolvingPostSender the {@link RedditPostSenderResolver} to resolve the appropriate sender
+     * @return an instance of {@link RedditResolvingPostSender}
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "redditPostForwarder")
+    public PostForwarder redditPostForwarder(
+            RedditLinkService redditLinkService,
+            RedditResolvingPostSender redditResolvingPostSender
+    ) {
+        return new RedditPostForwarder(redditLinkService, redditResolvingPostSender);
+    }
+
+    /**
+     * Creates a {@link RedditVideoDownloader} bean if one is not already present.
+     *
+     * @param redditProperties the {@link RedditProperties} to be used by the downloader
+     * @return an instance of {@link RedditVideoDownloader}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public RedditVideoDownloader redditVideoDownloader(RedditProperties redditProperties) {
+        return new RedditVideoDownloader(redditProperties);
+    }
+
+    /**
+     * Creates a {@link RedditLinkService} bean if one is not already present.
+     *
+     * @param redditInstantPropertyService the {@link RedditInstantPropertyService} to be used by the service
+     * @param redditClient                 the {@link RedditClient} to be used by the service
+     * @param redditProperties             the {@link RedditProperties} to be used by the service
+     * @return an instance of {@link RedditLinkService}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public RedditLinkService redditLinkService(
+            RedditInstantPropertyService redditInstantPropertyService,
+            RedditClient redditClient,
+            RedditProperties redditProperties
+    ) {
+        return new RedditLinkService(redditInstantPropertyService, redditClient, redditProperties);
+    }
+
+    /**
+     * Creates a {@link RedditResolvingPostSender} bean if one is not already present.
+     *
+     * @param redditPostSenderResolver     the {@link RedditPostSenderResolver} to resolve the appropriate sender
+     * @param redditInstantPropertyService the {@link RedditInstantPropertyService} to be used by the sender
+     * @return an instance of {@link RedditResolvingPostSender}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public RedditResolvingPostSender redditResolvingPostSender(
+            RedditPostSenderResolver redditPostSenderResolver,
+            RedditInstantPropertyService redditInstantPropertyService
+    ) {
+        return new RedditResolvingPostSender(redditPostSenderResolver, redditInstantPropertyService);
     }
 }

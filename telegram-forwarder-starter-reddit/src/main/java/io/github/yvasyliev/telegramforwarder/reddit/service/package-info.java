@@ -1,4 +1,4 @@
 /**
- * This package contains services for interacting with Reddit.
+ * Services for Reddit integration.
  */
 package io.github.yvasyliev.telegramforwarder.reddit.service;
