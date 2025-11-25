@@ -17,12 +17,6 @@ public class RedditImageAnimationSender extends AbstractRedditAnimationSender {
 
     @Override
     protected URL getUrl(Link post) {
-        return post.preview()
-                .images()
-                .getFirst()
-                .variants()
-                .mp4()
-                .source()
-                .url();
+        return post.preview().images().getFirst().variants().mp4().source().url();
     }
 }

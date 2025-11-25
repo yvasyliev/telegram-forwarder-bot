@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class RedditPostForwarderTest {
     @InjectMocks private RedditPostForwarder postForwarder;
     @Mock private RedditLinkService linkService;
-    @Mock private RedditResolvingPostSender resolvingPostSender;
+    @Mock private RedditPostSenderDelegator resolvingPostSender;
 
     @AfterEach
     void tearDown() {

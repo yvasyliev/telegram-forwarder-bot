@@ -1,6 +1,5 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service;
 
-import io.github.yvasyliev.telegramforwarder.reddit.configuration.RedditProperties;
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Thing;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import java.util.stream.Stream;
 public class RedditLinkService {
     private final RedditInstantPropertyService instantPropertyService;
     private final RedditClient redditClient;
-    private final RedditProperties redditProperties;
+    private final String subreddit;
 
     /**
      * Retrieves new links from a specified subreddit that were created after the last recorded creation time.
@@ -23,7 +22,7 @@ public class RedditLinkService {
      */
     public Stream<Link> getNewLinks() {
         var lastCreated = instantPropertyService.getLastCreated();
-        return redditClient.getSubredditNew(redditProperties.subreddit())
+        return redditClient.getSubredditNew(subreddit)
                 .data()
                 .children()
                 .stream()

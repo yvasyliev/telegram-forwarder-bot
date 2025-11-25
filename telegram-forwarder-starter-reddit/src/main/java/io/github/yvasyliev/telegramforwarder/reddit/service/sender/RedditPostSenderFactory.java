@@ -1,7 +1,6 @@
-package io.github.yvasyliev.telegramforwarder.reddit.service.factory;
+package io.github.yvasyliev.telegramforwarder.reddit.service.sender;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSender;
 
 /**
  * Factory for creating Reddit post senders.

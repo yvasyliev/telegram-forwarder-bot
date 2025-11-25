@@ -2,7 +2,6 @@ package io.github.yvasyliev.telegramforwarder.bot.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.yvasyliev.telegramforwarder.bot.TelegramForwarderBot;
-import io.github.yvasyliev.telegramforwarder.bot.service.command.HelpMessageCommand;
 import io.github.yvasyliev.telegramforwarder.bot.service.command.MessageCommand;
 import io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine;
 import io.github.yvasyliev.telegramforwarder.thymeleaf.TemplateContextCustomizer;
@@ -96,15 +95,14 @@ public class TelegramConfiguration {
     }
 
     /**
-     * Creates a {@link MessageCommand} bean for handling the {@code /help} and {@code /start} commands.
+     * Creates a {@link MessageCommand} bean for the {@code /start} command that delegates to the {@code /help} command.
      *
-     * @param templateEngine the {@link TelegramTemplateEngine} for processing templates
-     * @param telegramClient the {@link TelegramClient} for sending messages
-     * @return a {@link MessageCommand} instance that handles help and start commands
+     * @param helpMessageCommand the {@link MessageCommand} for the {@code /help} command
+     * @return a {@link MessageCommand} instance for the {@code /start} command
      */
-    @Bean({"/help", "/start"})
-    public MessageCommand helpMessageCommand(TelegramTemplateEngine templateEngine, TelegramClient telegramClient) {
-        return new HelpMessageCommand(templateEngine, telegramClient);
+    @Bean("/start")
+    public MessageCommand startMessageCommand(@Qualifier("/help") MessageCommand helpMessageCommand) {
+        return helpMessageCommand;
     }
 
     /**

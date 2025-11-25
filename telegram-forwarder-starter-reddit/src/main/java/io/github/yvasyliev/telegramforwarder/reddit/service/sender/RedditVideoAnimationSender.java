@@ -17,8 +17,6 @@ public class RedditVideoAnimationSender extends AbstractRedditAnimationSender {
 
     @Override
     protected URL getUrl(Link post) {
-        return post.preview()
-                .redditVideoPreview()
-                .fallbackUrl();
+        return post.preview().redditVideoPreview().fallbackUrl();
     }
 }

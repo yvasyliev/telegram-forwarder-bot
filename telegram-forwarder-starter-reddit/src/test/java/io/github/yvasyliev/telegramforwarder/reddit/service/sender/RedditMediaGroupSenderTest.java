@@ -1,129 +1,48 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service.sender;
 
-import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramMediaProperties;
-import io.github.yvasyliev.telegramforwarder.core.dto.InputFileDTO;
-import io.github.yvasyliev.telegramforwarder.core.dto.InputMediaDTO;
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.util.PhotoUtils;
-import io.github.yvasyliev.telegramforwarder.core.service.PostSender;
-import org.junit.jupiter.api.BeforeEach;
+import io.github.yvasyliev.telegramforwarder.reddit.util.GalleryMetadataPartitioner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RedditMediaGroupSenderTest {
-    private static final boolean HAS_SPOILER = true;
-    private static final String CAPTION = "Test Caption";
-    private static final int MEDIA_GROUP_MAX_SIZE = 3;
-    private static final int MAX_PHOTO_DIMENSIONS = 10_000;
-    private final Map<String, Link.Metadata> mediaMetadata = new HashMap<>();
-    private final List<Link.GalleryData.Item> items = new LinkedList<>();
-    private RedditMediaGroupSender redditMediaGroupSender;
-    @Mock private TelegramMediaProperties mediaProperties;
-    @Mock private RedditMetadataSender animationMetadataSender;
-    @Mock private RedditMetadataSender photoMetadataSender;
-    @Mock private PostSender<List<InputMediaDTO>, List<Message>> mediaGroupSender;
-    @Mock private Link post;
-    @Mock private URL url;
-
-    @BeforeEach
-    void setUp() {
-        redditMediaGroupSender = new RedditMediaGroupSender(
-                mediaProperties,
-                animationMetadataSender,
-                photoMetadataSender,
-                mediaGroupSender
-        );
-
-        when(post.isNsfw()).thenReturn(HAS_SPOILER);
-        when(post.title()).thenReturn(CAPTION);
-        when(post.galleryData()).thenReturn(new Link.GalleryData(items));
-        when(post.mediaMetadata()).thenReturn(mediaMetadata);
-        when(mediaProperties.mediaGroupMaxSize()).thenReturn(MEDIA_GROUP_MAX_SIZE);
-    }
+    @InjectMocks private RedditMediaGroupSender redditMediaGroupSender;
+    @Mock private GalleryMetadataPartitioner galleryMetadataPartitioner;
+    @Mock private MetadataPartitionSenderStrategyResolver metadataPartitionSenderStrategyResolver;
 
     @Test
-    void shouldSendTwoMediaGroups() throws TelegramApiException, IOException {
-        var inputFile = mock(InputFileDTO.class);
-        var inputMediaAnimation = InputMediaDTO.animation(inputFile);
-        var inputMediaPhoto = InputMediaDTO.photo(inputFile);
-        var inputMedias1 = List.of(inputMediaAnimation, inputMediaAnimation, inputMediaAnimation);
-        var inputMedias2 = List.of(inputMediaPhoto, inputMediaPhoto);
+    void testSend() throws TelegramApiException, IOException {
+        var hasSpoiler = true;
+        var caption = "Test Caption";
+        var post = mock(Link.class);
+        var metadataPartition1 = List.of(mock(Link.Metadata.class));
+        var metadataPartition2 = List.of(mock(Link.Metadata.class));
+        var metadataPartitionSenderStrategy = mock(MetadataPartitionSenderStrategy.class);
 
-        mockGifUrl(registerItem(Link.Metadata.Type.ANIMATED_IMAGE));
-        mockGifUrl(registerItem(Link.Metadata.Type.ANIMATED_IMAGE));
-        mockGifUrl(registerItem(Link.Metadata.Type.ANIMATED_IMAGE));
+        when(post.isNsfw()).thenReturn(hasSpoiler);
+        when(post.title()).thenReturn(caption);
+        when(galleryMetadataPartitioner.partition(post)).thenReturn(List.of(metadataPartition1, metadataPartition2));
+        when(metadataPartitionSenderStrategyResolver.resolve(metadataPartition1))
+                .thenReturn(metadataPartitionSenderStrategy);
+        when(metadataPartitionSenderStrategyResolver.resolve(metadataPartition2))
+                .thenReturn(metadataPartitionSenderStrategy);
 
-        var photoMetadata1 = registerItem(Link.Metadata.Type.IMAGE);
-        var photoMetadata2 = registerItem(Link.Metadata.Type.IMAGE);
+        assertDoesNotThrow(() -> redditMediaGroupSender.send(post));
 
-        when(mediaProperties.maxPhotoDimensions()).thenReturn(MAX_PHOTO_DIMENSIONS);
-
-        try (var photoUtils = mockStatic(PhotoUtils.class); var inputFileDTO = mockStatic(InputFileDTO.class)) {
-            photoUtils.when(() -> PhotoUtils.getUrl(photoMetadata1, MAX_PHOTO_DIMENSIONS)).thenReturn(url);
-            photoUtils.when(() -> PhotoUtils.getUrl(photoMetadata2, MAX_PHOTO_DIMENSIONS)).thenReturn(url);
-            inputFileDTO.when(() -> InputFileDTO.fromUrl(url, HAS_SPOILER)).thenReturn(inputFile);
-
-            redditMediaGroupSender.send(post);
-        }
-
-        verify(mediaGroupSender).send(inputMedias1, CAPTION);
-        verify(mediaGroupSender).send(inputMedias2, null);
-    }
-
-    @Test
-    void shouldSendSingleAnimation() throws TelegramApiException, IOException {
-        var animationMetadata = registerItem(Link.Metadata.Type.ANIMATED_IMAGE);
-
-        redditMediaGroupSender.send(post);
-
-        verify(animationMetadataSender).send(animationMetadata, HAS_SPOILER);
-    }
-
-    @Test
-    void shouldSendSinglePhoto() throws TelegramApiException, IOException {
-        var photoMetadata = registerItem(Link.Metadata.Type.IMAGE);
-
-        redditMediaGroupSender.send(post);
-
-        verify(photoMetadataSender).send(photoMetadata, HAS_SPOILER);
-    }
-
-    private Link.Metadata registerItem(Link.Metadata.Type type) {
-        var mediaId = UUID.randomUUID().toString();
-        var metadata = mock(Link.Metadata.class);
-        var item = mock(Link.GalleryData.Item.class);
-
-        mediaMetadata.put(mediaId, metadata);
-        items.add(item);
-
-        when(metadata.type()).thenReturn(type);
-        when(item.mediaId()).thenReturn(mediaId);
-
-        return metadata;
-    }
-
-    private void mockGifUrl(Link.Metadata animationMetadata) {
-        var source = mock(Link.Resolution.class);
-
-        when(animationMetadata.source()).thenReturn(source);
-        when(source.gif()).thenReturn(url);
+        verify(metadataPartitionSenderStrategy).send(metadataPartition1, hasSpoiler, caption);
+        verify(metadataPartitionSenderStrategy).send(metadataPartition2, hasSpoiler, null);
     }
 }

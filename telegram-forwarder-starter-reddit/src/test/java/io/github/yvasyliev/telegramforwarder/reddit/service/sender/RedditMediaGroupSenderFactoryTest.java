@@ -1,7 +1,6 @@
-package io.github.yvasyliev.telegramforwarder.reddit.service.factory;
+package io.github.yvasyliev.telegramforwarder.reddit.service.sender;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSender;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,23 +12,23 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class RedditUrlSenderFactoryTest {
-    @InjectMocks private RedditUrlSenderFactory urlSenderFactory;
-    @Mock private RedditPostSender urlSender;
+class RedditMediaGroupSenderFactoryTest {
+    @InjectMocks private RedditMediaGroupSenderFactory mediaGroupSenderFactory;
+    @Mock private RedditPostSender mediaGroupSender;
     @Mock private Link post;
 
     @Test
-    void shouldReturnUrlSender() {
-        when(post.postHint()).thenReturn(Link.PostHint.LINK);
+    void shouldReturnMediaGroupSender() {
+        when(post.hasGalleryData()).thenReturn(true);
 
-        var actual = urlSenderFactory.getRedditPostSender(post);
+        var actual = mediaGroupSenderFactory.getRedditPostSender(post);
 
-        assertEquals(urlSender, actual);
+        assertEquals(mediaGroupSender, actual);
     }
 
     @Test
     void shouldReturnNull() {
-        var actual = urlSenderFactory.getRedditPostSender(post);
+        var actual = mediaGroupSenderFactory.getRedditPostSender(post);
 
         assertNull(actual);
     }

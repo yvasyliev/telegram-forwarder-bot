@@ -5,7 +5,6 @@ import io.github.yvasyliev.telegramforwarder.bot.dto.MessageIdsCommandCallbackDa
 import io.github.yvasyliev.telegramforwarder.bot.service.CallbackDataConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
@@ -58,13 +57,14 @@ public class PostControlsSender {
     )
     public void sendPostControlKeyboard(List<Message> messages) {
         var postControls = telegramProperties.postControls();
-        var messageIds = CollectionUtils.collect(messages, Message::getMessageId, new ArrayList<>());
+        var messageIds = messages.stream().map(Message::getMessageId).toList();
         var buttons = buildKeyboardButtons(postControls.buttons(), messageIds);
         var sendMessage = SendMessage.builder()
                 .chatId(messages.getFirst().getChatId())
                 .text(postControls.initialMessageText())
                 .replyMarkup(new InlineKeyboardMarkup(buttons))
                 .build();
+
         try {
             telegramClient.execute(sendMessage);
         } catch (TelegramApiException e) {

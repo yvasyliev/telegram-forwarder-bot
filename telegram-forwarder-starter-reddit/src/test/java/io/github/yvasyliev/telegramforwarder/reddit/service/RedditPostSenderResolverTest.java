@@ -2,7 +2,8 @@ package io.github.yvasyliev.telegramforwarder.reddit.service;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
 import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSender;
-import io.github.yvasyliev.telegramforwarder.reddit.service.factory.RedditPostSenderFactory;
+import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSenderFactory;
+import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSenderResolver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

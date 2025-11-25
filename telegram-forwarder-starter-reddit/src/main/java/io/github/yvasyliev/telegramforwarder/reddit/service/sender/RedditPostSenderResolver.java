@@ -1,8 +1,6 @@
-package io.github.yvasyliev.telegramforwarder.reddit.service;
+package io.github.yvasyliev.telegramforwarder.reddit.service.sender;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSender;
-import io.github.yvasyliev.telegramforwarder.reddit.service.factory.RedditPostSenderFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +28,7 @@ public class RedditPostSenderResolver {
      */
     public RedditPostSender resolve(Link post) {
         return redditPostSenderFactories.stream()
-                .map(provider -> provider.getRedditPostSender(post))
+                .map(redditPostSenderFactory -> redditPostSenderFactory.getRedditPostSender(post))
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(NOOP_FORWARDER);

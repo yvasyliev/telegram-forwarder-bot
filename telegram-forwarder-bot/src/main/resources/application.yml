@@ -45,6 +45,9 @@ spring:
 telegram:
   bot:
     version: $version
+  media:
+    group-max-size: 10
+    photo-max-dimension-sum: 10000
   post-controls:
     ignored-api-responses:
       - "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"

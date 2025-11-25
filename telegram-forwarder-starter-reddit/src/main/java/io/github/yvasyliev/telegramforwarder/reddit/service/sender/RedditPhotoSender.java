@@ -18,11 +18,7 @@ public class RedditPhotoSender implements RedditPostSender {
 
     @Override
     public void send(Link post) throws IOException, TelegramApiException {
-        var url = post.preview()
-                .images()
-                .getFirst()
-                .source()
-                .url();
+        var url = post.preview().images().getFirst().source().url();
         var photo = InputFileDTO.fromUrl(url, post.isNsfw());
 
         photoSender.send(photo, post.title());

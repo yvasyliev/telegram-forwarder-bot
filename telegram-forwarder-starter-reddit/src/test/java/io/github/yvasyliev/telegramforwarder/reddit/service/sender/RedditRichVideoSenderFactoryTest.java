@@ -1,7 +1,6 @@
-package io.github.yvasyliev.telegramforwarder.reddit.service.factory;
+package io.github.yvasyliev.telegramforwarder.reddit.service.sender;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
-import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

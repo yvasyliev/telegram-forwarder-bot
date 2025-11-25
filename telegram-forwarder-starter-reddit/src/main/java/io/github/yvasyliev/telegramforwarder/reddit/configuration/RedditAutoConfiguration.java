@@ -13,9 +13,7 @@ import org.springframework.context.annotation.Import;
 @Import({
         RedditClientConfiguration.class,
         RedditJpaConfiguration.class,
-        RedditMetadataSenderConfiguration.class,
         RedditPostSenderConfiguration.class,
-        RedditPostSenderFactoryConfiguration.class,
-        RedditServiceConfiguration.class
+        RedditServicesConfiguration.class
 })
 public class RedditAutoConfiguration {}

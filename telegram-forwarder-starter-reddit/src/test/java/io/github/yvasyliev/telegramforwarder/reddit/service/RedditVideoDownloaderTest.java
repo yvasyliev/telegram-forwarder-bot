@@ -1,6 +1,5 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service;
 
-import io.github.yvasyliev.telegramforwarder.reddit.configuration.RedditProperties;
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,8 +31,7 @@ class RedditVideoDownloaderTest {
     private static final String PERMALINK = "https://www.reddit.com/r/test/comments/123456/test_post/";
     private static final String USER_AGENT = "java:io.github.yvasyliev.telegramforwarderbot:v4.0.0 (by /u/test)";
     private static final String CSS_SELECTOR = "a.video-download-link";
-    @InjectMocks private RedditVideoDownloader redditVideoDownloader;
-    @Mock private RedditProperties redditProperties;
+    private RedditVideoDownloader redditVideoDownloader;
     @Mock private Link post;
     @Mock private Elements elements;
     private MockedStatic<Jsoup> jsoup;
@@ -42,15 +39,15 @@ class RedditVideoDownloaderTest {
     @BeforeEach
     void setUp() throws IOException {
         jsoup = mockStatic(Jsoup.class);
-        var videoDownloaderProperties = new RedditProperties.VideoDownloader(
+        redditVideoDownloader = new RedditVideoDownloader(
                 URI.create(VIDEO_DOWNLOADER_URI),
+                USER_AGENT,
                 CSS_SELECTOR
         );
+
         var connection = mock(Connection.class);
         var document = mock(Document.class);
 
-        when(redditProperties.userAgent()).thenReturn(USER_AGENT);
-        when(redditProperties.videoDownloader()).thenReturn(videoDownloaderProperties);
         when(post.permalink()).thenReturn(URI.create(PERMALINK).toURL());
         jsoup.when(() -> Jsoup.connect(VIDEO_DOWNLOADER_URI + "?url=" + PERMALINK)).thenReturn(connection);
         when(connection.header(HttpHeaders.USER_AGENT, USER_AGENT)).thenReturn(connection);

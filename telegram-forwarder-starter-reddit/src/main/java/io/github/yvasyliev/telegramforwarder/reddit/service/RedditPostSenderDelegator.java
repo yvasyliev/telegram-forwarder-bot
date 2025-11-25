@@ -1,6 +1,7 @@
 package io.github.yvasyliev.telegramforwarder.reddit.service;
 
 import io.github.yvasyliev.telegramforwarder.reddit.dto.Link;
+import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSenderResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -8,18 +9,18 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 
 /**
- * Forwards Reddit links using the appropriate link forwarder.
+ * Forwards Reddit posts using the appropriate post forwarder.
  */
 @RequiredArgsConstructor
 @Slf4j
-public class RedditResolvingPostSender {
+public class RedditPostSenderDelegator {
     private final RedditPostSenderResolver redditPostSenderResolver;
     private final RedditInstantPropertyService instantPropertyService;
 
     /**
-     * Forwards the given link.
+     * Forwards the given post.
      *
-     * @param post the link to be forwarded
+     * @param post the post to be forwarded
      */
     public void send(Link post) {
         try {

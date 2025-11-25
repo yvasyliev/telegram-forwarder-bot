@@ -1,10 +1,8 @@
 package io.github.yvasyliev.telegramforwarder.reddit.deser.std;
 
 import com.fasterxml.jackson.core.JsonParser;
-import io.github.yvasyliev.telegramforwarder.reddit.configuration.RedditProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,19 +18,16 @@ import static org.mockito.Mockito.when;
 class PermalinkDeserializerTest {
     private static final String HOST = "https://www.reddit.com";
     private static final String PATH = "/r/test/comments/12345/test_post";
-    private static final URI HOST_URI = URI.create(HOST);
-    @InjectMocks private PermalinkDeserializer converter;
-    @Mock private RedditProperties redditProperties;
+    private static final PermalinkDeserializer PERMALINK_DESERIALIZER = new PermalinkDeserializer(URI.create(HOST));
     @Mock private JsonParser p;
 
     @Test
     void shouldBuildUrl() throws IOException {
         var expected = URI.create(HOST + PATH).toURL();
 
-        when(redditProperties.host()).thenReturn(HOST_URI);
         when(p.getText()).thenReturn(PATH);
 
-        var actual = assertDoesNotThrow(() -> converter.deserialize(p, mock()));
+        var actual = assertDoesNotThrow(() -> PERMALINK_DESERIALIZER.deserialize(p, mock()));
 
         assertEquals(expected, actual);
     }
