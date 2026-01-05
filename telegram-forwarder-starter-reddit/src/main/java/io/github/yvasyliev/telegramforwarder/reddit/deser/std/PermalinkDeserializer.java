@@ -13,7 +13,7 @@ import java.net.URL;
  * Deserializer for Reddit permalink fields.
  * It constructs a full URL by combining the Reddit host with the permalink path.
  */
-public class PermalinkDeserializer extends StdDeserializer<URL> { //TODO: converter
+public class PermalinkDeserializer extends StdDeserializer<URL> {
     private final RedditProperties redditProperties;
 
     public PermalinkDeserializer(RedditProperties redditProperties) {

@@ -1,6 +1,6 @@
 package io.github.yvasyliev.telegramforwarder.bot.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,19 +43,11 @@ public class TelegramUpdateConsumer implements LongPollingUpdateConsumer {
                 log.atWarn().addArgument(json(update)).log("Received unsupported update: {}");
             }
         } catch (Exception e) {
-            // TODO: reflection to string
             log.atError().addArgument(json(update)).log("Failed to process update: {}", e);
         }
     }
 
-    private Supplier<?> json(Object object) {
-        return () -> {
-            try {
-                return objectMapper.writeValueAsString(object);
-            } catch (JsonProcessingException e) {
-                log.error("Failed to serialize object.", e);
-                return "<unable to serialize>";
-            }
-        };
+    private Supplier<JsonNode> json(Update update) {
+        return () -> objectMapper.convertValue(update, JsonNode.class);
     }
 }

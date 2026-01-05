@@ -19,7 +19,6 @@ jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: [
                 'io/github/yvasyliev/telegramforwarder/logging/configuration/**',
-                'io/github/yvasyliev/telegramforwarder/logging/TelegramBotAppender.class',
         ])
     }))
 }

@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.thymeleaf.spring6.ISpringTemplateEngine;
+import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.spring6.expression.ThymeleafEvaluationContext;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class ThymeleafAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public TelegramTemplateProcessor telegramTemplateProcessor(ISpringTemplateEngine templateEngine) {
+    public TelegramTemplateProcessor telegramTemplateProcessor(ITemplateEngine templateEngine) {
         return new TelegramTemplateProcessor(templateEngine);
     }
 

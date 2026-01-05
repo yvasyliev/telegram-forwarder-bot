@@ -19,6 +19,6 @@ public class TelegramForwarderBot implements SpringLongPollingBot {
     @Delegate
     private final TelegramBotProperties botProperties;
 
-    @Getter
+    @Getter(onMethod_ = @Override)
     private final LongPollingUpdateConsumer updatesConsumer;
 }

@@ -17,7 +17,7 @@ public interface RedditInputMediaAnimationDTOMapper {
      * Maps Reddit link metadata to an {@link InputMediaAnimationDTO}.
      *
      * @param metadata   the Reddit link metadata
-     * @param hasSpoiler whether the media has
+     * @param hasSpoiler whether the media has a spoiler
      * @return the corresponding {@link InputMediaAnimationDTO}
      * @throws IOException if an I/O error occurs during mapping
      */

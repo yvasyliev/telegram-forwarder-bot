@@ -57,7 +57,7 @@ class RedditPostSenderManagerTest {
 
     @ParameterizedTest
     @ValueSource(classes = {IOException.class, TelegramApiException.class})
-    void shouldHandleException(Class<? extends Exception> eClass) throws TelegramApiException, IOException {
+    void shouldHandleException(Class<Exception> eClass) throws TelegramApiException, IOException {
         when(postSenderStrategy.canSend(post)).thenReturn(true);
         doThrow(eClass).when(postSenderStrategy).send(post);
 

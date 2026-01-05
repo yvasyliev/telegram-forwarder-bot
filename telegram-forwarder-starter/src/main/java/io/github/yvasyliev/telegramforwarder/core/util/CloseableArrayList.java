@@ -20,18 +20,18 @@ public class CloseableArrayList<T extends Closeable> extends ArrayList<T> implem
                     primaryThrowable.addSuppressed(otherThrowable);
                     return primaryThrowable;
                 })
-                .map(t -> t instanceof IOException ex ? ex : new IOException(t));
+                .map(ex -> ex instanceof IOException ioEx ? ioEx : new IOException(ex));
 
         if (e.isPresent()) {
             throw e.get();
         }
     }
 
-    private Throwable tryClose(T closeable) {
+    private Exception tryClose(T closeable) {
         try (var ignored = closeable) { // TODO: Java 25
             return null;
-        } catch (Throwable t) {
-            return t;
+        } catch (Exception e) {
+            return e;
         }
     }
 }
