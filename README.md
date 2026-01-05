@@ -86,7 +86,7 @@ Without these properties, the bot will not start:
     <td>Your Reddit app client secret.</td>
   </tr>
   <tr>
-    <td><code>telegram.admin-id</code></td>
+    <td><code>telegram.admin.id</code></td>
     <td>
       Your Telegram user ID (not your username!). The bot will send you posts for moderation before forwarding them to
       the channel, and important errors. Example: <code>390000000</code>
@@ -104,7 +104,7 @@ Without these properties, the bot will not start:
     <td>Your Telegram bot token. Example: <code>123456789:ABCdefGhIJKlmnoPQRstuVWXyZ</code></td>
   </tr>
   <tr>
-    <td><code>telegram.channel-username</code></td>
+    <td><code>telegram.channel.chat-id</code></td>
     <td>
       The username (with <code>@</code> prefix!) or the ID of the Telegram channel to forward posts to. Example:
       <code>@my_channel</code> or <code>-1001234567890</code>

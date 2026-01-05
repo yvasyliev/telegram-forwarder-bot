@@ -8,11 +8,14 @@ dependencies {
 
     implementation libs.bundles.telegrambots
     implementation libs.commons.collections4
+    implementation libs.mapstruct
 
     implementation 'org.jsoup:jsoup:1.21.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    annotationProcessor libs.mapstruct.processor
 }
 
 jacocoTestReport {
@@ -23,4 +26,11 @@ jacocoTestReport {
                 'io/github/yvasyliev/telegramforwarder/reddit/dto/**'
         ])
     }))
+}
+
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.defaultInjectionStrategy=constructor',
+    ]
 }

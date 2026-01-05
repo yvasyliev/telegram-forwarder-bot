@@ -1,13 +1,13 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
-import io.github.yvasyliev.telegramforwarder.bot.dto.AbstractCommandCallbackDataDTO;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.PostControlsEditMessageTextProperties;
+import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.EditMessageTextMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -23,8 +23,9 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @RequiredArgsConstructor
 @Slf4j
 public class PostControlsMessageTextEditor {
-    private final TelegramProperties telegramProperties;
     private final TelegramClient telegramClient;
+    private final EditMessageTextMapper editMessageTextMapper;
+    private final PostControlsEditMessageTextProperties editMessageTextProperties;
 
     /**
      * After returning advice that edits the post controls message text after executing a callback query command.
@@ -32,18 +33,13 @@ public class PostControlsMessageTextEditor {
      * @param callbackQuery the callback query that triggered the command
      * @param callbackData  the data associated with the command
      */
-    @AfterReturning("io.github.yvasyliev.telegramforwarder.bot.util.Pointcuts.executePostControlsCallbackQueryCommand"
-            + "() && args(callbackQuery, callbackData)")
-    public void editPostControlsMessageText(CallbackQuery callbackQuery, AbstractCommandCallbackDataDTO callbackData) {
-        var postControls = telegramProperties.postControls();
-        var messageText = postControls.buttons().get(callbackData.getCommand()).messageText();
-        var message = (Message) callbackQuery.getMessage();
-        var editMessageText = EditMessageText.builder()
-                .chatId(message.getChatId())
-                .messageId(message.getMessageId())
-                .text(messageText)
-                .replyMarkup(message.getReplyMarkup())
-                .build();
+    @AfterReturning("io.github.yvasyliev.telegramforwarder.bot.util.Pointcuts.executePostControlsCallbackQueryCommand()"
+            + " && args(callbackQuery, callbackData)")
+    public void editPostControlsMessageText(CallbackQuery callbackQuery, CommandCallbackData callbackData) {
+        var editMessageText = editMessageTextMapper.map(
+                (Message) callbackQuery.getMessage(),
+                editMessageTextProperties.options().get(callbackData.command())
+        );
 
         try {
             telegramClient.execute(editMessageText);
@@ -54,8 +50,8 @@ public class PostControlsMessageTextEditor {
         }
     }
 
-    private boolean isSuppressedException(TelegramApiException e) {
-        var ignoredApiResponses = telegramProperties.postControls().ignoredApiResponses();
-        return e instanceof TelegramApiRequestException ex && ignoredApiResponses.contains(ex.getApiResponse());
+    private boolean isSuppressedException(TelegramApiException telegramApiException) {
+        return telegramApiException instanceof TelegramApiRequestException e
+                && editMessageTextProperties.suppressedApiResponses().contains(e.getApiResponse());
     }
 }

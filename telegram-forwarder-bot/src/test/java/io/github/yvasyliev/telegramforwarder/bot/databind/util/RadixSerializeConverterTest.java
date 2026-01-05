@@ -1,30 +1,23 @@
 package io.github.yvasyliev.telegramforwarder.bot.databind.util;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
-import org.junit.jupiter.api.extension.ExtendWith;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramRadixConverterProperties;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class RadixSerializeConverterTest {
-    @InjectMocks private RadixSerializeConverter radixConverter;
-    @Mock private TelegramProperties telegramProperties;
+    private static final int RADIX = Character.MAX_RADIX;
+    private static final RadixSerializeConverter CONVERTER = new RadixSerializeConverter(
+            new TelegramRadixConverterProperties(RADIX)
+    );
 
     @ParameterizedTest
     @ValueSource(ints = {0, 2, 8, 10, 16, 36, 62, 64})
     void testConvert(int value) {
-        var radix = Character.MAX_RADIX;
-        var expected = Integer.toString(value, radix);
+        var expected = Integer.toString(value, RADIX);
 
-        when(telegramProperties.radix()).thenReturn(radix);
-
-        var actual = radixConverter.convert(value);
+        var actual = CONVERTER.convert(value);
 
         assertEquals(expected, actual);
     }

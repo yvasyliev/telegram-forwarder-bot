@@ -1,7 +1,9 @@
 package io.github.yvasyliev.telegramforwarder.bot.service;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramChannelProperties;
 import io.github.yvasyliev.telegramforwarder.bot.entity.ApprovedPost;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.CopyMessagesMapper;
+import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramAdminProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +16,6 @@ import org.telegram.telegrambots.meta.api.methods.CopyMessages;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -25,12 +26,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PostPublisherSchedulerTest {
     @InjectMocks private PostPublisherScheduler postPublisherScheduler;
+    @Mock private TelegramChannelProperties channelProperties;
+    @Mock private TelegramAdminProperties adminProperties;
     @Mock private ApprovedPostService postService;
-    @Mock private TelegramProperties telegramProperties;
+    @Mock private CopyMessagesMapper copyMessagesMapper;
     @Mock private TelegramClient telegramClient;
 
     @Test
-    void shouldDoNothingWhenNoPosts() {
+    void shouldNotPublishPost() {
         when(postService.poll()).thenReturn(Optional.empty());
 
         postPublisherScheduler.publishPost();
@@ -39,45 +42,31 @@ class PostPublisherSchedulerTest {
     }
 
     @Nested
-    class PublishPostTests {
-        private static final String CHANNEL_USERNAME = "@channel";
-        private static final long ADMIN_ID = 123456789;
-        private static final List<Integer> MESSAGE_IDS = List.of(1, 2, 3);
-        private static final boolean REMOVE_CAPTION = true;
-        private static final CopyMessages COPY_MESSAGES = CopyMessages.builder()
-                .chatId(CHANNEL_USERNAME)
-                .fromChatId(ADMIN_ID)
-                .messageIds(MESSAGE_IDS)
-                .removeCaption(REMOVE_CAPTION)
-                .build();
+    class PublishPostTest {
+        @Mock private ApprovedPost approvedPost;
+        @Mock private CopyMessages copyMessages;
 
         @BeforeEach
         void setUp() {
-            var approvedPost = new ApprovedPost();
-
-            approvedPost.setMessageIds(MESSAGE_IDS);
-            approvedPost.setRemoveCaption(REMOVE_CAPTION);
-
-            when(telegramProperties.channelUsername()).thenReturn(CHANNEL_USERNAME);
-            when(telegramProperties.adminId()).thenReturn(ADMIN_ID);
             when(postService.poll()).thenReturn(Optional.of(approvedPost));
+            when(copyMessagesMapper.map(channelProperties, adminProperties, approvedPost)).thenReturn(copyMessages);
         }
 
         @AfterEach
         void tearDown() throws TelegramApiException {
-            verify(telegramClient).execute(COPY_MESSAGES);
+            verify(telegramClient).execute(copyMessages);
         }
 
         @Test
-        void shouldCopyMessages() {
+        void shouldPublishPost() {
             postPublisherScheduler.publishPost();
         }
 
         @Test
-        void shouldHandleException() throws TelegramApiException {
-            when(telegramClient.execute(COPY_MESSAGES)).thenThrow(TelegramApiException.class);
+        void shouldHandleTelegramApiException() throws TelegramApiException {
+            when(telegramClient.execute(copyMessages)).thenThrow(TelegramApiException.class);
 
-            assertDoesNotThrow(postPublisherScheduler::publishPost);
+            assertDoesNotThrow(() -> postPublisherScheduler.publishPost());
         }
     }
 }

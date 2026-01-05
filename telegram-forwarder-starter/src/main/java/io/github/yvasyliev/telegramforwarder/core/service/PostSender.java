@@ -5,21 +5,20 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 
 /**
- * Functional interface for sending posts.
+ * A functional interface for sending posts to Telegram.
  *
- * @param <T> the type of the source object
- * @param <R> the type of the result object
+ * @param <T> the type of the method to be sent
+ * @param <R> the type of the response received after sending
  */
 @FunctionalInterface
 public interface PostSender<T, R> {
     /**
-     * Sends a post from the given source with the specified text.
+     * Sends the given method to Telegram.
      *
-     * @param source the source object from which the post is sent
-     * @param text   the text content of the post
-     * @return the result of the send operation
-     * @throws IOException          if an I/O error occurs during sending
-     * @throws TelegramApiException if a Telegram API error occurs during sending
+     * @param method the method to be sent
+     * @return the response received after sending
+     * @throws IOException          if an I/O error occurs
+     * @throws TelegramApiException if a Telegram API error occurs
      */
-    R send(T source, String text) throws IOException, TelegramApiException;
+    R send(T method) throws IOException, TelegramApiException;
 }

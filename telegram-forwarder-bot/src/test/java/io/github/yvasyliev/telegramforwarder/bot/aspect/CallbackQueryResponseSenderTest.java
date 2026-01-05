@@ -1,10 +1,11 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
-import io.github.yvasyliev.telegramforwarder.bot.dto.MessageIdsCommandCallbackDataDTO;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.PostControlsAnswerCallbackQueryProperties;
+import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.AnswerCallbackQueryMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -21,29 +22,29 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CallbackQueryResponseSenderTest {
-    @InjectMocks private CallbackQueryResponseSender callbackQueryResponseSender;
-    @Mock private TelegramProperties telegramProperties;
+    private static final String COMMAND = "test_command";
+    @Mock private AnswerCallbackQueryMapper answerCallbackQueryMapper;
     @Mock private TelegramClient telegramClient;
+    @Mock private PostControlsAnswerCallbackQueryProperties.AnswerCallbackQueryProperties answerCallbackQueryProperties;
+    private CallbackQueryResponseSender callbackQueryResponseSender;
+
+    @BeforeEach
+    void setUp() {
+        callbackQueryResponseSender = new CallbackQueryResponseSender(
+                new PostControlsAnswerCallbackQueryProperties(Map.of(COMMAND, answerCallbackQueryProperties)),
+                answerCallbackQueryMapper,
+                telegramClient
+        );
+    }
 
     @Test
     void testAnswerCallbackQuery() throws TelegramApiException {
-        var callbackQueryId = "123";
-        var callbackAnswerText = "Test answer";
-        var command = "testCommand";
         var callbackQuery = mock(CallbackQuery.class);
-        var callbackData = mock(MessageIdsCommandCallbackDataDTO.class);
-        var postControls = mock(TelegramProperties.PostControls.class);
-        var button = mock(TelegramProperties.PostControls.Button.class);
-        var answerCallbackQuery = AnswerCallbackQuery.builder()
-                .callbackQueryId(callbackQueryId)
-                .text(callbackAnswerText)
-                .build();
+        var callbackData = new CommandCallbackData(COMMAND, null);
+        var answerCallbackQuery = mock(AnswerCallbackQuery.class);
 
-        when(telegramProperties.postControls()).thenReturn(postControls);
-        when(postControls.buttons()).thenReturn(Map.of(command, button));
-        when(button.callbackAnswerText()).thenReturn(callbackAnswerText);
-        when(callbackQuery.getId()).thenReturn(callbackQueryId);
-        when(callbackData.getCommand()).thenReturn(command);
+        when(answerCallbackQueryMapper.map(callbackQuery, answerCallbackQueryProperties))
+                .thenReturn(answerCallbackQuery);
 
         assertDoesNotThrow(() -> callbackQueryResponseSender.answerCallbackQuery(callbackQuery, callbackData));
 

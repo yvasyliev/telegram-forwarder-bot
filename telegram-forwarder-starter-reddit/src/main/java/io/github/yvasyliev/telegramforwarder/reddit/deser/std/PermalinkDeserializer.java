@@ -3,28 +3,27 @@ package io.github.yvasyliev.telegramforwarder.reddit.deser.std;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import org.springframework.beans.factory.annotation.Value;
+import io.github.yvasyliev.telegramforwarder.reddit.configuration.RedditProperties;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 
 /**
  * Deserializer for Reddit permalink fields.
  * It constructs a full URL by combining the Reddit host with the permalink path.
  */
-public class PermalinkDeserializer extends StdDeserializer<URL> {
-    private final URI redditHost;
+public class PermalinkDeserializer extends StdDeserializer<URL> { //TODO: converter
+    private final RedditProperties redditProperties;
 
-    public PermalinkDeserializer(@Value("${reddit.host}") URI redditHost) {
+    public PermalinkDeserializer(RedditProperties redditProperties) {
         super(URL.class);
-        this.redditHost = redditHost;
+        this.redditProperties = redditProperties;
     }
 
     @Override
     public URL deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        return UriComponentsBuilder.fromUri(redditHost)
+        return UriComponentsBuilder.fromUri(redditProperties.host())
                 .path(p.getText())
                 .build()
                 .toUri()

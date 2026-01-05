@@ -1,14 +1,14 @@
 package io.github.yvasyliev.telegramforwarder.bot.service;
 
-import io.github.yvasyliev.telegramforwarder.bot.dto.AbstractTelegramCommandCallbackDataDTO;
-import io.github.yvasyliev.telegramforwarder.bot.mapper.CallbackDataMapper;
+import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
 import io.github.yvasyliev.telegramforwarder.bot.service.command.CallbackQueryCommand;
+import io.github.yvasyliev.telegramforwarder.bot.util.CommandCallbackDataConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import java.util.Map;
 
 /**
  * Handles incoming Telegram callback queries by mapping them to commands.
@@ -18,27 +18,25 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 @RequiredArgsConstructor
 @Slf4j
 public class CallbackQueryHandler implements TelegramEventHandler<CallbackQuery> {
-    private final CallbackDataConverter callbackDataConverter;
-    private final CallbackDataMapper callbackDataMapper;
-    private final ApplicationContext applicationContext;
+    private final CommandCallbackDataConverter commandCallbackDataConverter;
+    private final Map<String, CallbackQueryCommand<CommandCallbackData>> callbackQueryCommands;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void handle(CallbackQuery callbackQuery) {
-        var telegramCallbackData = callbackDataConverter.fromCallbackData(
-                callbackQuery.getData(),
-                AbstractTelegramCommandCallbackDataDTO.class
-        );
-        var callbackData = callbackDataMapper.map(telegramCallbackData);
-        var commandName = callbackData.getCommand();
+        var commandCallbackData = commandCallbackDataConverter.convert(callbackQuery);
 
-        try {
-            applicationContext.getBean(commandName, CallbackQueryCommand.class).execute(callbackQuery, callbackData);
-        } catch (BeansException e) {
-            log.atWarn()
-                    .addArgument(commandName)
-                    .addArgument(() -> applicationContext.getBeanNamesForType(CallbackQueryCommand.class))
-                    .log("Unknown callback query command: {}, available commands: {}");
-        }
+        getCommand(commandCallbackData).execute(callbackQuery, commandCallbackData);
+    }
+
+    private CallbackQueryCommand<CommandCallbackData> getCommand(CommandCallbackData commandCallbackData) {
+        // TODO: Java 25
+        return callbackQueryCommands.getOrDefault(
+                commandCallbackData.command(),
+                (callbackQuery, callbackData) -> log.warn(
+                        "Unknown callback query command: {}, available commands: {}",
+                        commandCallbackData.command(),
+                        callbackQueryCommands.keySet()
+                )
+        );
     }
 }

@@ -1,13 +1,13 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
-import io.github.yvasyliev.telegramforwarder.bot.dto.AbstractCommandCallbackDataDTO;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.PostControlsAnswerCallbackQueryProperties;
+import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.AnswerCallbackQueryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -21,7 +21,8 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @RequiredArgsConstructor
 @Slf4j
 public class CallbackQueryResponseSender {
-    private final TelegramProperties telegramProperties;
+    private final PostControlsAnswerCallbackQueryProperties postControlsAnswerCallbackQueryProperties;
+    private final AnswerCallbackQueryMapper answerCallbackQueryMapper;
     private final TelegramClient telegramClient;
 
     /**
@@ -33,18 +34,12 @@ public class CallbackQueryResponseSender {
      */
     @Before("io.github.yvasyliev.telegramforwarder.bot.util.Pointcuts.executeCallbackQueryCommand() && args"
             + "(callbackQuery, callbackData)")
-    public void answerCallbackQuery(
-            CallbackQuery callbackQuery,
-            AbstractCommandCallbackDataDTO callbackData
-    ) throws TelegramApiException {
-        var callbackAnswerText = telegramProperties.postControls()
-                .buttons()
-                .get(callbackData.getCommand())
-                .callbackAnswerText();
-        var answerCallbackQuery = AnswerCallbackQuery.builder()
-                .callbackQueryId(callbackQuery.getId())
-                .text(callbackAnswerText)
-                .build();
+    public void answerCallbackQuery(CallbackQuery callbackQuery, CommandCallbackData callbackData)
+            throws TelegramApiException {
+        var answerCallbackQuery = answerCallbackQueryMapper.map(
+                callbackQuery,
+                postControlsAnswerCallbackQueryProperties.options().get(callbackData.command())
+        );
 
         telegramClient.execute(answerCallbackQuery);
     }

@@ -6,10 +6,9 @@ import io.github.yvasyliev.telegramforwarder.reddit.service.RedditClient;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditInstantPropertyService;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditLinkService;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostForwarder;
-import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostSenderDelegator;
+import io.github.yvasyliev.telegramforwarder.reddit.service.RedditPostSenderManager;
 import io.github.yvasyliev.telegramforwarder.reddit.service.RedditVideoDownloader;
-import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSenderFactory;
-import io.github.yvasyliev.telegramforwarder.reddit.service.sender.RedditPostSenderResolver;
+import io.github.yvasyliev.telegramforwarder.reddit.service.sender.strategy.RedditPostSenderStrategy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -27,19 +26,26 @@ import java.util.List;
 })
 public class RedditServicesConfiguration {
     /**
-     * A {@link PostForwarder} implementation for forwarding Reddit posts.
+     * Creates a {@link PostForwarder} bean for Reddit if one is not already present in the context.
      *
-     * @param redditPostSenderDelegator the Reddit post sender delegator
-     * @param redditLinkService         the Reddit link service
-     * @return a {@link PostForwarder} implementation for Reddit posts
+     * @param redditInstantPropertyService the Reddit instant property service
+     * @param redditClient                 the Reddit client
+     * @param redditProperties             the Reddit properties
+     * @param redditPostSenderStrategies   the list of Reddit post sender strategies
+     * @return a new instance of {@link RedditPostForwarder}
      */
     @Bean
     @ConditionalOnMissingBean(name = "redditPostForwarder")
     public PostForwarder redditPostForwarder(
-            RedditPostSenderDelegator redditPostSenderDelegator,
-            RedditLinkService redditLinkService
+            RedditInstantPropertyService redditInstantPropertyService,
+            RedditClient redditClient,
+            RedditProperties redditProperties,
+            List<RedditPostSenderStrategy> redditPostSenderStrategies
     ) {
-        return new RedditPostForwarder(redditLinkService, redditPostSenderDelegator);
+        return new RedditPostForwarder(
+                new RedditLinkService(redditInstantPropertyService, redditClient, redditProperties.subreddit()),
+                new RedditPostSenderManager(redditPostSenderStrategies, redditInstantPropertyService)
+        );
     }
 
     /**
@@ -52,44 +58,6 @@ public class RedditServicesConfiguration {
     @ConditionalOnMissingBean
     public RedditInstantPropertyService redditInstantPropertyService(RedditInstantPropertyRepository repository) {
         return new RedditInstantPropertyService(repository);
-    }
-
-    /**
-     * Creates a {@link RedditLinkService} bean if one is not already present in the context.
-     *
-     * @param redditInstantPropertyService the Reddit instant property service
-     * @param redditClient                 the Reddit client
-     * @param redditProperties             the Reddit properties
-     * @return a new instance of {@link RedditLinkService}
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RedditLinkService redditLinkService(
-            RedditInstantPropertyService redditInstantPropertyService,
-            RedditClient redditClient,
-            RedditProperties redditProperties
-    ) {
-        return new RedditLinkService(redditInstantPropertyService, redditClient, redditProperties.subreddit());
-
-    }
-
-    /**
-     * Creates a {@link RedditPostSenderDelegator} bean if one is not already present in the context.
-     *
-     * @param redditPostSenderFactories    the list of Reddit post sender factories
-     * @param redditInstantPropertyService the Reddit instant property service
-     * @return a new instance of {@link RedditPostSenderDelegator}
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RedditPostSenderDelegator redditPostSenderDelegator(
-            List<RedditPostSenderFactory> redditPostSenderFactories,
-            RedditInstantPropertyService redditInstantPropertyService
-    ) {
-        return new RedditPostSenderDelegator(
-                new RedditPostSenderResolver(redditPostSenderFactories),
-                redditInstantPropertyService
-        );
     }
 
     /**

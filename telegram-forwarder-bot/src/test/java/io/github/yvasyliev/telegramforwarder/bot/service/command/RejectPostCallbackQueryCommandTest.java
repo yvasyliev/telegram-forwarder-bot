@@ -1,6 +1,6 @@
 package io.github.yvasyliev.telegramforwarder.bot.service.command;
 
-import io.github.yvasyliev.telegramforwarder.bot.dto.MessageIdsCommandCallbackDataDTO;
+import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
 import io.github.yvasyliev.telegramforwarder.bot.service.ApprovedPostService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +20,8 @@ class RejectPostCallbackQueryCommandTest {
 
     @Test
     void testExecute() {
-        var callbackData = new MessageIdsCommandCallbackDataDTO();
         var messageIds = List.of(123, 456);
-
-        callbackData.setMessageIds(messageIds);
+        var callbackData = new CommandCallbackData(null, messageIds);
 
         command.execute(mock(), callbackData);
 

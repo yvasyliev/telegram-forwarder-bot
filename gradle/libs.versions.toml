@@ -1,6 +1,7 @@
 [versions]
-freefair = "9.0.0"
 commons-collections4 = "4.5.0"
+freefair = "9.0.0"
+mapstruct = "1.6.3"
 telegrambots = "9.0.0"
 
 [plugins]
@@ -9,6 +10,8 @@ freefair-lombok = { id = "io.freefair.lombok", version.ref = "freefair" }
 
 [libraries]
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collections4" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 telegrambots-client = { module = "org.telegram:telegrambots-client", version.ref = "telegrambots" }
 telegrambots-spring-boot-starter = { module = "org.telegram:telegrambots-springboot-longpolling-starter", version.ref = "telegrambots" }
 

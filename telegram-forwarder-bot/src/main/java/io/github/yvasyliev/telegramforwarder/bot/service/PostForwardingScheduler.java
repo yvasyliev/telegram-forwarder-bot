@@ -28,12 +28,14 @@ public class PostForwardingScheduler {
      */
     @Scheduled(fixedDelayString = "${scheduler.post-forward.fixed-delay:1m}")
     public void forwardPosts() {
-        postForwarders.forEach(postForwarder -> {
-            try {
-                postForwarder.forward();
-            } catch (Exception e) {
-                log.error("Failed to forward posts", e);
-            }
-        });
+        postForwarders.forEach(this::forwardPost);
+    }
+
+    private void forwardPost(PostForwarder postForwarder) {
+        try {
+            postForwarder.forward();
+        } catch (Exception e) {
+            log.error("Failed to forward posts", e);
+        }
     }
 }

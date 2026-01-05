@@ -37,29 +37,29 @@ public class ThymeleafAutoConfiguration {
     }
 
     /**
-     * Creates a {@link TelegramTemplateEngine} bean that delegates to the provided Spring template engine.
+     * Creates a {@link TelegramTemplateProcessor} bean that processes Telegram templates using Thymeleaf.
      *
-     * @param delegate the Spring template engine to delegate to
-     * @return a new instance of {@link TelegramTemplateEngine}
+     * @param templateEngine the Thymeleaf template engine
+     * @return a new instance of {@link TelegramTemplateProcessor}
      */
     @Bean
     @ConditionalOnMissingBean
-    public TelegramTemplateEngine telegramTemplateEngine(ISpringTemplateEngine delegate) {
-        return new TelegramTemplateEngine(delegate);
+    public TelegramTemplateProcessor telegramTemplateProcessor(ISpringTemplateEngine templateEngine) {
+        return new TelegramTemplateProcessor(templateEngine);
     }
 
     /**
-     * Creates a {@link TelegramTemplateEngineInterceptor} bean that applies the provided context customizers
+     * Creates a {@link TelegramTemplateProcessorInterceptor} bean that applies the provided context customizers
      * to the Thymeleaf template context.
      *
      * @param contextCustomizers a list of context customizers to apply
-     * @return a new instance of {@link TelegramTemplateEngineInterceptor}
+     * @return a new instance of {@link TelegramTemplateProcessorInterceptor}
      */
     @Bean
     @ConditionalOnMissingBean
-    public TelegramTemplateEngineInterceptor telegramTemplateEngineInterceptor(
+    public TelegramTemplateProcessorInterceptor telegramTemplateProcessorInterceptor(
             List<TemplateContextCustomizer> contextCustomizers
     ) {
-        return new TelegramTemplateEngineInterceptor(contextCustomizers);
+        return new TelegramTemplateProcessorInterceptor(contextCustomizers);
     }
 }

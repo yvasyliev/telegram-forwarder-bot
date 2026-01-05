@@ -1,70 +1,40 @@
 package io.github.yvasyliev.telegramforwarder.bot;
 
-import io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramBotProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
-import org.thymeleaf.context.Context;
+import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.refEq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class TelegramForwarderBotTest {
-    private static final long ADMIN_ID = 123456789;
-    private TelegramForwarderBot bot;
-    @Mock private User me;
-    @Mock private TelegramTemplateEngine templateEngine;
-    @Mock private TelegramClient telegramClient;
+    private static final String BOT_TOKEN = "test-bot-token";
+    private TelegramForwarderBot telegramForwarderBot;
+    @Mock private LongPollingUpdateConsumer longPollingUpdateConsumer;
 
     @BeforeEach
     void setUp() {
-        bot = new TelegramForwarderBot(null, null, me, ADMIN_ID, templateEngine, telegramClient);
+        var botProperties = new TelegramBotProperties();
+        telegramForwarderBot = new TelegramForwarderBot(botProperties, longPollingUpdateConsumer);
+
+        botProperties.setBotToken(BOT_TOKEN);
     }
 
     @Test
-    void testInit() throws TelegramApiException {
-        var firstName = "TestBot";
-        var text = "Bot is running";
-        var context = new Context();
-        var sendMessage = SendMessage.builder()
-                .chatId(ADMIN_ID)
-                .text(text)
-                .parseMode(ParseMode.HTML)
-                .build();
+    void testGetBotToken() {
+        var actual = telegramForwarderBot.getBotToken();
 
-        context.setVariable("botName", firstName);
-
-        when(me.getFirstName()).thenReturn(firstName);
-        when(templateEngine.process(eq("running"), refEq(context))).thenReturn(text);
-
-        bot.init();
-
-        verify(telegramClient).execute(sendMessage);
+        assertEquals(BOT_TOKEN, actual);
     }
 
     @Test
-    void testShutdown() throws TelegramApiException {
-        var text = "Bot is shutting down";
-        var sendMessage = SendMessage.builder()
-                .chatId(ADMIN_ID)
-                .text(text)
-                .parseMode(ParseMode.HTML)
-                .build();
+    void testGetUpdatesConsumer() {
+        var actual = telegramForwarderBot.getUpdatesConsumer();
 
-        when(templateEngine.process(eq("shutdown"), refEq(new Context()))).thenReturn(text);
-
-        bot.shutdown();
-
-        verify(telegramClient).execute(sendMessage);
+        assertEquals(longPollingUpdateConsumer, actual);
     }
 }

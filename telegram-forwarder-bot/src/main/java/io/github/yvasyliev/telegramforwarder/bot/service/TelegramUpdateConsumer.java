@@ -43,6 +43,7 @@ public class TelegramUpdateConsumer implements LongPollingUpdateConsumer {
                 log.atWarn().addArgument(json(update)).log("Received unsupported update: {}");
             }
         } catch (Exception e) {
+            // TODO: reflection to string
             log.atError().addArgument(json(update)).log("Failed to process update: {}", e);
         }
     }

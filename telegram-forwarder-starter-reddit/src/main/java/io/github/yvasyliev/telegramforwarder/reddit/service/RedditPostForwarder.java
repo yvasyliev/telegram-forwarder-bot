@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RedditPostForwarder implements PostForwarder {
     private final RedditLinkService redditLinkService;
-    private final RedditPostSenderDelegator redditPostSenderDelegator;
+    private final RedditPostSenderManager redditPostSenderManager;
 
     @Override
     public void forward() {
-        redditLinkService.getNewLinks().forEach(redditPostSenderDelegator::send);
+        redditLinkService.getNewLinks().forEach(redditPostSenderManager::send);
     }
 }

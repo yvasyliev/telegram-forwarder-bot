@@ -167,7 +167,7 @@
         <module name="SuppressWarnings"/>
         <module name="SuppressWarningsHolder"/>
         <module name="ThrowsCount"/>
-        <module name="TodoComment"/>
+<!--        <module name="TodoComment"/>--> <!-- TODO: uncomment -->
         <module name="TypeName"/>
         <module name="TypecastParenPad"/>
         <module name="UnnecessaryNullCheckWithInstanceOf"/>

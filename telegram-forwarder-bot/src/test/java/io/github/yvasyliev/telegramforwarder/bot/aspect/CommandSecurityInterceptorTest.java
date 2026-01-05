@@ -1,9 +1,10 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.UnauthorizedActionProperties;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.AnswerCallbackQueryMapper;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.SendMessageMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,19 +16,19 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CommandSecurityInterceptorTest {
     @InjectMocks private CommandSecurityInterceptor commandSecurityInterceptor;
-    @Mock private TelegramProperties telegramProperties;
+    @Mock private UnauthorizedActionProperties unauthorizedActionProperties;
+    @Mock private SendMessageMapper sendMessageMapper;
+    @Mock private AnswerCallbackQueryMapper answerCallbackQueryMapper;
     @Mock private TelegramClient telegramClient;
     @Mock private ProceedingJoinPoint pjp;
 
@@ -37,71 +38,45 @@ class CommandSecurityInterceptorTest {
     }
 
     @Nested
-    @ExtendWith(MockitoExtension.class)
-    class InterceptTests {
-        @AfterEach
-        void tearDown() {
-            verifyNoInteractions(telegramClient);
-        }
+    class MessageHandlerInterceptorTest {
+        @Mock private Message message;
 
         @Test
-        void testInterceptMessage() {
-            var message = mock(Message.class);
-
+        void shouldProceedMessageHandlingNormally() {
             assertDoesNotThrow(() -> commandSecurityInterceptor.intercept(pjp, message));
-
-            verifyNoInteractions(message);
         }
 
         @Test
-        void testInterceptCallbackQuery() {
-            var query = mock(CallbackQuery.class);
+        void shouldHandleAccessDeniedException() throws Throwable {
+            var sendMessage = mock(SendMessage.class);
 
-            assertDoesNotThrow(() -> commandSecurityInterceptor.intercept(pjp, query));
-
-            verifyNoInteractions(query);
-        }
-    }
-
-    @Nested
-    @ExtendWith(MockitoExtension.class)
-    class InterceptAccessDeniedExceptionTests {
-        private static final String UNAUTHORIZED_TEXT = "Unauthorized action";
-
-        @BeforeEach
-        void setUp() throws Throwable {
-            when(pjp.proceed()).thenThrow(new AccessDeniedException(null));
-            when(telegramProperties.unauthorizedActionText()).thenReturn(UNAUTHORIZED_TEXT);
-        }
-
-        @Test
-        void testInterceptMessage() throws TelegramApiException {
-            var chatId = 123L;
-            var message = mock(Message.class);
-            var sendMessage = SendMessage.builder()
-                    .chatId(chatId)
-                    .text(UNAUTHORIZED_TEXT)
-                    .build();
-
-            when(message.getChatId()).thenReturn(chatId);
+            when(pjp.proceed()).thenThrow(AccessDeniedException.class);
+            when(sendMessageMapper.map(message, unauthorizedActionProperties)).thenReturn(sendMessage);
 
             assertDoesNotThrow(() -> commandSecurityInterceptor.intercept(pjp, message));
 
             verify(telegramClient).execute(sendMessage);
         }
+    }
+
+    @Nested
+    class CallbackQueryHandlerInterceptorTest {
+        @Mock private CallbackQuery callbackQuery;
 
         @Test
-        void testInterceptCallbackQuery() throws TelegramApiException {
-            var callbackQueryId = "123";
-            var query = mock(CallbackQuery.class);
-            var answerCallbackQuery = AnswerCallbackQuery.builder()
-                    .callbackQueryId(callbackQueryId)
-                    .text(UNAUTHORIZED_TEXT)
-                    .build();
+        void shouldProceedCallbackQueryHandlingNormally() {
+            assertDoesNotThrow(() -> commandSecurityInterceptor.intercept(pjp, callbackQuery));
+        }
 
-            when(query.getId()).thenReturn(callbackQueryId);
+        @Test
+        void shouldHandleAccessDeniedException() throws Throwable {
+            var answerCallbackQuery = mock(AnswerCallbackQuery.class);
 
-            assertDoesNotThrow(() -> commandSecurityInterceptor.intercept(pjp, query));
+            when(pjp.proceed()).thenThrow(AccessDeniedException.class);
+            when(answerCallbackQueryMapper.map(callbackQuery, unauthorizedActionProperties))
+                    .thenReturn(answerCallbackQuery);
+
+            assertDoesNotThrow(() -> commandSecurityInterceptor.intercept(pjp, callbackQuery));
 
             verify(telegramClient).execute(answerCallbackQuery);
         }

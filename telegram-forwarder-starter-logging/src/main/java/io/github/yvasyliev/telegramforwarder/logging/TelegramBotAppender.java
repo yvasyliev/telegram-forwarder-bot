@@ -2,19 +2,17 @@ package io.github.yvasyliev.telegramforwarder.logging;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
-import ch.qos.logback.core.Layout;
-import io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine;
+import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramAdminProperties;
+import io.github.yvasyliev.telegramforwarder.logging.mapper.LoggingSendMessageMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.apache.commons.lang3.ObjectUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import org.thymeleaf.context.Context;
 
 import java.net.HttpURLConnection;
-import java.util.Objects;
 
 /**
  * Appender that sends log messages to a Telegram chat.
@@ -25,21 +23,14 @@ public class TelegramBotAppender extends AppenderBase<ILoggingEvent> {
     private static final String FORBIDDEN_LOG_MESSAGE = "Send /start command to the bot in Telegram to allow it to "
             + "send log messages to you, or provide logging.telegram-bot-appender.enabled=false property to disable "
             + "bot appender.";
+    private final TelegramAdminProperties adminProperties;
+    private final LoggingSendMessageMapper sendMessageMapper;
     private final TelegramClient telegramClient;
-    private final TelegramTemplateEngine templateEngine;
-    private final String adminId;
-    private final Layout<ILoggingEvent> patternLayout;
 
     @Override
     public void append(ILoggingEvent event) {
-        var context = new Context();
-        context.setVariable("text", patternLayout.doLayout(event));
+        var sendMessage = sendMessageMapper.map(adminProperties, event);
 
-        var sendMessage = SendMessage.builder()
-                .chatId(adminId)
-                .text(templateEngine.process("error", context))
-                .parseMode(ParseMode.HTML)
-                .build();
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -52,7 +43,7 @@ public class TelegramBotAppender extends AppenderBase<ILoggingEvent> {
         try {
             telegramClient.execute(sendMessage);
         } catch (TelegramApiRequestException e) {
-            if (!Objects.equals(HttpURLConnection.HTTP_FORBIDDEN, e.getErrorCode())) {
+            if (ObjectUtils.notEqual(HttpURLConnection.HTTP_FORBIDDEN, e.getErrorCode())) {
                 throw e;
             }
 

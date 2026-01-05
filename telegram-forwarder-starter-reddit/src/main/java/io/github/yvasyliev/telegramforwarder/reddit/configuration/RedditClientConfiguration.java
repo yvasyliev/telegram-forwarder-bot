@@ -45,7 +45,7 @@ public class RedditClientConfiguration {
             OAuth2ClientProperties oAuth2ClientProperties,
             RedditProperties redditProperties,
             ObjectMapper objectMapper
-    ) {
+    ) { // TODO: spring Boot 4
         var clientRegistrations = List.copyOf(new OAuth2ClientPropertiesMapper(oAuth2ClientProperties)
                 .asClientRegistrations()
                 .values()
@@ -57,7 +57,8 @@ public class RedditClientConfiguration {
                 .messageConverters(converters -> Objects.requireNonNull(CollectionUtils.findValueOfType(
                                 converters,
                                 AbstractJackson2HttpMessageConverter.class
-                        )).setObjectMapper(objectMapper)
+                        ))
+                        .setObjectMapper(objectMapper)
                 )
                 .build();
         var restClientAdapter = RestClientAdapter.create(restClient);

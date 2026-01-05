@@ -1,22 +1,21 @@
 package io.github.yvasyliev.telegramforwarder.bot.databind.util;
 
 import com.fasterxml.jackson.databind.util.StdConverter;
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramRadixConverterProperties;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Converts an integer to a string representation in a specified radix.
+ * Converts an {@link Integer} to its string representation in a specified radix.
  *
  * <p>
- * This converter uses the radix defined in {@link TelegramProperties} to convert integers to their string
- * representation.
+ * This converter uses the radix defined in {@link TelegramRadixConverterProperties} to format the integer.
  */
 @RequiredArgsConstructor
 public class RadixSerializeConverter extends StdConverter<Integer, String> {
-    private final TelegramProperties telegramProperties;
+    private final TelegramRadixConverterProperties radixConverterProperties;
 
     @Override
     public String convert(Integer value) {
-        return Integer.toString(value, telegramProperties.radix());
+        return Integer.toString(value, radixConverterProperties.radix());
     }
 }

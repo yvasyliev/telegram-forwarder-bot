@@ -1,6 +1,5 @@
 package io.github.yvasyliev.telegramforwarder.bot.service.command;
 
-import io.github.yvasyliev.telegramforwarder.bot.dto.AbstractCommandCallbackDataDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -10,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
  * @param <T> the type of command callback data
  */
 @FunctionalInterface
-public interface CallbackQueryCommand<T extends AbstractCommandCallbackDataDTO> {
+public interface CallbackQueryCommand<T> {
     /**
      * Executes the command with the provided callback query and data.
      *

@@ -1,49 +1,31 @@
 package io.github.yvasyliev.telegramforwarder.bot.service.sender;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.SendMessageMapper;
+import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramAdminProperties;
+import io.github.yvasyliev.telegramforwarder.core.dto.SendUrlDTO;
 import io.github.yvasyliev.telegramforwarder.core.service.PostSender;
-import io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import org.thymeleaf.context.Context;
 
-import java.net.URL;
+import java.io.IOException;
 
 /**
  * Service for sending URLs to a Telegram chat.
  */
 @Service
 @RequiredArgsConstructor
-public class UrlSender implements PostSender<URL, Message> {
-    private static final String URL = "url";
-    private final TelegramProperties telegramProperties;
-    private final TelegramTemplateEngine templateEngine;
+public class UrlSender implements PostSender<SendUrlDTO, Message> {
+    private final TelegramAdminProperties adminProperties;
+    private final SendMessageMapper sendMessageMapper;
     private final TelegramClient telegramClient;
 
-    /**
-     * Sends a message containing a URL to the admin chat.
-     *
-     * @param url     the URL to send
-     * @param message the message to accompany the URL
-     * @return the sent message
-     * @throws TelegramApiException if an error occurs while sending the message
-     */
     @Override
-    public Message send(URL url, String message) throws TelegramApiException {
-        var context = new Context();
-        context.setVariable("text", message);
-        context.setVariable(URL, url);
+    public Message send(SendUrlDTO sendUrlDTO) throws IOException, TelegramApiException {
+        var sendMessage = sendMessageMapper.map(sendUrlDTO, adminProperties);
 
-        var sendMessage = SendMessage.builder()
-                .chatId(telegramProperties.adminId())
-                .text(templateEngine.process(URL, context))
-                .parseMode(ParseMode.HTML)
-                .build();
         return telegramClient.execute(sendMessage);
     }
 }

@@ -1,1 +1,1 @@
-io.github.yvasyliev.telegramforwarder.logging.TelegramBotAppenderAutoConfiguration
+io.github.yvasyliev.telegramforwarder.logging.configuration.LoggingAutoConfiguration
