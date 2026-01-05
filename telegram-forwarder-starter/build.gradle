@@ -8,3 +8,12 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
+
+jacocoTestReport {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                'io/github/yvasyliev/telegramforwarder/core/configuration/**',
+                'io/github/yvasyliev/telegramforwarder/core/dto/**',
+        ])
+    }))
+}

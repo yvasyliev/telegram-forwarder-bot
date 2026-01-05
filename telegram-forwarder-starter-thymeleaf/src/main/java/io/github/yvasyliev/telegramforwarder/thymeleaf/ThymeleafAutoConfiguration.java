@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.thymeleaf.spring6.ISpringTemplateEngine;
+import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.spring6.expression.ThymeleafEvaluationContext;
 
 import java.util.List;
@@ -37,29 +37,29 @@ public class ThymeleafAutoConfiguration {
     }
 
     /**
-     * Creates a {@link TelegramTemplateEngine} bean that delegates to the provided Spring template engine.
+     * Creates a {@link TelegramTemplateProcessor} bean that processes Telegram templates using Thymeleaf.
      *
-     * @param delegate the Spring template engine to delegate to
-     * @return a new instance of {@link TelegramTemplateEngine}
+     * @param templateEngine the Thymeleaf template engine
+     * @return a new instance of {@link TelegramTemplateProcessor}
      */
     @Bean
     @ConditionalOnMissingBean
-    public TelegramTemplateEngine telegramTemplateEngine(ISpringTemplateEngine delegate) {
-        return new TelegramTemplateEngine(delegate);
+    public TelegramTemplateProcessor telegramTemplateProcessor(ITemplateEngine templateEngine) {
+        return new TelegramTemplateProcessor(templateEngine);
     }
 
     /**
-     * Creates a {@link TelegramTemplateEngineInterceptor} bean that applies the provided context customizers
+     * Creates a {@link TelegramTemplateProcessorInterceptor} bean that applies the provided context customizers
      * to the Thymeleaf template context.
      *
      * @param contextCustomizers a list of context customizers to apply
-     * @return a new instance of {@link TelegramTemplateEngineInterceptor}
+     * @return a new instance of {@link TelegramTemplateProcessorInterceptor}
      */
     @Bean
     @ConditionalOnMissingBean
-    public TelegramTemplateEngineInterceptor telegramTemplateEngineInterceptor(
+    public TelegramTemplateProcessorInterceptor telegramTemplateProcessorInterceptor(
             List<TemplateContextCustomizer> contextCustomizers
     ) {
-        return new TelegramTemplateEngineInterceptor(contextCustomizers);
+        return new TelegramTemplateProcessorInterceptor(contextCustomizers);
     }
 }

@@ -21,5 +21,4 @@ public record Listing(
         @JsonProperty("geo_filter") String geoFilter,
         @JsonProperty("children") List<Thing<Link>> children,
         @JsonProperty("before") String before
-) {
-}
+) {}

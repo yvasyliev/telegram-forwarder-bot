@@ -1,12 +1,12 @@
 package io.github.yvasyliev.telegramforwarder.bot.service.sender;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
-import io.github.yvasyliev.telegramforwarder.core.dto.InputFileDTO;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.SendPhotoMapper;
+import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramAdminProperties;
+import io.github.yvasyliev.telegramforwarder.core.dto.SendPhotoDTO;
 import io.github.yvasyliev.telegramforwarder.core.service.PostSender;
+import io.github.yvasyliev.telegramforwarder.core.util.CloseableSupplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -18,28 +18,16 @@ import java.io.IOException;
  */
 @Service
 @RequiredArgsConstructor
-public class PhotoSender implements PostSender<InputFileDTO, Message> {
-    private final TelegramProperties telegramProperties;
+public class PhotoSender implements PostSender<CloseableSupplier<SendPhotoDTO>, Message> {
+    private final TelegramAdminProperties adminProperties;
+    private final SendPhotoMapper sendPhotoMapper;
     private final TelegramClient telegramClient;
 
-    /**
-     * Sends a photo to the admin chat.
-     *
-     * @param photo   the photo to send
-     * @param caption the caption for the photo
-     * @return the sent message
-     * @throws IOException          if an I/O error occurs
-     * @throws TelegramApiException if a Telegram API error occurs
-     */
     @Override
-    public Message send(InputFileDTO photo, String caption) throws IOException, TelegramApiException {
-        try (var inputStream = photo.fileSupplier().get()) {
-            var sendPhoto = SendPhoto.builder()
-                    .chatId(telegramProperties.adminId())
-                    .photo(new InputFile(inputStream, photo.filename()))
-                    .caption(caption)
-                    .hasSpoiler(photo.hasSpoiler())
-                    .build();
+    public Message send(CloseableSupplier<SendPhotoDTO> sendPhotoDTOSupplier) throws IOException, TelegramApiException {
+        try (var sendPhotoDTO = sendPhotoDTOSupplier.get()) {
+            var sendPhoto = sendPhotoMapper.map(sendPhotoDTO, adminProperties);
+
             return telegramClient.execute(sendPhoto);
         }
     }

@@ -1,31 +1,25 @@
 package io.github.yvasyliev.telegramforwarder.bot.service.command;
 
-import io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.SendMessageMapper;
 import lombok.RequiredArgsConstructor;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import org.thymeleaf.context.Context;
 
 /**
  * Command to send a help message to the user.
  * This command is typically used to provide users with information on how to use the bot.
  */
+@Service("/help")
 @RequiredArgsConstructor
 public class HelpMessageCommand implements MessageCommand {
-    private final TelegramTemplateEngine templateEngine;
+    private final SendMessageMapper sendMessageMapper;
     private final TelegramClient telegramClient;
 
     @Override
     public void execute(Message message) throws TelegramApiException {
-        var text = templateEngine.process("help", new Context());
-        var sendMessage = SendMessage.builder()
-                .chatId(message.getChatId())
-                .text(text)
-                .parseMode(ParseMode.HTML)
-                .build();
+        var sendMessage = sendMessageMapper.map(message, "help");
 
         telegramClient.execute(sendMessage);
     }

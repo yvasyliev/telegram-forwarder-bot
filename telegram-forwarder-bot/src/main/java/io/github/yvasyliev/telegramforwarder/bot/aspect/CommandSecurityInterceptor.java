@@ -1,6 +1,8 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.UnauthorizedActionProperties;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.AnswerCallbackQueryMapper;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.SendMessageMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,9 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -26,7 +26,9 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 @Slf4j
 public class CommandSecurityInterceptor {
-    private final TelegramProperties telegramProperties;
+    private final UnauthorizedActionProperties unauthorizedActionProperties;
+    private final SendMessageMapper sendMessageMapper;
+    private final AnswerCallbackQueryMapper answerCallbackQueryMapper;
     private final TelegramClient telegramClient;
 
     /**
@@ -40,13 +42,7 @@ public class CommandSecurityInterceptor {
      */
     @Around("io.github.yvasyliev.telegramforwarder.bot.util.Pointcuts.handleMessageEvent() && args(message)")
     public Object intercept(ProceedingJoinPoint pjp, Message message) throws Throwable {
-        return intercept(
-                pjp,
-                () -> SendMessage.builder()
-                        .chatId(message.getChatId())
-                        .text(telegramProperties.unauthorizedActionText())
-                        .build()
-        );
+        return intercept(pjp, () -> sendMessageMapper.map(message, unauthorizedActionProperties));
     }
 
     /**
@@ -60,19 +56,13 @@ public class CommandSecurityInterceptor {
      */
     @Around("io.github.yvasyliev.telegramforwarder.bot.util.Pointcuts.handleCallbackQueryEvent() && args(query)")
     public Object intercept(ProceedingJoinPoint pjp, CallbackQuery query) throws Throwable {
-        return intercept(
-                pjp,
-                () -> AnswerCallbackQuery.builder()
-                        .callbackQueryId(query.getId())
-                        .text(telegramProperties.unauthorizedActionText())
-                        .build()
-        );
+        return intercept(pjp, () -> answerCallbackQueryMapper.map(query, unauthorizedActionProperties));
     }
 
     private Object intercept(ProceedingJoinPoint pjp, Supplier<BotApiMethod<?>> methodSupplier) throws Throwable {
         try {
             return pjp.proceed();
-        } catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) { // TODO: Java 25
             return telegramClient.execute(methodSupplier.get());
         }
     }

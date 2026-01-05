@@ -28,15 +28,16 @@ class RedditInstantPropertyServiceTest {
     private static final Supplier<Stream<Arguments>> testGetLastCreated = () -> {
         var now = Instant.now();
 
-        return Stream.of(arguments(Optional.of(now), now), arguments(Optional.empty(), Instant.EPOCH));
+        return Stream.of(arguments(now, now), arguments(null, Instant.EPOCH));
     };
     @InjectMocks private RedditInstantPropertyService service;
     @Mock private RedditInstantPropertyRepository repository;
 
     @ParameterizedTest
     @FieldSource
-    void testGetLastCreated(Optional<Instant> value, Instant expected) {
-        when(repository.getValue(RedditInstantProperty.RedditInstantPropertyName.LAST_CREATED)).thenReturn(value);
+    void testGetLastCreated(Instant instant, Instant expected) {
+        when(repository.getValue(RedditInstantProperty.RedditInstantPropertyName.LAST_CREATED))
+                .thenReturn(Optional.ofNullable(instant));
 
         var actual = service.getLastCreated();
 

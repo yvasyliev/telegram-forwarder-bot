@@ -7,6 +7,5 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * Core autoconfiguration class for the Telegram Forwarder application.
  */
 @AutoConfiguration
-@EnableConfigurationProperties(TelegramMediaProperties.class)
-public class TelegramForwarderCoreAutoConfiguration {
-}
+@EnableConfigurationProperties({TelegramAdminProperties.class, TelegramMediaProperties.class})
+public class TelegramForwarderCoreAutoConfiguration {}

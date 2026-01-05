@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Map;
 
 /**
  * Handles incoming Telegram messages and executes the corresponding command.
@@ -20,7 +20,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 @Slf4j
 public class MessageHandler implements TelegramEventHandler<Message> {
-    private final ApplicationContext applicationContext;
+    private final Map<String, MessageCommand> messageCommands;
 
     @Override
     public void handle(Message message) {
@@ -33,14 +33,14 @@ public class MessageHandler implements TelegramEventHandler<Message> {
                         entity -> NumberUtils.INTEGER_ZERO.equals(entity.getOffset())
                 )
                 .getText();
+        var messageCommand = messageCommands.getOrDefault(commandName, msg -> log.warn(
+                "No command found for name: {}, available commands: {}",
+                commandName,
+                messageCommands.keySet()
+        ));
 
         try {
-            applicationContext.getBean(commandName, MessageCommand.class).execute(message);
-        } catch (BeansException e) {
-            log.atWarn()
-                    .addArgument(commandName)
-                    .addArgument(() -> applicationContext.getBeanNamesForType(MessageCommand.class))
-                    .log("Unknown command: {}, available commands: {}");
+            messageCommand.execute(message);
         } catch (TelegramApiException e) {
             log.error("Failed to execute command: {}", commandName, e);
         }

@@ -8,15 +8,24 @@ dependencies {
     implementation project(':telegram-forwarder-starter-thymeleaf')
 
     implementation libs.bundles.telegrambots
+    implementation libs.mapstruct
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    annotationProcessor libs.mapstruct.processor
 }
 
 jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: [
-                'io/github/yvasyliev/telegramforwarder/logging/TelegramBotAppenderAutoConfiguration.class',
-                'io/github/yvasyliev/telegramforwarder/logging/TelegramBotAppenderProperties.class'
+                'io/github/yvasyliev/telegramforwarder/logging/configuration/**',
         ])
     }))
+}
+
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.defaultInjectionStrategy=constructor',
+    ]
 }

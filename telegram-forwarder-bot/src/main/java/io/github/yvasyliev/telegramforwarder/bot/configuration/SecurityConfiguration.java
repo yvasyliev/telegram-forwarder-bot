@@ -1,6 +1,7 @@
 package io.github.yvasyliev.telegramforwarder.bot.configuration;
 
 import io.github.yvasyliev.telegramforwarder.bot.util.AuthUtils;
+import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramAdminProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -43,11 +44,11 @@ public class SecurityConfiguration {
      * This method creates a user details manager that contains a single admin user
      * with the ID specified in the Telegram properties.
      *
-     * @param telegramProperties the Telegram properties containing the admin ID
+     * @param adminProperties the Telegram admin properties
      * @return the user details service with the admin user
      */
     @Bean
-    public UserDetailsService userDetailsService(TelegramProperties telegramProperties) {
-        return new InMemoryUserDetailsManager(AuthUtils.createAdmin(telegramProperties.adminId()));
+    public UserDetailsService userDetailsService(TelegramAdminProperties adminProperties) {
+        return new InMemoryUserDetailsManager(AuthUtils.createAdmin(adminProperties.id()));
     }
 }

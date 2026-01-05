@@ -1,6 +1,6 @@
 logging:
   telegram-bot-appender:
-    chat-id: \${telegram.admin-id}
+    chat-id: \${telegram.admin.id}
     pattern: "%-5level --- %logger{50} : %msg%n%ex"
 
 reddit:
@@ -45,21 +45,41 @@ spring:
 telegram:
   bot:
     version: $version
+  media:
+    group-max-size: 10
+    photo-max-dimension-sum: 10000
   post-controls:
-    ignored-api-responses:
-      - "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"
-    initial-message-text: 🆕 New
-    buttons:
-      "[/approvepost]":
-        button-text: ✅ Approve
-        callback-answer-text: Approving...
-        message-text: ✅ Approved
-      "[/rejecttext]":
-        button-text: ☑️ Reject text
-        callback-answer-text: Rejecting text...
-        message-text: ☑️ Text rejected
-      "[/rejectpost]":
-        button-text: ❌ Reject
-        callback-answer-text: Rejecting...
-        message-text: ❌ Rejected
-  unauthorized-action-text: 👮‍♀️ You are not authorized to perform this action
+    answer-callback-query:
+      options:
+        "[/approvepost]":
+          text: Approving...
+        "[/rejecttext]":
+          text: Rejecting text...
+        "[/rejectpost]":
+          text: Rejecting...
+    edit-message-text:
+      suppressed-api-responses:
+        - "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"
+      options:
+        "[/approvepost]":
+          text: ✅ Approved
+        "[/rejecttext]":
+          text: ☑️ Text rejected
+        "[/rejectpost]":
+          text: ❌ Rejected
+    send-message:
+      text: 🆕 New
+      reply-markup:
+        keyboard:
+          -
+            - command: /approvepost
+              text: ✅ Approve
+          -
+            - command: /rejecttext
+              text: ☑️ Reject text
+          -
+            - command: /rejectpost
+              text: ❌ Reject
+  security:
+    unauthorized-action:
+      text: 👮‍♀️ You are not authorized to perform this action

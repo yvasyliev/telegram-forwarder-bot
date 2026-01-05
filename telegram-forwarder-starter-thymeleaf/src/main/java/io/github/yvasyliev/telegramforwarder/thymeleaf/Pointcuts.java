@@ -7,10 +7,9 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 public class Pointcuts {
     /**
-     * Pointcut that matches the execution of any method starting with "process" in the
-     * {@link io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine} class.
+     * Pointcut that matches the execution of the process method in {@link TelegramTemplateProcessor}.
      */
-    @Pointcut("execution(* io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateEngine.process*(..))")
-    public void processTemplate() {
-    }
+    @Pointcut("execution(String io.github.yvasyliev.telegramforwarder.thymeleaf.TelegramTemplateProcessor.process("
+            + "io.github.yvasyliev.telegramforwarder.thymeleaf.TemplateContext))")
+    public void processTemplate() {}
 }

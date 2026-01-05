@@ -1,6 +1,6 @@
 package io.github.yvasyliev.telegramforwarder.bot.service.command;
 
-import io.github.yvasyliev.telegramforwarder.bot.dto.MessageIdsCommandCallbackDataDTO;
+import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
 import io.github.yvasyliev.telegramforwarder.bot.service.ApprovedPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class RejectTextCallbackQueryCommand implements PostControlsCallbackQuery
     private final ApprovedPostService postService;
 
     @Override
-    public void execute(CallbackQuery callbackQuery, MessageIdsCommandCallbackDataDTO callbackData) {
-        postService.save(callbackData.getMessageIds(), true);
+    public void execute(CallbackQuery callbackQuery, CommandCallbackData callbackData) {
+        postService.save(callbackData.messageIds(), true);
     }
 }

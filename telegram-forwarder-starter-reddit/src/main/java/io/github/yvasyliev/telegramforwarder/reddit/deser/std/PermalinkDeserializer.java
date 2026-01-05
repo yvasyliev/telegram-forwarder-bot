@@ -10,10 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Deserializer for Reddit post permalinks.
- *
- * <p>
- * This converter uses the base host from {@link RedditProperties} to construct the full URL.
+ * Deserializer for Reddit permalink fields.
+ * It constructs a full URL by combining the Reddit host with the permalink path.
  */
 public class PermalinkDeserializer extends StdDeserializer<URL> {
     private final RedditProperties redditProperties;

@@ -1,7 +1,9 @@
 package io.github.yvasyliev.telegramforwarder.bot.service;
 
-import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramProperties;
+import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramChannelProperties;
 import io.github.yvasyliev.telegramforwarder.bot.entity.ApprovedPost;
+import io.github.yvasyliev.telegramforwarder.bot.mapper.CopyMessagesMapper;
+import io.github.yvasyliev.telegramforwarder.core.configuration.TelegramAdminProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,8 +22,10 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @RequiredArgsConstructor
 @Slf4j
 public class PostPublisherScheduler {
+    private final TelegramChannelProperties channelProperties;
+    private final TelegramAdminProperties adminProperties;
     private final ApprovedPostService postService;
-    private final TelegramProperties telegramProperties;
+    private final CopyMessagesMapper copyMessagesMapper;
     private final TelegramClient telegramClient;
 
     /**
@@ -32,16 +36,9 @@ public class PostPublisherScheduler {
      */
     @Scheduled(cron = "${scheduler.post-publisher.cron:0 30 8-21 * * *}")
     public void publishPost() {
-        postService.poll().ifPresent(post -> {
-            var copyMessages = CopyMessages.builder()
-                    .chatId(telegramProperties.channelUsername())
-                    .fromChatId(telegramProperties.adminId())
-                    .messageIds(post.getMessageIds())
-                    .removeCaption(post.getRemoveCaption())
-                    .build();
-
-            execute(copyMessages);
-        });
+        postService.poll()
+                .map(post -> copyMessagesMapper.map(channelProperties, adminProperties, post))
+                .ifPresent(this::execute);
     }
 
     private void execute(CopyMessages copyMessages) {

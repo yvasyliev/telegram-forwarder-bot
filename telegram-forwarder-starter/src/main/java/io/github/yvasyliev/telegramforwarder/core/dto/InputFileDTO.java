@@ -1,26 +1,15 @@
 package io.github.yvasyliev.telegramforwarder.core.dto;
 
-import io.github.yvasyliev.telegramforwarder.core.util.InputStreamSupplier;
-import org.apache.commons.io.FilenameUtils;
+import lombok.experimental.Delegate;
 
-import java.net.URL;
+import java.io.Closeable;
+import java.io.InputStream;
 
 /**
- * Data Transfer Object for input files.
+ * Data Transfer Object representing an input file with a media stream and file name.
  *
- * @param fileSupplier a supplier for the input stream of the file
- * @param filename     the name of the file
- * @param hasSpoiler   indicates if the file has a spoiler
+ * @param mediaStream the input stream of the media file
+ * @param fileName    the name of the file
  */
-public record InputFileDTO(InputStreamSupplier fileSupplier, String filename, boolean hasSpoiler) {
-    /**
-     * Creates an InputFileDTO from a URL.
-     *
-     * @param url        the URL of the file
-     * @param hasSpoiler indicates if the file has a spoiler
-     * @return a new InputFileDTO instance
-     */
-    public static InputFileDTO fromUrl(URL url, boolean hasSpoiler) {
-        return new InputFileDTO(url::openStream, FilenameUtils.getName(url.getPath()), hasSpoiler);
-    }
-}
+public record InputFileDTO(@Delegate(types = Closeable.class) InputStream mediaStream, String fileName)
+        implements Closeable {}
