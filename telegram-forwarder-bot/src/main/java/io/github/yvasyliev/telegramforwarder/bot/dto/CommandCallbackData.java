@@ -1,7 +1,7 @@
 package io.github.yvasyliev.telegramforwarder.bot.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.github.yvasyliev.telegramforwarder.bot.databind.util.RawCommandCallbackDataConverter;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 

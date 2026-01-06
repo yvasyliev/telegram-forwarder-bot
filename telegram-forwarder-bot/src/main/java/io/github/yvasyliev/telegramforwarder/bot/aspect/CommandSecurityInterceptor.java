@@ -62,7 +62,7 @@ public class CommandSecurityInterceptor {
     private Object intercept(ProceedingJoinPoint pjp, Supplier<BotApiMethod<?>> methodSupplier) throws Throwable {
         try {
             return pjp.proceed();
-        } catch (AccessDeniedException e) { // TODO: Java 25
+        } catch (AccessDeniedException _) {
             return telegramClient.execute(methodSupplier.get());
         }
     }

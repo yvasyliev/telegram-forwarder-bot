@@ -2,7 +2,6 @@ package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
 import io.github.yvasyliev.telegramforwarder.bot.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -57,9 +56,10 @@ public class TelegramEventHandlerAuthentication {
 
     private Authentication authenticate(Long userId) {
         try {
+            //TODO: mapper
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     userId,
-                    StringUtils.EMPTY,
+                    AuthUtils.DUMMY_PASSWORD,
                     List.of()
             ));
         } catch (UsernameNotFoundException e) {

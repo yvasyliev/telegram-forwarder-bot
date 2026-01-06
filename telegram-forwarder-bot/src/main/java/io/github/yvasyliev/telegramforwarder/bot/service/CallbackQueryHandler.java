@@ -29,10 +29,9 @@ public class CallbackQueryHandler implements TelegramEventHandler<CallbackQuery>
     }
 
     private CallbackQueryCommand<CommandCallbackData> getCommand(CommandCallbackData commandCallbackData) {
-        // TODO: Java 25
         return callbackQueryCommands.getOrDefault(
                 commandCallbackData.command(),
-                (callbackQuery, callbackData) -> log.warn(
+                (_, _) -> log.warn(
                         "Unknown callback query command: {}, available commands: {}",
                         commandCallbackData.command(),
                         callbackQueryCommands.keySet()

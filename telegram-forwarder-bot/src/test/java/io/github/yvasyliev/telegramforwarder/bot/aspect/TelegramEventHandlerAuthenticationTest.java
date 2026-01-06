@@ -1,7 +1,6 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
 import io.github.yvasyliev.telegramforwarder.bot.util.AuthUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -34,7 +33,7 @@ class TelegramEventHandlerAuthenticationTest {
     private static final long USER_ID = 123456789L;
     private static final User TELEGRAM_USER = new User(USER_ID, "testUser", false);
     private static final Authentication USERNAME_PASSWORD_AUTHENTICATION_TOKEN =
-            new UsernamePasswordAuthenticationToken(USER_ID, StringUtils.EMPTY, List.of());
+            new UsernamePasswordAuthenticationToken(USER_ID, AuthUtils.DUMMY_PASSWORD, List.of());
     @InjectMocks private TelegramEventHandlerAuthentication telegramEventHandlerAuthentication;
     @Mock private AuthenticationManager authenticationManager;
     @Mock private SecurityContext securityContext;
@@ -90,7 +89,7 @@ class TelegramEventHandlerAuthenticationTest {
         private static final org.springframework.security.core.userdetails.User INTERNAL_USER =
                 new org.springframework.security.core.userdetails.User(
                         String.valueOf(USER_ID),
-                        AuthUtils.DEFAULT_PASSWORD,
+                        "{noop}" + AuthUtils.DUMMY_PASSWORD,
                         AuthorityUtils.createAuthorityList("ROLE_USER")
                 );
         private static final Authentication EXPECTED_AUTHENTICATION = new AnonymousAuthenticationToken(

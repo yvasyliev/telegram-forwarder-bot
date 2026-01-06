@@ -2,14 +2,13 @@ package io.github.yvasyliev.telegramforwarder.reddit.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import io.github.yvasyliev.telegramforwarder.reddit.deser.std.EditedDeserializer;
-import io.github.yvasyliev.telegramforwarder.reddit.deser.std.PermalinkDeserializer;
+import io.github.yvasyliev.telegramforwarder.reddit.deser.EditedDeserializer;
+import io.github.yvasyliev.telegramforwarder.reddit.deser.PermalinkDeserializer;
 import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.node.ArrayNode;
 
 import java.net.URL;
 import java.time.Duration;
@@ -282,11 +281,11 @@ public record Link(
      * @return the source {@link Link} of the post.
      */
     public Link sourceLink() {
-        return ObjectUtils.defaultIfNull(CollectionUtils.lastElement(crosspostParentList), this);
+        return ObjectUtils.getIfNull(CollectionUtils.lastElement(crosspostParentList), this);
     }
 
     @Override
-    public int compareTo(@NotNull Link o) {
+    public int compareTo(Link o) {
         return created.compareTo(o.created);
     }
 

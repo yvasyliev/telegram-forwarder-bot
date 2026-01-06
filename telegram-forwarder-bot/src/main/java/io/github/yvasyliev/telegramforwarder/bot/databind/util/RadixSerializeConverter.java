@@ -1,8 +1,8 @@
 package io.github.yvasyliev.telegramforwarder.bot.databind.util;
 
-import com.fasterxml.jackson.databind.util.StdConverter;
 import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramRadixConverterProperties;
 import lombok.RequiredArgsConstructor;
+import tools.jackson.databind.util.StdConverter;
 
 /**
  * Converts an {@link Integer} to its string representation in a specified radix.

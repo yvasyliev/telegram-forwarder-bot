@@ -28,7 +28,7 @@ public class CloseableArrayList<T extends Closeable> extends ArrayList<T> implem
     }
 
     private Exception tryClose(T closeable) {
-        try (var ignored = closeable) { // TODO: Java 25
+        try (var _ = closeable) {
             return null;
         } catch (Exception e) {
             return e;

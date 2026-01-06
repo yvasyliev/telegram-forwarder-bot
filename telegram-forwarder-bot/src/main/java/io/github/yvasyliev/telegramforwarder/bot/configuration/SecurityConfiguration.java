@@ -29,10 +29,9 @@ public class SecurityConfiguration {
      *
      * @param authConfig the authentication configuration
      * @return the configured authentication manager
-     * @throws Exception if an error occurs during configuration
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
         var authenticationManager = (ProviderManager) authConfig.getAuthenticationManager();
         var provider = (AbstractUserDetailsAuthenticationProvider) authenticationManager.getProviders().getFirst();
         provider.setHideUserNotFoundExceptions(false);

@@ -16,10 +16,10 @@ import java.util.Collection;
 @UtilityClass
 public class AuthUtils {
     /**
-     * Default password for users. Always {@code {noop}} for empty password without encoding.
+     * A dummy password used for creating user details.
      */
     @SuppressWarnings({"checkstyle:VisibilityModifier", "checkstyle:MemberName"})
-    public final String DEFAULT_PASSWORD = "{noop}";
+    public final String DUMMY_PASSWORD = "dummy_password";
 
     @SuppressWarnings("checkstyle:MemberName")
     private final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -70,6 +70,6 @@ public class AuthUtils {
      * @return a {@link UserDetails} object representing the user
      */
     public UserDetails createUser(Long userId, Collection<? extends GrantedAuthority> authorities) {
-        return new User(userId.toString(), DEFAULT_PASSWORD, authorities);
+        return new User(userId.toString(), "{noop}" + DUMMY_PASSWORD, authorities);
     }
 }
