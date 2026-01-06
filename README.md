@@ -18,7 +18,7 @@ Currently, the bot can only forward posts from a single subreddit.
 
 ## 📋 Requirements
 
-* Java 21
+* Java 25
 * A [Reddit](https://www.reddit.com/) account.
 * A [Telegram](https://telegram.org/) account.
 * A [Telegram Channel](https://telegram.org/tour/channels) to forward posts to.

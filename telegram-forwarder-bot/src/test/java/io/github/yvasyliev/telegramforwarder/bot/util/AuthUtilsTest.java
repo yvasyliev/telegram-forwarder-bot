@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 class AuthUtilsTest {
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_USER = "ROLE_USER";
+    private static final String EXPECTED_PASSWORD = "{noop}" + AuthUtils.DUMMY_PASSWORD;
     private static final long USER_ID = 123;
     @SuppressWarnings("checkstyle:ConstantName")
     private static final Supplier<Stream<Arguments>> testIsAdmin = () -> Stream.of(
@@ -52,7 +53,7 @@ class AuthUtilsTest {
     void testCreateAdmin() {
         var expected = new User(
                 String.valueOf(USER_ID),
-                AuthUtils.DEFAULT_PASSWORD,
+                EXPECTED_PASSWORD,
                 AuthorityUtils.createAuthorityList(ROLE_ADMIN)
         );
 
@@ -65,7 +66,7 @@ class AuthUtilsTest {
     void testCreateUser() {
         var expected = new User(
                 String.valueOf(USER_ID),
-                AuthUtils.DEFAULT_PASSWORD,
+                EXPECTED_PASSWORD,
                 AuthorityUtils.createAuthorityList(ROLE_USER)
         );
 
@@ -77,7 +78,7 @@ class AuthUtilsTest {
     @Test
     void testCreateUserWithAuthorities() {
         var authorities = AuthorityUtils.createAuthorityList(ROLE_ADMIN, ROLE_USER);
-        var expected = new User(String.valueOf(USER_ID), AuthUtils.DEFAULT_PASSWORD, authorities);
+        var expected = new User(String.valueOf(USER_ID), EXPECTED_PASSWORD, authorities);
 
         var actual = AuthUtils.createUser(USER_ID, authorities);
 

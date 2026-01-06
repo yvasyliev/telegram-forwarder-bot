@@ -4,7 +4,6 @@ logging:
     pattern: "%-5level --- %logger{50} : %msg%n%ex"
 
 reddit:
-  api-host: https://oauth.reddit.com
   host: https://www.reddit.com
   user-agent: java:$group:v\${telegram.bot.version} (by /u/\${reddit.username})
   video-downloader:
@@ -24,6 +23,12 @@ spring:
         format_sql: true
         highlight_sql: true
     show-sql: true
+  http:
+    serviceclient:
+      reddit:
+        base-url: https://oauth.reddit.com
+        default-header:
+          User-Agent: \${reddit.user-agent}
   output:
     ansi:
       enabled: always

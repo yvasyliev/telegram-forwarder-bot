@@ -3,12 +3,13 @@ package io.github.yvasyliev.telegramforwarder.bot.databind.util;
 import io.github.yvasyliev.telegramforwarder.bot.configuration.TelegramRadixConverterProperties;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import tools.jackson.databind.util.StdConverter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RadixSerializeConverterTest {
     private static final int RADIX = Character.MAX_RADIX;
-    private static final RadixSerializeConverter CONVERTER = new RadixSerializeConverter(
+    private static final StdConverter<Integer, String> CONVERTER = new RadixSerializeConverter(
             new TelegramRadixConverterProperties(RADIX)
     );
 

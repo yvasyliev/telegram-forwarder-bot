@@ -10,7 +10,6 @@ import java.net.URI;
 /**
  * Reddit configuration properties.
  *
- * @param apiHost   Reddit API host
  * @param host      Reddit host
  * @param subreddit subreddit name
  * @param username  developer username
@@ -19,7 +18,6 @@ import java.net.URI;
 @ConfigurationProperties(prefix = "reddit")
 @Validated
 public record RedditProperties(
-        @NotNull URI apiHost,
         @NotNull URI host,
         @NotBlank String subreddit,
         @NotBlank String username,

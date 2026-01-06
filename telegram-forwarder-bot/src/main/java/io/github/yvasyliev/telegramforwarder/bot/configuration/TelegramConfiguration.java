@@ -41,17 +41,15 @@ public class TelegramConfiguration {
      * Creates a {@link TelegramBotsLongPollingApplication} bean for handling long polling updates from the Telegram
      * bot.
      *
-     * @param objectMapper             the {@link ObjectMapper} for JSON serialization/deserialization
      * @param scheduledExecutorService the {@link ScheduledExecutorService} for scheduling tasks
      * @return a {@link TelegramBotsLongPollingApplication} instance
      */
     @Bean
     public TelegramBotsLongPollingApplication telegramBotsLongPollingApplication(
-            ObjectMapper objectMapper,
             @Qualifier("telegramScheduledExecutorService") ScheduledExecutorService scheduledExecutorService
     ) {
         return new TelegramBotsLongPollingApplication(
-                () -> objectMapper,
+                ObjectMapper::new,
                 new TelegramOkHttpClientFactory.DefaultOkHttpClientCreator(),
                 () -> scheduledExecutorService
         );
