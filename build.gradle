@@ -14,7 +14,7 @@ plugins {
 allprojects {
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'io.github.yvasyliev.telegramforwarder'
+    group = 'io.github.yvasyliev.forwarder.telegram'
     version = '5.0.0'
 
     repositories {
@@ -95,7 +95,7 @@ dependencies {
 
 sonar {
     properties {
-        property "sonar.projectKey", "io.github.yvasyliev.telegramforwarder:telegram-forwarder-bot"
+        property "sonar.projectKey", "io.github.yvasyliev.forwarder.telegram:telegram-forwarder-bot"
         property "sonar.organization", "yvasyliev"
         property "sonar.host.url", "https://sonarcloud.io"
     }
