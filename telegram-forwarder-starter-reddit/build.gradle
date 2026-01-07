@@ -22,9 +22,9 @@ dependencies {
 jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: [
-                'io/github/yvasyliev/telegramforwarder/reddit/configuration/**',
-                'io/github/yvasyliev/telegramforwarder/reddit/entity/**',
-                'io/github/yvasyliev/telegramforwarder/reddit/dto/**'
+                'io/github/yvasyliev/forwarder/telegram/reddit/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/reddit/entity/**',
+                'io/github/yvasyliev/forwarder/telegram/reddit/dto/**'
         ])
     }))
 }

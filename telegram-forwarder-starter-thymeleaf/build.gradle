@@ -12,8 +12,8 @@ dependencies {
 jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: [
-                'io/github/yvasyliev/telegramforwarder/thymeleaf/Pointcuts.class',
-                'io/github/yvasyliev/telegramforwarder/thymeleaf/ThymeleafAutoConfiguration.class'
+                'io/github/yvasyliev/forwarder/telegram/thymeleaf/Pointcuts.class',
+                'io/github/yvasyliev/forwarder/telegram/thymeleaf/ThymeleafAutoConfiguration.class'
         ])
     }))
 }

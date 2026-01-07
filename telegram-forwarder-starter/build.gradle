@@ -12,8 +12,8 @@ dependencies {
 jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: [
-                'io/github/yvasyliev/telegramforwarder/core/configuration/**',
-                'io/github/yvasyliev/telegramforwarder/core/dto/**',
+                'io/github/yvasyliev/forwarder/telegram/core/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/core/dto/**',
         ])
     }))
 }
