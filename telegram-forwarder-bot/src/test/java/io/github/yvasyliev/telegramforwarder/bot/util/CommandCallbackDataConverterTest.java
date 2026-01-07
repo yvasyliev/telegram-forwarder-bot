@@ -1,8 +1,6 @@
 package io.github.yvasyliev.telegramforwarder.bot.util;
 
 import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
-import io.github.yvasyliev.telegramforwarder.bot.dto.RawCommandCallbackData;
-import io.github.yvasyliev.telegramforwarder.bot.mapper.CommandCallbackDataMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -11,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 
@@ -33,36 +31,30 @@ class CommandCallbackDataConverterTest {
     private static final String PAIR2 = KEY2 + EQUALS_SIGN + VALUE2;
     private static final Map<String, String> COMMAND_CALLBACK_DATA_MAP = Map.of(KEY1, VALUE1, KEY2, VALUE2);
     @InjectMocks private CommandCallbackDataConverter commandCallbackDataConverter;
-    @Mock private ObjectMapper objectMapper;
-    @Mock private CommandCallbackDataMapper commandCallbackDataMapper;
+    @Mock private JsonMapper jsonMapper;
 
     @Test
     void testConvertCommandCallbackData() {
         var commandCallbackData = mock(CommandCallbackData.class);
 
-        when(objectMapper.convertValue(
+        when(jsonMapper.convertValue(
                 eq(commandCallbackData),
                 ArgumentMatchers.<TypeReference<Map<String, String>>>any()
         )).thenReturn(COMMAND_CALLBACK_DATA_MAP);
 
         var actual = commandCallbackDataConverter.convert(commandCallbackData);
 
-        assertThat(actual).contains(PAIR1);
-        assertThat(actual).contains(AMPERSAND);
-        assertThat(actual).contains(PAIR2);
+        assertThat(actual).contains(PAIR1).contains(AMPERSAND).contains(PAIR2);
     }
 
     @Test
     void testConvertCallbackQuery() {
         var callbackQuery = new CallbackQuery();
-        var rawCommandCallbackData = mock(RawCommandCallbackData.class);
         var expected = mock(CommandCallbackData.class);
 
         callbackQuery.setData(PAIR1 + AMPERSAND + PAIR2);
 
-        when(objectMapper.convertValue(COMMAND_CALLBACK_DATA_MAP, RawCommandCallbackData.class))
-                .thenReturn(rawCommandCallbackData);
-        when(commandCallbackDataMapper.map(rawCommandCallbackData)).thenReturn(expected);
+        when(jsonMapper.convertValue(COMMAND_CALLBACK_DATA_MAP, CommandCallbackData.class)).thenReturn(expected);
 
         var actual = commandCallbackDataConverter.convert(callbackQuery);
 

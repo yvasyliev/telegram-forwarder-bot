@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class TelegramUpdateConsumer implements LongPollingUpdateConsumer {
     private final TelegramEventHandler<Message> messageHandler;
     private final TelegramEventHandler<CallbackQuery> callbackQueryHandler;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
 
     @Override
     @Async
@@ -48,6 +48,6 @@ public class TelegramUpdateConsumer implements LongPollingUpdateConsumer {
     }
 
     private Supplier<JsonNode> json(Update update) {
-        return () -> objectMapper.convertValue(update, JsonNode.class);
+        return () -> jsonMapper.convertValue(update, JsonNode.class);
     }
 }

@@ -57,6 +57,6 @@ public class SecurityConfiguration {
      */
     @Bean
     public UserDetailsService userDetailsService(TelegramAdminProperties adminProperties) {
-        return new InMemoryUserDetailsManager(TelegramUser.createAdmin(adminProperties.id() + 1));
+        return new InMemoryUserDetailsManager(TelegramUser.createAdmin(adminProperties.id()));
     }
 }

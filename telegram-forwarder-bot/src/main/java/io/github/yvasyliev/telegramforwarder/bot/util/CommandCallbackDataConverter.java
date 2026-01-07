@@ -1,15 +1,13 @@
 package io.github.yvasyliev.telegramforwarder.bot.util;
 
 import io.github.yvasyliev.telegramforwarder.bot.dto.CommandCallbackData;
-import io.github.yvasyliev.telegramforwarder.bot.dto.RawCommandCallbackData;
-import io.github.yvasyliev.telegramforwarder.bot.mapper.CommandCallbackDataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 
@@ -21,8 +19,7 @@ import java.util.Map;
 public class CommandCallbackDataConverter {
     private static final TypeReference<Map<String, String>> STRING_MAP = new TypeReference<>() {};
 
-    private final ObjectMapper objectMapper;
-    private final CommandCallbackDataMapper commandCallbackDataMapper;
+    private final JsonMapper jsonMapper;
 
     /**
      * Converts CommandCallbackData to a query string.
@@ -31,8 +28,10 @@ public class CommandCallbackDataConverter {
      * @return the query string representation of the command callback data
      */
     public String convert(CommandCallbackData commandCallbackData) {
+        var queryParams = jsonMapper.convertValue(commandCallbackData, STRING_MAP);
+
         return UriComponentsBuilder.newInstance()
-                .queryParams(MultiValueMap.fromSingleValue(objectMapper.convertValue(commandCallbackData, STRING_MAP)))
+                .queryParams(MultiValueMap.fromSingleValue(queryParams))
                 .build()
                 .getQuery();
     }
@@ -48,9 +47,7 @@ public class CommandCallbackDataConverter {
                 .build()
                 .getQueryParams()
                 .asSingleValueMap();
-        // TODO: CommandCallbackData
-        var rawCommandCallbackData = objectMapper.convertValue(rawCommandCallbackDataMap, RawCommandCallbackData.class);
 
-        return commandCallbackDataMapper.map(rawCommandCallbackData);
+        return jsonMapper.convertValue(rawCommandCallbackDataMap, CommandCallbackData.class);
     }
 }

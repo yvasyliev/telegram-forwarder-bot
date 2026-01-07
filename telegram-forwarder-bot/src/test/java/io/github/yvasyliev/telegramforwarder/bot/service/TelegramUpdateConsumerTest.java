@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ class TelegramUpdateConsumerTest {
 
     @BeforeEach
     void setUp() {
-        updateConsumer = new TelegramUpdateConsumer(messageHandler, callbackQueryHandler, new ObjectMapper());
+        updateConsumer = new TelegramUpdateConsumer(messageHandler, callbackQueryHandler, new JsonMapper());
     }
 
     @Test
