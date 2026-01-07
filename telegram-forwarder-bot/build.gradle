@@ -29,6 +29,7 @@ jacocoTestReport {
                 'io/github/yvasyliev/telegramforwarder/bot/configuration/**',
                 'io/github/yvasyliev/telegramforwarder/bot/dto/**',
                 'io/github/yvasyliev/telegramforwarder/bot/entity/**',
+                'io/github/yvasyliev/telegramforwarder/bot/security/core/TelegramUser.class',
                 'io/github/yvasyliev/telegramforwarder/bot/util/Pointcuts.class',
                 'io/github/yvasyliev/telegramforwarder/bot/TelegramForwarderBotApplication.class'
         ])

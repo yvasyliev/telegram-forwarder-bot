@@ -1,21 +1,14 @@
 package io.github.yvasyliev.telegramforwarder.bot.aspect;
 
-import io.github.yvasyliev.telegramforwarder.bot.util.AuthUtils;
+import io.github.yvasyliev.telegramforwarder.bot.security.authentication.TelegramAuthenticationManager;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-
-import java.util.List;
 
 /**
  * Aspect for handling authentication of Telegram events.
@@ -25,7 +18,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class TelegramEventHandlerAuthentication {
-    private final AuthenticationManager authenticationManager;
+    private final TelegramAuthenticationManager authenticationManager;
 
     /**
      * Authenticates the user based on the message received.
@@ -50,21 +43,8 @@ public class TelegramEventHandlerAuthentication {
     }
 
     private void authenticate(User user) {
-        var authentication = authenticate(user.getId());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
+        var authentication = authenticationManager.authenticate(user);
 
-    private Authentication authenticate(Long userId) {
-        try {
-            //TODO: mapper
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    userId,
-                    AuthUtils.DUMMY_PASSWORD,
-                    List.of()
-            ));
-        } catch (UsernameNotFoundException e) {
-            var user = AuthUtils.createUser(userId);
-            return new AnonymousAuthenticationToken(user.getUsername(), user, user.getAuthorities());
-        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
