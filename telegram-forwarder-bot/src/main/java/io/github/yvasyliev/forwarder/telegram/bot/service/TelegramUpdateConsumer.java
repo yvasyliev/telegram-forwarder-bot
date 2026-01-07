@@ -8,7 +8,6 @@ import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsume
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class TelegramUpdateConsumer implements LongPollingUpdateConsumer {
         }
     }
 
-    private Supplier<JsonNode> json(Update update) {
-        return () -> jsonMapper.convertValue(update, JsonNode.class);
+    private Supplier<String> json(Update update) {
+        return () -> jsonMapper.writeValueAsString(update);
     }
 }
