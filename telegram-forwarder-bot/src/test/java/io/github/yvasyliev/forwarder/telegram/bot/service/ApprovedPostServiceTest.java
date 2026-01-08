@@ -60,18 +60,18 @@ class ApprovedPostServiceTest {
             setApprovedAt(Instant.now());
         }};
         @SuppressWarnings("checkstyle:ConstantName")
-        private static final Supplier<Stream<Optional<ApprovedPost>>> testSave = () -> {
+        private static final Supplier<Stream<ApprovedPost>> testSave = () -> {
             var post = new ApprovedPost();
 
             post.setMessageIds(MESSAGE_IDS);
 
-            return Stream.of(Optional.of(post), Optional.empty());
+            return Stream.of(post, null);
         };
 
         @ParameterizedTest
         @FieldSource
-        void testSave(Optional<ApprovedPost> post) {
-            when(postRepository.findFirstByMessageIdsIn(MESSAGE_IDS)).thenReturn(post);
+        void testSave(ApprovedPost post) {
+            when(postRepository.findFirstByMessageIdsIn(MESSAGE_IDS)).thenReturn(Optional.ofNullable(post));
             when(postRepository.save(APPROVED_POST)).thenReturn(EXPECTED);
 
             var actual = postService.save(MESSAGE_IDS, REMOVE_CAPTION);
@@ -86,19 +86,21 @@ class ApprovedPostServiceTest {
         void shouldPollPost() {
             var post = mock(ApprovedPost.class);
 
-            shouldPoll(Optional.of(post));
+            shouldPoll(post);
 
             verify(postRepository).delete(post);
         }
 
         @Test
         void shouldReturnEmpty() {
-            shouldPoll(Optional.empty());
+            shouldPoll(null);
 
             verify(postRepository, never()).delete(any());
         }
 
-        private void shouldPoll(Optional<ApprovedPost> expected) {
+        private void shouldPoll(ApprovedPost post) {
+            var expected = Optional.ofNullable(post);
+
             when(postRepository.findFirstByOrderByApprovedAt()).thenReturn(expected);
 
             var actual = postService.poll();

@@ -3,6 +3,7 @@ package io.github.yvasyliev.forwarder.telegram.bot.aspect;
 import io.github.yvasyliev.forwarder.telegram.bot.security.authentication.TelegramAuthenticationManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,22 +27,22 @@ class TelegramEventHandlerAuthenticationTest {
     @Mock private TelegramAuthenticationManager authenticationManager;
 
     @Test
-    void shouldSetAuthenticateForMessage() {
+    void shouldSetAuthenticationForMessage() {
         var message = Message.builder().from(USER).build();
 
-        shouldSetAuthenticate(() -> telegramEventHandlerAuthentication.authenticate(message));
+        shouldSetAuthentication(() -> telegramEventHandlerAuthentication.authenticate(message));
     }
 
     @Test
-    void shouldSetAuthenticateForCallbackQuery() {
+    void shouldSetAuthenticationForCallbackQuery() {
         var callbackQuery = new CallbackQuery();
 
         callbackQuery.setFrom(USER);
 
-        shouldSetAuthenticate(() -> telegramEventHandlerAuthentication.authenticate(callbackQuery));
+        shouldSetAuthentication(() -> telegramEventHandlerAuthentication.authenticate(callbackQuery));
     }
 
-    private void shouldSetAuthenticate(Runnable authenticateMethod) {
+    private void shouldSetAuthentication(Executable executable) {
         var securityContext = mock(SecurityContext.class);
         var expected = mock(Authentication.class);
 
@@ -48,7 +50,7 @@ class TelegramEventHandlerAuthenticationTest {
 
         when(authenticationManager.authenticate(USER)).thenReturn(expected);
 
-        authenticateMethod.run();
+        assertDoesNotThrow(executable);
 
         verify(securityContext).setAuthentication(expected);
     }

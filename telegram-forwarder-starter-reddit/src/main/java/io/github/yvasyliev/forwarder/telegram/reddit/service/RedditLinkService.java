@@ -22,6 +22,7 @@ public class RedditLinkService {
      */
     public Stream<Link> getNewLinks() {
         var lastCreated = instantPropertyService.getLastCreated();
+
         return redditClient.getSubredditNew(subreddit)
                 .data()
                 .children()

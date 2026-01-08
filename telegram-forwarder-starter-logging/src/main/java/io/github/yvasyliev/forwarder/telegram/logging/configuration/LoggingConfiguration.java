@@ -95,7 +95,6 @@ public class LoggingConfiguration {
     @Bean(initMethod = "start")
     @ConditionalOnMissingBean(name = "telegramBotAppenderFilter")
     public Filter<ILoggingEvent> telegramBotAppenderFilter(
-
             TelegramBotAppenderProperties botAppenderProperties,
             LoggerContext loggerContext
     ) {

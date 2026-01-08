@@ -22,5 +22,4 @@ public record RedditProperties(
         @NotBlank String subreddit,
         @NotBlank String username,
         @NotBlank String userAgent
-) {
-}
+) {}

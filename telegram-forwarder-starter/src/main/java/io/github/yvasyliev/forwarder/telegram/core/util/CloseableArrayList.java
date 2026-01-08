@@ -16,9 +16,9 @@ public class CloseableArrayList<T extends Closeable> extends ArrayList<T> implem
         var e = stream()
                 .map(this::tryClose)
                 .filter(Objects::nonNull)
-                .reduce((primaryThrowable, otherThrowable) -> {
-                    primaryThrowable.addSuppressed(otherThrowable);
-                    return primaryThrowable;
+                .reduce((primaryException, otherException) -> {
+                    primaryException.addSuppressed(otherException);
+                    return primaryException;
                 })
                 .map(ex -> ex instanceof IOException ioEx ? ioEx : new IOException(ex));
 
