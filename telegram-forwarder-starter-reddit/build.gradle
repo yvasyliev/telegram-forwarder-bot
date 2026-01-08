@@ -4,17 +4,16 @@ plugins {
 }
 
 dependencies {
-    implementation project(':telegram-forwarder-starter')
+    api project(':telegram-forwarder-starter')
 
-    implementation libs.bundles.telegrambots
-    implementation libs.commons.collections4
-    implementation libs.mapstruct
+    api libs.bundles.commons
+    api libs.mapstruct
+
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    api 'org.springframework.boot:spring-boot-starter-restclient'
 
     implementation 'org.jsoup:jsoup:1.21.1'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-restclient'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     annotationProcessor libs.mapstruct.processor
 }

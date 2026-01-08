@@ -4,13 +4,10 @@ plugins {
 }
 
 dependencies {
-    implementation project(':telegram-forwarder-starter')
-    implementation project(':telegram-forwarder-starter-thymeleaf')
+    api project(':telegram-forwarder-starter')
+    api project(':telegram-forwarder-starter-thymeleaf')
 
-    implementation libs.bundles.telegrambots
-    implementation libs.mapstruct
-
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    api libs.mapstruct
 
     annotationProcessor libs.mapstruct.processor
 }
