@@ -2,11 +2,11 @@ package io.github.yvasyliev.forwarder.telegram.bot.aspect;
 
 import io.github.yvasyliev.forwarder.telegram.bot.configuration.PostControlsSendMessageProperties;
 import io.github.yvasyliev.forwarder.telegram.bot.mapper.SendMessageMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,38 +35,51 @@ class PostControlsSenderTest {
         when(sendMessageMapper.map(postControlsSendMessageProperties, List.of(message))).thenReturn(sendMessage);
     }
 
-    @AfterEach
-    void tearDown() throws TelegramApiException {
+    private void testSendPostControlKeyboard(Executable executable) throws TelegramApiException {
+        assertDoesNotThrow(executable);
+
         verify(telegramClient).execute(sendMessage);
     }
 
     @Nested
     class MessagePostControlsSenderTest {
         @Test
-        void shouldSendPostControlKeyboard() {
-            postControlsSender.sendPostControlKeyboard(message);
+        void shouldSendPostControlKeyboard() throws TelegramApiException {
+            testSendPostControlKeyboard();
         }
 
         @Test
         void shouldHandleTelegramApiException() throws TelegramApiException {
             when(telegramClient.execute(sendMessage)).thenThrow(TelegramApiException.class);
 
-            assertDoesNotThrow(() -> postControlsSender.sendPostControlKeyboard(message));
+            testSendPostControlKeyboard();
+        }
+
+        private void testSendPostControlKeyboard() throws TelegramApiException {
+            PostControlsSenderTest.this.testSendPostControlKeyboard(
+                    () -> postControlsSender.sendPostControlKeyboard(message)
+            );
         }
     }
 
     @Nested
     class MessagesPostControlsSenderTest {
         @Test
-        void shouldSendPostControlKeyboard() {
-            postControlsSender.sendPostControlKeyboard(List.of(message));
+        void shouldSendPostControlKeyboard() throws TelegramApiException {
+            testSendPostControlKeyboard();
         }
 
         @Test
         void shouldHandleTelegramApiException() throws TelegramApiException {
             when(telegramClient.execute(sendMessage)).thenThrow(TelegramApiException.class);
 
-            assertDoesNotThrow(() -> postControlsSender.sendPostControlKeyboard(List.of(message)));
+            testSendPostControlKeyboard();
+        }
+
+        private void testSendPostControlKeyboard() throws TelegramApiException {
+            PostControlsSenderTest.this.testSendPostControlKeyboard(
+                    () -> postControlsSender.sendPostControlKeyboard(List.of(message))
+            );
         }
     }
 }

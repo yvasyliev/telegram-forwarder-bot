@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,6 +32,12 @@ class TelegramForwarderLifecycleListenerTest {
         verify(telegramClient).execute(sendMessage);
     }
 
+    private void testSendNotification(Executable executable) throws TelegramApiException {
+        assertDoesNotThrow(executable);
+
+        verify(telegramClient).execute(sendMessage);
+    }
+
     @Nested
     class SendStartupNotificationTest {
         @BeforeEach
@@ -39,15 +46,19 @@ class TelegramForwarderLifecycleListenerTest {
         }
 
         @Test
-        void shouldSendNotification() {
-            telegramForwarderLifecycleListener.sendStartupNotification();
+        void shouldSendNotification() throws TelegramApiException {
+            testSendStartupNotification();
         }
 
         @Test
         void shouldHandleTelegramApiException() throws TelegramApiException {
             when(telegramClient.execute(sendMessage)).thenThrow(TelegramApiException.class);
 
-            assertDoesNotThrow(() -> telegramForwarderLifecycleListener.sendStartupNotification());
+            testSendStartupNotification();
+        }
+
+        void testSendStartupNotification() throws TelegramApiException {
+            testSendNotification(() -> telegramForwarderLifecycleListener.sendStartupNotification());
         }
     }
 
@@ -59,15 +70,19 @@ class TelegramForwarderLifecycleListenerTest {
         }
 
         @Test
-        void shouldSendNotification() {
-            telegramForwarderLifecycleListener.sendShutdownNotification();
+        void shouldSendNotification() throws TelegramApiException {
+            testSendShutdownNotification();
         }
 
         @Test
         void shouldHandleTelegramApiException() throws TelegramApiException {
             when(telegramClient.execute(sendMessage)).thenThrow(TelegramApiException.class);
 
-            assertDoesNotThrow(() -> telegramForwarderLifecycleListener.sendShutdownNotification());
+            testSendShutdownNotification();
+        }
+
+        void testSendShutdownNotification() throws TelegramApiException {
+            testSendNotification(() -> telegramForwarderLifecycleListener.sendShutdownNotification());
         }
     }
 }

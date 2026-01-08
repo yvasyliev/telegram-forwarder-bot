@@ -3,7 +3,6 @@ package io.github.yvasyliev.forwarder.telegram.bot.aspect;
 import io.github.yvasyliev.forwarder.telegram.bot.configuration.PostControlsEditMessageTextProperties;
 import io.github.yvasyliev.forwarder.telegram.bot.dto.CommandCallbackData;
 import io.github.yvasyliev.forwarder.telegram.bot.mapper.EditMessageTextMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,14 +55,9 @@ class PostControlsMessageTextEditorTest {
         when(editMessageTextMapper.map(message, editMessageTextProperties)).thenReturn(editMessageText);
     }
 
-    @AfterEach
-    void tearDown() throws TelegramApiException {
-        verify(telegramClient).execute(editMessageText);
-    }
-
     @Test
-    void shouldEditPostControlsMessageText() {
-        postControlsMessageTextEditor.editPostControlsMessageText(callbackQuery, callbackData);
+    void shouldEditPostControlsMessageText() throws TelegramApiException {
+        testEditPostControlsMessageText();
     }
 
     @Test
@@ -72,20 +66,14 @@ class PostControlsMessageTextEditorTest {
 
         when(telegramClient.execute(editMessageText)).thenThrow(new TelegramApiRequestException(null, apiResponse));
 
-        assertDoesNotThrow(() -> postControlsMessageTextEditor.editPostControlsMessageText(
-                callbackQuery,
-                callbackData
-        ));
+        testEditPostControlsMessageText();
     }
 
     @Test
     void shouldHandleUnsuppressedTelegramApiException() throws TelegramApiException {
         when(telegramClient.execute(editMessageText)).thenThrow(TelegramApiException.class);
 
-        assertDoesNotThrow(() -> postControlsMessageTextEditor.editPostControlsMessageText(
-                callbackQuery,
-                callbackData
-        ));
+        testEditPostControlsMessageText();
     }
 
     @Test
@@ -94,9 +82,15 @@ class PostControlsMessageTextEditorTest {
 
         when(telegramClient.execute(editMessageText)).thenThrow(new TelegramApiRequestException(null, apiResponse));
 
+        testEditPostControlsMessageText();
+    }
+
+    private void testEditPostControlsMessageText() throws TelegramApiException {
         assertDoesNotThrow(() -> postControlsMessageTextEditor.editPostControlsMessageText(
                 callbackQuery,
                 callbackData
         ));
+
+        verify(telegramClient).execute(editMessageText);
     }
 }

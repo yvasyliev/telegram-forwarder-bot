@@ -1,7 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.bot.service;
 
 import io.github.yvasyliev.forwarder.telegram.core.service.PostForwarder;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,20 +23,21 @@ class PostForwardingSchedulerTest {
         postForwardingScheduler = new PostForwardingScheduler(List.of(postForwarder));
     }
 
-    @AfterEach
-    void tearDown() {
-        verify(postForwarder).forward();
-    }
-
     @Test
     void shouldForwardPosts() {
-        postForwardingScheduler.forwardPosts();
+        testForwardPosts();
     }
 
     @Test
     void shouldHandleExceptionDuringForwarding() {
         doThrow(RuntimeException.class).when(postForwarder).forward();
 
+        testForwardPosts();
+    }
+
+    private void testForwardPosts() {
         assertDoesNotThrow(postForwardingScheduler::forwardPosts);
+
+        verify(postForwarder).forward();
     }
 }

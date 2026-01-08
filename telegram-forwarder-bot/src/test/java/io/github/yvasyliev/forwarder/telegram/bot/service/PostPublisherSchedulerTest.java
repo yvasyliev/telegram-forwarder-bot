@@ -58,15 +58,21 @@ class PostPublisherSchedulerTest {
         }
 
         @Test
-        void shouldPublishPost() {
-            postPublisherScheduler.publishPost();
+        void shouldPublishPost() throws TelegramApiException {
+            testPublishPost();
         }
 
         @Test
         void shouldHandleTelegramApiException() throws TelegramApiException {
             when(telegramClient.execute(copyMessages)).thenThrow(TelegramApiException.class);
 
+            testPublishPost();
+        }
+
+        private void testPublishPost() throws TelegramApiException {
             assertDoesNotThrow(() -> postPublisherScheduler.publishPost());
+
+            verify(telegramClient).execute(copyMessages);
         }
     }
 }
