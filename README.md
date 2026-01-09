@@ -171,7 +171,7 @@ options.
 
 ## 🛠️ Building from Source
 
-To build the bot from source, you need to have JDK 21 installed. You can use the following commands to build the bot
+To build the bot from source, you need to have JDK 25 installed. You can use the following commands to build the bot
 (assuming you have cloned the repository and are in the project root directory):
 
 * On Linux/macOS:
