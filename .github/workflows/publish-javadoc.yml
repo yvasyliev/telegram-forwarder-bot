@@ -37,7 +37,11 @@ jobs:
         run: |
           mkdir -p docs
           rm -rf docs/*
-          cp -r build/docs/javadoc/* docs/ || true
+          if [ ! -d build/docs/javadoc ] || [ -z "$(ls -A build/docs/javadoc)" ]; then
+            echo "Error: No Javadoc files found in build/docs/javadoc. Aborting publish."
+            exit 1
+          fi
+          cp -r build/docs/javadoc/* docs/
 
       - name: Commit and push Javadoc to gh-pages
         run: |
