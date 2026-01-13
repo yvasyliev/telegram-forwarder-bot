@@ -9,9 +9,13 @@ on:
 jobs:
   publish-javadoc:
     runs-on: ubuntu-latest
+    env:
+      SOURCE_BRANCH: ${{ github.head_ref || github.ref_name }}
     steps:
-      - name: Checkout sources
+      - name: Checkout sources (full history)
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Setup Gradle
         uses: ./.github/actions/setup-gradle
@@ -21,10 +25,29 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Reset gh-pages branch
+      - name: Prepare gh-pages branch (create/clean and merge source)
         run: |
-          git checkout gh-pages
-          git reset --hard master
+          echo "Source branch: $SOURCE_BRANCH"
+
+          # fetch source branch and gh-pages if they exist
+          git fetch origin "$SOURCE_BRANCH" || true
+          git fetch origin gh-pages || true
+
+          # checkout or create gh-pages
+          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+            git checkout -B gh-pages origin/gh-pages
+          else
+            git checkout --orphan gh-pages
+          fi
+
+          # remove all files from worktree (preserve .git)
+          git rm -rf . || true
+          git clean -fdx || true
+
+          # merge the source branch into gh-pages (skip if merging gh-pages into itself)
+          if [ "$SOURCE_BRANCH" != "gh-pages" ]; then
+            git merge --allow-unrelated-histories --no-edit origin/"$SOURCE_BRANCH" || true
+          fi
 
       - name: Generate Javadoc
         run: ./gradlew javadoc
@@ -33,10 +56,10 @@ jobs:
         run: |
           mkdir -p docs
           rm -rf docs/*
-          cp -r build/docs/javadoc/* docs/
+          cp -r build/docs/javadoc/* docs/ || true
 
-      - name: Commit and push Javadoc
+      - name: Commit and push Javadoc to gh-pages
         run: |
           git add .
-          git commit -m "Update Javadoc" || echo "No changes to commit"
-          git push --force origin gh-pages
+          git commit -m "Update Javadoc from $SOURCE_BRANCH" || echo "No changes to commit"
+          git push origin gh-pages
