@@ -9,9 +9,13 @@ on:
 jobs:
   publish-javadoc:
     runs-on: ubuntu-latest
+    env:
+      SOURCE_BRANCH: ${{ github.head_ref || github.ref_name }}
     steps:
-      - name: Checkout sources
+      - name: Checkout sources (full history)
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Setup Gradle
         uses: ./.github/actions/setup-gradle
@@ -21,10 +25,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Reset gh-pages branch
+      - name: Prepare gh-pages branch (force-replace with source)
         run: |
-          git checkout gh-pages
-          git reset --hard master
+          if ! git ls-remote --exit-code origin "refs/heads/$SOURCE_BRANCH" > /dev/null; then
+            echo "Error: Source branch '$SOURCE_BRANCH' does not exist on remote 'origin'." >&2
+            exit 1
+          fi
+          git fetch origin "$SOURCE_BRANCH"
+          git checkout --force -B gh-pages origin/"$SOURCE_BRANCH"
 
       - name: Generate Javadoc
         run: ./gradlew javadoc
@@ -33,10 +41,14 @@ jobs:
         run: |
           mkdir -p docs
           rm -rf docs/*
+          if [ ! -d build/docs/javadoc ] || [ -z "$(ls -A build/docs/javadoc)" ]; then
+            echo "Error: No Javadoc files found in build/docs/javadoc. Aborting publish."
+            exit 1
+          fi
           cp -r build/docs/javadoc/* docs/
 
-      - name: Commit and push Javadoc
+      - name: Commit and push Javadoc to gh-pages
         run: |
           git add .
-          git commit -m "Update Javadoc" || echo "No changes to commit"
+          git commit -m "Update Javadoc from $SOURCE_BRANCH" || echo "No changes to commit"
           git push --force origin gh-pages
