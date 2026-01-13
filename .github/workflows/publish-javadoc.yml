@@ -21,12 +21,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Fetch and merge remote gh-pages
+      - name: Reset gh-pages branch
         run: |
-          git fetch origin gh-pages || true
-          git checkout -B gh-pages origin/gh-pages || git checkout -b gh-pages
-          git merge --allow-unrelated-histories master
-          git status
+          git checkout gh-pages
+          git reset --hard master
 
       - name: Generate Javadoc
         run: ./gradlew javadoc
@@ -41,4 +39,4 @@ jobs:
         run: |
           git add .
           git commit -m "Update Javadoc" || echo "No changes to commit"
-          git push origin gh-pages
+          git push --force origin gh-pages
