@@ -1,8 +1,0 @@
-<th:block xmlns:th="http://www.thymeleaf.org" th:with="botName=${@telegramForwarderBot.me.firstName}">
-👋 Hello, I'm <b th:text="${botName}"/> (ver. <code th:text="${telegramProperties.bot.version}"/>), and I'm the manager bot of <th:block th:text="${telegramProperties.channelUsername}"/> channel!
-
-🤓 I can understand the following commands:
-
-/help - show available commands
-<th:block th:if="${T(io.github.yvasyliev.telegramforwarderbot.util.AuthUtils).isAdmin}">/stop - stop <b th:text="${botName}"/></th:block>
-</th:block>

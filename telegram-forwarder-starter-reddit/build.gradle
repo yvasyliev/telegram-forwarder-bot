@@ -1,0 +1,36 @@
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' apply false
+}
+
+dependencies {
+    api project(':telegram-forwarder-starter')
+
+    api libs.bundles.commons
+    api libs.mapstruct
+
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    api 'org.springframework.boot:spring-boot-starter-restclient'
+
+    implementation 'org.jsoup:jsoup:1.21.1'
+
+    annotationProcessor libs.mapstruct.processor
+}
+
+jacocoTestReport {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                'io/github/yvasyliev/forwarder/telegram/reddit/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/reddit/entity/**',
+                'io/github/yvasyliev/forwarder/telegram/reddit/dto/**'
+        ])
+    }))
+}
+
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.defaultInjectionStrategy=constructor',
+    ]
+}

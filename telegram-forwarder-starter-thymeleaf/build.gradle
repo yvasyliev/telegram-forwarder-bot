@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' apply false
+}
+
+dependencies {
+    api 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    api 'org.springframework.boot:spring-boot-starter-aspectj'
+}
+
+jacocoTestReport {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                'io/github/yvasyliev/forwarder/telegram/thymeleaf/Pointcuts.class',
+                'io/github/yvasyliev/forwarder/telegram/thymeleaf/ThymeleafAutoConfiguration.class'
+        ])
+    }))
+}

@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation project(':telegram-forwarder-starter-logging')
+    implementation project(':telegram-forwarder-starter-reddit')
+
+    implementation libs.bundles.telegrambots
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    runtimeOnly 'com.h2database:h2'
+
+    annotationProcessor libs.mapstruct.processor
+}
+
+jacocoTestReport {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                'io/github/yvasyliev/forwarder/telegram/bot/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/bot/dto/**',
+                'io/github/yvasyliev/forwarder/telegram/bot/entity/**',
+                'io/github/yvasyliev/forwarder/telegram/bot/security/core/TelegramUser.class',
+                'io/github/yvasyliev/forwarder/telegram/bot/util/Pointcuts.class',
+                'io/github/yvasyliev/forwarder/telegram/bot/TelegramForwarderBotApplication.class'
+        ])
+    }))
+}
+
+processResources {
+    filesMatching('application.yml') {
+        expand project.properties
+    }
+}
+
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.defaultInjectionStrategy=constructor',
+    ]
+}

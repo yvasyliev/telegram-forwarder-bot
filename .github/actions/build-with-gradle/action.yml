@@ -34,10 +34,10 @@ runs:
       id: get-variables
       env:
         INIT_SCRIPT: |
-          allprojects {
+          subprojects {
             tasks.register('printBootJarPath') {
               doLast {
-                println project.relativePath(bootJar.archiveFile.get().asFile)
+                println project.parent.relativePath(bootJar.archiveFile.get().asFile)
               }
             }
           
@@ -55,7 +55,7 @@ runs:
           }
       run: |
         echo "$INIT_SCRIPT" > ~/.gradle/init.gradle
-        echo "jar-path=$(./gradlew --quiet printBootJarPath)" >> $GITHUB_OUTPUT
-        echo "jar-name=$(./gradlew --quiet printBootJarName)" >> $GITHUB_OUTPUT
-        echo "version=$(./gradlew --quiet printVersion)" >> $GITHUB_OUTPUT
+        echo "jar-path=$(./gradlew --quiet :telegram-forwarder-bot:printBootJarPath)" >> $GITHUB_OUTPUT
+        echo "jar-name=$(./gradlew --quiet :telegram-forwarder-bot:printBootJarName)" >> $GITHUB_OUTPUT
+        echo "version=$(./gradlew --quiet :telegram-forwarder-bot:printVersion)" >> $GITHUB_OUTPUT
       shell: bash

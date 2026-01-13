@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' apply false
+}
+
+dependencies {
+    api libs.telegrambots.meta
+
+    api 'org.springframework.boot:spring-boot-starter-validation'
+}
+
+jacocoTestReport {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+                'io/github/yvasyliev/forwarder/telegram/core/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/core/dto/**',
+        ])
+    }))
+}

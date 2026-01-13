@@ -1,0 +1,90 @@
+logging:
+  telegram-bot-appender:
+    chat-id: \${telegram.admin.id}
+    pattern: "%-5level --- %logger{50} : %msg%n%ex"
+
+reddit:
+  host: https://www.reddit.com
+  user-agent: java:$group:v\${telegram.bot.version} (by /u/\${reddit.username})
+  video-downloader:
+    uri: https://rapidsave.com/info
+    css-selector: div.download-info a.downloadbutton
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./data
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+    show-sql: true
+  http:
+    serviceclient:
+      reddit:
+        base-url: https://oauth.reddit.com
+        default-header:
+          User-Agent: \${reddit.user-agent}
+  output:
+    ansi:
+      enabled: always
+  security:
+    oauth2:
+      client:
+        registration:
+          reddit:
+            authorization-grant-type: client_credentials
+        provider:
+          reddit:
+            token-uri: \${reddit.host}/api/v1/access_token
+  threads:
+    virtual:
+      enabled: true
+  thymeleaf:
+    enable-spring-el-compiler: true
+
+telegram:
+  bot:
+    version: $version
+  media:
+    group-max-size: 10
+    photo-max-dimension-sum: 10000
+  post-controls:
+    answer-callback-query:
+      options:
+        "[/approvepost]":
+          text: Approving...
+        "[/rejecttext]":
+          text: Rejecting text...
+        "[/rejectpost]":
+          text: Rejecting...
+    edit-message-text:
+      suppressed-api-responses:
+        - "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"
+      options:
+        "[/approvepost]":
+          text: ✅ Approved
+        "[/rejecttext]":
+          text: ☑️ Text rejected
+        "[/rejectpost]":
+          text: ❌ Rejected
+    send-message:
+      text: 🆕 New
+      reply-markup:
+        keyboard:
+          -
+            - command: /approvepost
+              text: ✅ Approve
+          -
+            - command: /rejecttext
+              text: ☑️ Reject text
+          -
+            - command: /rejectpost
+              text: ❌ Reject
+  security:
+    unauthorized-action:
+      text: 👮‍♀️ You are not authorized to perform this action

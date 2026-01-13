@@ -7,10 +7,6 @@
         <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
     </module>
 
-    <module name="BeforeExecutionExclusionFileFilter">
-        <property name="fileNamePattern" value="[\\/]\.idea[\\/]|.*\.pid|gradlew(\.bat)?"/>
-    </module>
-
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
     <module name="JavadocPackage"/>
