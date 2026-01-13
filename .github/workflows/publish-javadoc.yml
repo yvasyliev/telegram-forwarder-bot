@@ -27,7 +27,12 @@ jobs:
 
       - name: Prepare gh-pages branch (force-replace with source)
         run: |
-          git fetch origin "$SOURCE_BRANCH" || true
+          # Ensure the source branch exists on the remote; fail with a clear message if not.
+          if ! git ls-remote --exit-code origin "refs/heads/$SOURCE_BRANCH" > /dev/null; then
+            echo "Error: Source branch '$SOURCE_BRANCH' does not exist on remote 'origin'." >&2
+            exit 1
+          fi
+          git fetch origin "$SOURCE_BRANCH"
           git checkout --force -B gh-pages origin/"$SOURCE_BRANCH"
 
       - name: Generate Javadoc
