@@ -34,22 +34,28 @@ runs:
       id: get-variables
       env:
         INIT_SCRIPT: |
-          subprojects {
-            tasks.register('printBootJarPath') {
-              doLast {
-                println project.parent.relativePath(bootJar.archiveFile.get().asFile)
-              }
-            }
-          
-            tasks.register('printBootJarName') {
-              doLast {
-                println bootJar.archiveFileName.get()
-              }
-            }
-          
-            tasks.register('printVersion') {
-              doLast {
-                println project.version
+          allprojects {
+            afterEvaluate { project ->
+              if (project.tasks.findByName('bootJar')) {
+                project.tasks.register('printBootJarPath') {
+                  doLast {
+                    def jarFile = project.tasks.bootJar.archiveFile.get().asFile
+
+                    println project.parent ? project.parent.relativePath(jarFile) : jarFile
+                  }
+                }
+
+                project.tasks.register('printBootJarName') {
+                  doLast {
+                    println project.tasks.bootJar.archiveFileName.get()
+                  }
+                }
+
+                project.tasks.register('printVersion') {
+                  doLast {
+                    println project.version
+                  }
+                }
               }
             }
           }
