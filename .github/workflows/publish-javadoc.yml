@@ -25,29 +25,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Prepare gh-pages branch (create/clean and merge source)
+      - name: Prepare gh-pages branch (force-replace with source)
         run: |
-          echo "Source branch: $SOURCE_BRANCH"
-
-          # fetch source branch and gh-pages if they exist
           git fetch origin "$SOURCE_BRANCH" || true
-          git fetch origin gh-pages || true
-
-          # checkout or create gh-pages
-          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
-            git checkout -B gh-pages origin/gh-pages
-          else
-            git checkout --orphan gh-pages
-          fi
-
-          # remove all files from worktree (preserve .git)
-          git rm -rf . || true
-          git clean -fdx || true
-
-          # merge the source branch into gh-pages (skip if merging gh-pages into itself)
-          if [ "$SOURCE_BRANCH" != "gh-pages" ]; then
-            git merge --allow-unrelated-histories --no-edit origin/"$SOURCE_BRANCH" || true
-          fi
+          git checkout --force -B gh-pages origin/"$SOURCE_BRANCH"
+          git push --force origin gh-pages
 
       - name: Generate Javadoc
         run: ./gradlew javadoc
