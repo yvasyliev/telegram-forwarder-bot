@@ -13,7 +13,7 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-oauth2-client'
     api 'org.springframework.boot:spring-boot-starter-restclient'
 
-    implementation 'org.jsoup:jsoup:1.21.1'
+    implementation 'org.jsoup:jsoup:1.22.1'
 
     annotationProcessor libs.mapstruct.processor
 }
