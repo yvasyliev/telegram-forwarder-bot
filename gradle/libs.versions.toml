@@ -1,7 +1,7 @@
 [versions]
 commons-collections4 = "4.5.0"
 commons-io = "2.21.0"
-freefair = "9.0.0"
+freefair = "9.2.0"
 mapstruct = "1.6.3"
 telegrambots = "9.2.1"
 
