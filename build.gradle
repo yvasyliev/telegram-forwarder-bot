@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     alias libs.plugins.freefair.aggregate.javadoc
 
-    id 'org.sonarqube' version '6.2.0.5505'
+    id 'org.sonarqube' version '7.2.2.6593'
 
     alias libs.plugins.freefair.lombok apply false
 
