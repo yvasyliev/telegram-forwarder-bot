@@ -1,8 +1,8 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.configuration;
 
 import io.github.yvasyliev.forwarder.telegram.core.configuration.TelegramMediaProperties;
-import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaAnimationDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaPhotoDTOMapper;
+import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaVideoDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.util.RedditMetadataInputMediaDTOConverter;
 import io.github.yvasyliev.forwarder.telegram.reddit.util.RedditMetadataPhotoUrlSelector;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,17 +17,17 @@ public class RedditUtilConfiguration {
     /**
      * Creates a {@link RedditMetadataInputMediaDTOConverter} bean.
      *
-     * @param inputMediaAnimationDTOMapper the mapper for animated media
-     * @param inputMediaPhotoDTOMapper     the mapper for photo media
+     * @param inputMediaVideoDTOMapper the mapper for video media
+     * @param inputMediaPhotoDTOMapper the mapper for photo media
      * @return a new instance of {@link RedditMetadataInputMediaDTOConverter}
      */
     @Bean
     @ConditionalOnMissingBean
     public RedditMetadataInputMediaDTOConverter redditMetadataInputMediaDTOConverter(
-            RedditInputMediaAnimationDTOMapper inputMediaAnimationDTOMapper,
+            RedditInputMediaVideoDTOMapper inputMediaVideoDTOMapper,
             RedditInputMediaPhotoDTOMapper inputMediaPhotoDTOMapper
     ) {
-        return new RedditMetadataInputMediaDTOConverter(inputMediaAnimationDTOMapper, inputMediaPhotoDTOMapper);
+        return new RedditMetadataInputMediaDTOConverter(inputMediaVideoDTOMapper, inputMediaPhotoDTOMapper);
     }
 
     /**

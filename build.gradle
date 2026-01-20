@@ -15,7 +15,7 @@ allprojects {
     apply plugin: 'io.spring.dependency-management'
 
     group = 'io.github.yvasyliev.forwarder.telegram'
-    version = '5.0.0'
+    version = '5.0.1'
 
     repositories {
         mavenCentral()
