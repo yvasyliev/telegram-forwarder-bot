@@ -1,10 +1,10 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.util;
 
-import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaAnimationDTO;
 import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaPhotoDTO;
+import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaVideoDTO;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
-import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaAnimationDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaPhotoDTOMapper;
+import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaVideoDTOMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,17 +21,17 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RedditMetadataInputMediaDTOConverterTest {
     @InjectMocks private RedditMetadataInputMediaDTOConverter metadataInputMediaDTOConverter;
-    @Mock private RedditInputMediaAnimationDTOMapper inputMediaAnimationDTOMapper;
+    @Mock private RedditInputMediaVideoDTOMapper inputMediaVideoDTOMapper;
     @Mock private RedditInputMediaPhotoDTOMapper inputMediaPhotoDTOMapper;
 
     @Test
-    void shouldReturnInputMediaAnimationDTO() throws IOException {
+    void shouldReturnInputMediaVideoDTO() throws IOException {
         var metadata = mock(Link.Metadata.class);
         var hasSpoiler = true;
-        var expected = mock(InputMediaAnimationDTO.class);
+        var expected = mock(InputMediaVideoDTO.class);
 
         when(metadata.type()).thenReturn(Link.Metadata.Type.ANIMATED_IMAGE);
-        when(inputMediaAnimationDTOMapper.map(metadata, hasSpoiler)).thenReturn(expected);
+        when(inputMediaVideoDTOMapper.map(metadata, hasSpoiler)).thenReturn(expected);
 
         var actual = assertDoesNotThrow(() -> metadataInputMediaDTOConverter.convert(metadata, hasSpoiler));
 

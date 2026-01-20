@@ -1,6 +1,5 @@
 package io.github.yvasyliev.forwarder.telegram.bot.mapper;
 
-import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaAnimationDTO;
 import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaDTO;
 import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaPhotoDTO;
 import io.github.yvasyliev.forwarder.telegram.core.dto.InputMediaVideoDTO;
@@ -56,8 +55,6 @@ class InputMediaMapperTest {
 
     @Test
     void shouldThrowExceptionForUnknownSubclass() {
-        var inputMediaAnimationDTO = mock(InputMediaAnimationDTO.class);
-
-        assertThrows(IllegalArgumentException.class, () -> INPUT_MEDIA_MAPPER.map(inputMediaAnimationDTO));
+        assertThrows(IllegalArgumentException.class, () -> INPUT_MEDIA_MAPPER.map(mock(InputMediaDTO.class)));
     }
 }
