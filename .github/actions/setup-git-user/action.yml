@@ -1,0 +1,15 @@
+name: Setup Git User
+
+description: Sets up Git username and email for commits
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Git User
+      env:
+        USERNAME: "github-actions[bot]"
+        EMAIL: "github-actions[bot]@users.noreply.github.com"
+      run: |
+        git config --global user.name "$USERNAME"
+        git config --global user.email "$EMAIL"
+      shell: bash

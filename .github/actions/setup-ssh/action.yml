@@ -20,10 +20,13 @@ runs:
   steps:
     - name: Setup SSH
       id: setup-ssh
+      env:
+        SSH_KEY: ${{ inputs.ssh_key }}
+        SSH_HOST: ${{ inputs.ssh_host }}
       run: |
         mkdir -p ~/.ssh
-        echo "${{ inputs.ssh_key }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan -H ${{ inputs.ssh_host }} >> ~/.ssh/known_hosts
+        echo "$SSH_KEY" > ~/.ssh/id_ed25519
+        chmod u=r,go= ~/.ssh/id_ed25519
+        ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
         echo "ssh-key-path=~/.ssh/id_ed25519" >> $GITHUB_OUTPUT
       shell: bash

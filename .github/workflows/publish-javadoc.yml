@@ -20,10 +20,8 @@ jobs:
       - name: Setup Gradle
         uses: ./.github/actions/setup-gradle
 
-      - name: Set Git user
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Setup Git user
+        uses: ./.github/actions/setup-git-user
 
       - name: Prepare gh-pages branch (force-replace with source)
         run: |

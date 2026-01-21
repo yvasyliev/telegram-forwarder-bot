@@ -32,5 +32,11 @@ jobs:
           ssh_host: ${{ secrets.SSH_HOST }}
 
       - name: Manage service on remote server
+        env:
+          SSH_KEY: ${{ steps.setup-ssh.outputs.ssh-key-path}}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          ACTION: ${{ inputs.action }}
+          SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
         run: |
-          ssh -i ${{ steps.setup-ssh.outputs.ssh-key-path}} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl ${{ inputs.action }} ${{ secrets.SERVICE_NAME }}"
+          ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "sudo systemctl $ACTION $SERVICE_NAME"
