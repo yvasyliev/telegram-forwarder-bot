@@ -33,7 +33,7 @@ jobs:
 
       - name: Manage service on remote server
         env:
-          SSH_KEY: ${{ steps.setup-ssh.outputs.ssh-key-path}}
+          SSH_KEY: ${{ steps.setup-ssh.outputs.ssh-key-path }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           ACTION: ${{ inputs.action }}
