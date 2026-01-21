@@ -34,23 +34,28 @@ jobs:
           NEW_VERSION=$(./gradlew --version | grep 'Gradle ' | awk '{print $2}')
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
+      - name: Setup Git user
+        if: steps.old-version.outputs.old-version != steps.new-version.outputs.new-version
+        uses: ./.github/actions/setup-git-user
+
       - name: Commit and push changes
         if: steps.old-version.outputs.old-version != steps.new-version.outputs.new-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: feature/gradle
+          COMMIT_MESSAGE: Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          BRANCH="feature/gradle"
           git checkout -b "$BRANCH"
           git add .
-          git commit -m "Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}"
+          git commit -m "$COMMIT_MESSAGE"
           git push origin "$BRANCH"
 
       - name: Create Pull Request
         if: steps.old-version.outputs.old-version != steps.new-version.outputs.new-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TITLE: Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}
+          BODY: Bumps [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}
         run: |
           DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
-          gh pr create --title "Bump Gradle wrapper from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}" --body "Bumps [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) from ${{ steps.old-version.outputs.old-version }} to ${{ steps.new-version.outputs.new-version }}" --base "$DEFAULT_BRANCH"
+          gh pr create --title "$TITLE" --body "$BODY" --base "$DEFAULT_BRANCH"
