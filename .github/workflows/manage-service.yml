@@ -39,4 +39,4 @@ jobs:
           ACTION: ${{ inputs.action }}
           SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
         run: |
-          ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "sudo systemctl $ACTION $SERVICE_NAME"
+          ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "sudo systemctl \"$ACTION\" \"$SERVICE_NAME\""
