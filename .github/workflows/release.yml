@@ -30,7 +30,7 @@ jobs:
 
       - name: Deploy to remote server
         env:
-          SSH_KEY: ${{ steps.setup-ssh.outputs.ssh-key-path}}
+          SSH_KEY: ${{ steps.setup-ssh.outputs.ssh-key-path }}
           JAR_PATH: ${{ steps.build.outputs.jar-path }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
