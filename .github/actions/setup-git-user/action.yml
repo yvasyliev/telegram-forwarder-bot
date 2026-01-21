@@ -7,8 +7,8 @@ runs:
   steps:
     - name: Setup Git User
       env:
-        USERNAME: "github-actions[bot]"
-        EMAIL: "github-actions[bot]@users.noreply.github.com"
+        USERNAME: github-actions[bot]
+        EMAIL: github-actions[bot]@users.noreply.github.com
       run: |
         git config --global user.name "$USERNAME"
         git config --global user.email "$EMAIL"
