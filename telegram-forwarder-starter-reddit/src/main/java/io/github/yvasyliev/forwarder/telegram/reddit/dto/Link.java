@@ -521,6 +521,11 @@ public record Link(
             @JsonProperty("image/jpg") IMAGE_JPG,
 
             /**
+             * Represents a JPEG image format.
+             */
+            @JsonProperty("image/jpeg") IMAGE_JPEG,
+
+            /**
              * Represents a PNG image format.
              */
             @JsonProperty("image/png") IMAGE_PNG
