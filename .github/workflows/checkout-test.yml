@@ -1,0 +1,15 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: ./.github/actions/checkout
+
+      - name: Verify checkout
+        run: ls -la
+        shell: bash
