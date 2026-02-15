@@ -28,6 +28,7 @@ public interface SendMessageMapper {
      */
     @Mapping(target = "chatId", source = "adminProperties.id")
     @Mapping(target = "text", source = "sendUrlDTO", qualifiedByName = TelegramBotTemplateProcessor.NAME)
+    @Mapping(target = "parseMode", constant = ParseMode.HTML)
     SendMessage map(SendUrlDTO sendUrlDTO, TelegramAdminProperties adminProperties);
 
     /**
