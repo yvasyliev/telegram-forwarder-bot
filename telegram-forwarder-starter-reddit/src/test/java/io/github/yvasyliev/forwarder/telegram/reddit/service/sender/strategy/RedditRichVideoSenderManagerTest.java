@@ -51,7 +51,16 @@ class RedditRichVideoSenderManagerTest {
     }
 
     @Test
-    void shouldSendUrlWhenNoRedditVideoIsNull() throws TelegramApiException, IOException {
+    void shouldSendUrlWhenPostIsNotRedditMediaDomain() throws TelegramApiException, IOException {
+        var post = mock(Link.class);
+
+        assertDoesNotThrow(() -> richVideoSenderManager.send(post));
+
+        verify(urlSender).send(post);
+    }
+
+    @Test
+    void shouldSendUrlWhenRedditVideoIsNull() throws TelegramApiException, IOException {
         testSend(null, urlSender);
     }
 
@@ -78,6 +87,7 @@ class RedditRichVideoSenderManagerTest {
         var post = mock(Link.class);
         var preview = mock(Link.Preview.class);
 
+        when(post.isRedditMediaDomain()).thenReturn(true);
         when(post.preview()).thenReturn(preview);
         when(preview.redditVideoPreview()).thenReturn(redditVideo);
 

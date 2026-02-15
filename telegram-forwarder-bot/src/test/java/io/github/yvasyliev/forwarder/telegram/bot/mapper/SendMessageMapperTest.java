@@ -48,7 +48,7 @@ class SendMessageMapperTest {
             var id = 12345L;
             var sendUrlDTO = mock(SendUrlDTO.class);
             var adminProperties = new TelegramAdminProperties(id);
-            var expected = SendMessage.builder().chatId(id).text(text).build();
+            var expected = SendMessage.builder().chatId(id).text(text).parseMode(ParseMode.HTML).build();
 
             when(templateContextMapper.map(sendUrlDTO)).thenReturn(templateContext);
             when(telegramBotTemplateProcessor.process(templateContext)).thenReturn(text);
