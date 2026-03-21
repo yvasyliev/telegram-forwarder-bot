@@ -4,6 +4,7 @@ import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.resilience.annotation.EnableResilientMethods;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -16,6 +17,7 @@ import org.springframework.web.service.registry.ImportHttpServices;
  */
 @Configuration
 @ImportHttpServices(group = RedditClient.REDDIT_GROUP, types = RedditClient.class)
+@EnableResilientMethods
 public class RedditClientConfiguration {
     /**
      * Configures the OAuth2 Rest Client for Reddit.
