@@ -61,16 +61,14 @@ class RedditSendPhotoDTOMapperTest {
     void testMapPost() throws IOException {
         var post = mock(Link.class);
         var preview = mock(Link.Preview.class);
-        var image = mock(Link.Preview.Image.class);
-        var source = mock(Link.Resolution.class);
+        var image = mock(Link.Metadata.class);
         var url = mock(URL.class);
         var photo = mock(InputFileDTO.class);
         var expected = new SendPhotoDTO(photo, CAPTION, HAS_SPOILER);
 
         when(post.preview()).thenReturn(preview);
         when(preview.images()).thenReturn(List.of(image));
-        when(image.source()).thenReturn(source);
-        when(source.url()).thenReturn(url);
+        when(metadataPhotoUrlSelector.findBestPhotoUrl(image)).thenReturn(url);
         when(post.title()).thenReturn(CAPTION);
         when(post.isNsfw()).thenReturn(HAS_SPOILER);
         when(inputFileDTOMapper.map(url)).thenReturn(photo);

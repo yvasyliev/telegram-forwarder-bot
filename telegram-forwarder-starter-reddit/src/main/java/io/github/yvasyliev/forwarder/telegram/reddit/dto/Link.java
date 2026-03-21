@@ -330,25 +330,10 @@ public record Link(
      * @param redditVideoPreview the Reddit video preview, if available
      */
     public record Preview(
-            @JsonProperty("images") List<Image> images,
+            @JsonProperty("images") List<Metadata> images,
             @JsonProperty("enabled") Boolean enabled,
             @JsonProperty("reddit_video_preview") RedditVideo redditVideoPreview
-    ) {
-        /**
-         * Represents an image in the preview.
-         *
-         * @param source      the source resolution of the image
-         * @param resolutions the list of resolutions available for the image
-         * @param variants    the variants of the image (e.g., GIF, MP4)
-         * @param id          the unique identifier of the image
-         */
-        public record Image(
-                @JsonProperty("source") Resolution source,
-                @JsonProperty("resolutions") List<Resolution> resolutions,
-                @JsonProperty("variants") Variants variants,
-                @JsonProperty("id") String id
-        ) {}
-    }
+    ) {}
 
     /**
      * Represents a resolution of an image or video.
@@ -399,37 +384,6 @@ public record Link(
     }
 
     /**
-     * Represents the type of variant for a post's media. This can be used to determine the format of the media (e.g.,
-     * GIF, MP3, MP4).
-     */
-    public enum VariantType {
-        /**
-         * Represents a GIF variant.
-         */
-        @JsonProperty("gif") GIF,
-
-        /**
-         * Represents an MP3 variant.
-         */
-        @JsonProperty("mp3") MP3,
-
-        /**
-         * Represents an MP4 variant.
-         */
-        @JsonProperty("mp4") MP4,
-
-        /**
-         * Represents an NSFW (not safe for work) variant.
-         */
-        @JsonProperty("nsfw") NSFW,
-
-        /**
-         * Represents an obfuscated variant.
-         */
-        @JsonProperty("obfuscated") OBFUSCATED
-    }
-
-    /**
      * Represents a variant of a post's media with its source resolution and available resolutions.
      *
      * @param source      the source resolution of the variant
@@ -465,14 +419,16 @@ public record Link(
      * @param resolutions the list of resolutions available for the post
      * @param source      the source resolution of the post
      * @param id          the unique identifier of the post
+     * @param variants    the variants of the post's media (e.g., GIF, MP4)
      */
     public record Metadata(
             @JsonProperty("status") Status status,
             @JsonProperty("e") Type type,
             @JsonProperty("m") Format format,
-            @JsonProperty("p") List<Resolution> resolutions,
-            @JsonProperty("s") Resolution source,
-            @JsonProperty("id") String id
+            @JsonProperty("resolutions") @JsonAlias("p") List<Resolution> resolutions,
+            @JsonProperty("source") @JsonAlias("s") Resolution source,
+            @JsonProperty("id") String id,
+            @JsonProperty("variants") Variants variants
     ) {
         /**
          * Represents the status of the metadata. This can be used to determine if the metadata is valid or not.
