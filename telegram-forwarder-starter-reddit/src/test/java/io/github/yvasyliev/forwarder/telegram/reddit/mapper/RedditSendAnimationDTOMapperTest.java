@@ -62,7 +62,7 @@ class RedditSendAnimationDTOMapperTest {
         var caption = "caption";
         var hasSpoiler = true;
         var preview = mock(Link.Preview.class);
-        var image = mock(Link.Preview.Image.class);
+        var image = mock(Link.Metadata.class);
         var variants = mock(Link.Variants.class);
         var mp4 = mock(Link.Variant.class);
         var source = mock(Link.Resolution.class);

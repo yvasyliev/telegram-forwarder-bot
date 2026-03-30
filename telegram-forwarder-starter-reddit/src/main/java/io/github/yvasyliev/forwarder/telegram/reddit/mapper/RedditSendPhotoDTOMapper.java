@@ -31,7 +31,7 @@ public interface RedditSendPhotoDTOMapper {
      * @return the corresponding SendPhotoDTO
      * @throws IOException if an I/O error occurs during mapping
      */
-    @Mapping(target = "photo", source = "preview.images.first.source.url")
+    @Mapping(target = "photo", source = "preview.images.first")
     @Mapping(target = "caption", source = "title")
     @Mapping(target = "hasSpoiler", source = "nsfw")
     SendPhotoDTO map(Link post) throws IOException;

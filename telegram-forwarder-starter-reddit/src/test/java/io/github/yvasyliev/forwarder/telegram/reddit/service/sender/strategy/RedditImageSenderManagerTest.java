@@ -64,7 +64,7 @@ class RedditImageSenderManagerTest {
     private void testSend(boolean hasGif, RedditPostSender postSender) throws TelegramApiException, IOException {
         var post = mock(Link.class);
         var preview = mock(Link.Preview.class);
-        var image = mock(Link.Preview.Image.class);
+        var image = mock(Link.Metadata.class);
         var variants = mock(Link.Variants.class);
 
         when(post.preview()).thenReturn(preview);
