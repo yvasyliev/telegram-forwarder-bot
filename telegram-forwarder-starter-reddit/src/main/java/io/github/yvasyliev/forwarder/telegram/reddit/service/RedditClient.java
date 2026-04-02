@@ -3,6 +3,7 @@ package io.github.yvasyliev.forwarder.telegram.reddit.service;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Listing;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Thing;
 import org.springframework.http.MediaType;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.security.oauth2.client.annotation.ClientRegistrationId;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
@@ -25,6 +26,7 @@ public interface RedditClient {
      * @param subreddit the name of the subreddit
      * @return a listing of new posts in the subreddit
      */
+    @Retryable
     @GetExchange("/r/{subreddit}/new?raw_json=1")
     Thing<Listing> getSubredditNew(@PathVariable String subreddit);
 }
