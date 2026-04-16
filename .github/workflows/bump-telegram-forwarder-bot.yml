@@ -76,8 +76,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEW_BRANCH: release/v${{ steps.bump-version.outputs.new-version }}
-          COMMIT_MESSAGE: Bump io.github.yvasyliev.forwarder.telegram from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}
-          BODY: Bumps [io.github.yvasyliev.forwarder.telegram](https://github.com/yvasyliev/telegram-forwarder-bot) from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}
+          COMMIT_MESSAGE: Bump io.github.yvasyliev from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}
+          BODY: Bumps [io.github.yvasyliev](https://github.com/yvasyliev/telegram-forwarder-bot) from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.new-version }}
         run: |
           DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
           git checkout -b "$NEW_BRANCH"
