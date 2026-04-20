@@ -74,7 +74,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: property_name
-                  type: varchar(256)
+                  type: varchar(255)
                   constraints:
                     primaryKey: true
                     nullable: false
