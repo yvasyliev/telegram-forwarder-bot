@@ -23,22 +23,27 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RedditPostSenderManagerTest {
+    private static final String SUBREDDIT = "subreddit";
     private static final Instant NOW = Instant.now();
     @Mock private RedditPostSenderStrategy postSenderStrategy;
-    @Mock private RedditInstantPropertyService instantPropertyService;
+    @Mock private RedditLastFetchedPostService redditLastFetchedPostService;
     @Mock private Link post;
     private RedditPostSenderManager postSenderManager;
 
     @BeforeEach
     void setUp() {
-        postSenderManager = new RedditPostSenderManager(List.of(postSenderStrategy), instantPropertyService);
+        postSenderManager = new RedditPostSenderManager(
+                List.of(postSenderStrategy),
+                redditLastFetchedPostService,
+                SUBREDDIT
+        );
 
         when(post.created()).thenReturn(NOW);
     }
 
     @AfterEach
     void tearDown() {
-        verify(instantPropertyService).saveLastCreated(NOW);
+        verify(redditLastFetchedPostService).save(SUBREDDIT, NOW);
     }
 
     @Test

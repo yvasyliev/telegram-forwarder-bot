@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  */
 @RequiredArgsConstructor
 public class RedditLinkService {
-    private final RedditInstantPropertyService instantPropertyService;
+    private final RedditLastFetchedPostService redditLastFetchedPostService;
     private final RedditClient redditClient;
     private final String subreddit;
 
@@ -21,14 +21,14 @@ public class RedditLinkService {
      * @return a stream of new links
      */
     public Stream<Link> getNewLinks() {
-        var lastCreated = instantPropertyService.getLastCreated();
+        var lastPublishedAt = redditLastFetchedPostService.getLastPublishedAt(subreddit);
 
         return redditClient.getSubredditNew(subreddit)
                 .data()
                 .children()
                 .stream()
                 .map(Thing::data)
-                .filter(link -> link.created().isAfter(lastCreated))
+                .filter(link -> link.created().isAfter(lastPublishedAt))
                 .sorted()
                 .map(Link::sourceLink);
     }

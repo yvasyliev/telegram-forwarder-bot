@@ -1,9 +1,10 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.configuration;
 
+import io.github.yvasyliev.forwarder.telegram.core.service.LastFetchedPostService;
 import io.github.yvasyliev.forwarder.telegram.core.service.PostForwarder;
-import io.github.yvasyliev.forwarder.telegram.reddit.repository.RedditInstantPropertyRepository;
+import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditLastFetchedPostMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditClient;
-import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditInstantPropertyService;
+import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditLastFetchedPostService;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditLinkService;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditPostForwarder;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.RedditPostSenderManager;
@@ -28,7 +29,7 @@ public class RedditServicesConfiguration {
     /**
      * Creates a {@link PostForwarder} bean for Reddit if one is not already present in the context.
      *
-     * @param redditInstantPropertyService the Reddit instant property service
+     * @param redditLastFetchedPostService the Reddit instant property service
      * @param redditClient                 the Reddit client
      * @param redditProperties             the Reddit properties
      * @param redditPostSenderStrategies   the list of Reddit post sender strategies
@@ -37,27 +38,34 @@ public class RedditServicesConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "redditPostForwarder")
     public PostForwarder redditPostForwarder(
-            RedditInstantPropertyService redditInstantPropertyService,
+            RedditLastFetchedPostService redditLastFetchedPostService,
             RedditClient redditClient,
             RedditProperties redditProperties,
             List<RedditPostSenderStrategy> redditPostSenderStrategies
     ) {
+        var subreddit = redditProperties.subreddit();
+
         return new RedditPostForwarder(
-                new RedditLinkService(redditInstantPropertyService, redditClient, redditProperties.subreddit()),
-                new RedditPostSenderManager(redditPostSenderStrategies, redditInstantPropertyService)
+                new RedditLinkService(redditLastFetchedPostService, redditClient, subreddit),
+                new RedditPostSenderManager(redditPostSenderStrategies, redditLastFetchedPostService, subreddit)
         );
     }
 
     /**
-     * Creates a {@link RedditInstantPropertyService} bean if one is not already present in the context.
+     * Creates a {@link RedditLastFetchedPostService} bean if one is not already present in the context.
      *
-     * @param repository the Reddit instant property repository
-     * @return a new instance of {@link RedditInstantPropertyService}
+     * @param lastFetchedPostService      the service for managing last fetched post information
+     * @param redditLastFetchedPostMapper the mapper for converting between Reddit-specific last fetched post data and
+     *                                    the core last fetched post entity
+     * @return a new instance of {@link RedditLastFetchedPostService}
      */
     @Bean
     @ConditionalOnMissingBean
-    public RedditInstantPropertyService redditInstantPropertyService(RedditInstantPropertyRepository repository) {
-        return new RedditInstantPropertyService(repository);
+    public RedditLastFetchedPostService redditLastFetchedPostService(
+            LastFetchedPostService lastFetchedPostService,
+            RedditLastFetchedPostMapper redditLastFetchedPostMapper
+    ) {
+        return new RedditLastFetchedPostService(lastFetchedPostService, redditLastFetchedPostMapper);
     }
 
     /**

@@ -9,7 +9,6 @@ dependencies {
     api libs.bundles.commons
     api libs.mapstruct
 
-    api 'org.springframework.boot:spring-boot-starter-data-jpa'
     api 'org.springframework.boot:spring-boot-starter-oauth2-client'
     api 'org.springframework.boot:spring-boot-starter-restclient'
 
