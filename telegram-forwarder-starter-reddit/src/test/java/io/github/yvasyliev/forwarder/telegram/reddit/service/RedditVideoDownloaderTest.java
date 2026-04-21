@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.net.URI;
@@ -50,7 +49,7 @@ class RedditVideoDownloaderTest {
 
         when(post.permalink()).thenReturn(URI.create(PERMALINK).toURL());
         jsoup.when(() -> Jsoup.connect(VIDEO_DOWNLOADER_URI + "?url=" + PERMALINK)).thenReturn(connection);
-        when(connection.header(HttpHeaders.USER_AGENT, USER_AGENT)).thenReturn(connection);
+        when(connection.userAgent(USER_AGENT)).thenReturn(connection);
         when(connection.get()).thenReturn(document);
         when(document.select(CSS_SELECTOR)).thenReturn(elements);
     }
