@@ -15,7 +15,7 @@ spring:
     url: jdbc:h2:./data
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
@@ -27,6 +27,8 @@ spring:
         base-url: https://oauth.reddit.com
         default-header:
           User-Agent: \${reddit.user-agent}
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
   output:
     ansi:
       enabled: always
@@ -62,7 +64,9 @@ telegram:
           text: Rejecting...
     edit-message-text:
       suppressed-api-responses:
-        - "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"
+        - >
+          Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a
+          current content and reply markup of the message
       options:
         "[/approvepost]":
           text: ✅ Approved

@@ -1,0 +1,85 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260420-01-create-approved-posts
+      author: yvasyliev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: approved_posts
+      changes:
+        - createTable:
+            tableName: approved_posts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: remove_caption
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: approved_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 20260420-02-create-approved-post-message-ids
+      author: yvasyliev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: approved_post_message_ids
+      changes:
+        - createTable:
+            tableName: approved_post_message_ids
+            columns:
+              - column:
+                  name: approved_post_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    unique: true
+        - addForeignKeyConstraint:
+            baseTableName: approved_post_message_ids
+            baseColumnNames: approved_post_id
+            referencedTableName: approved_posts
+            referencedColumnNames: id
+            constraintName: fk_approved_post_message_ids_post
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 20260420-03-create-reddit-timestamp-properties
+      author: yvasyliev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: reddit_timestamp_properties
+      changes:
+        - createTable:
+            tableName: reddit_timestamp_properties
+            columns:
+              - column:
+                  name: property_name
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: property_value
+                  type: timestamp
+                  constraints:
+                    nullable: false
