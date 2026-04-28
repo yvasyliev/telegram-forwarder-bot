@@ -9,6 +9,7 @@ include 'telegram-forwarder-starter'
 include 'telegram-forwarder-starter-logging'
 include 'telegram-forwarder-starter-thymeleaf'
 include 'telegram-forwarder-starter-reddit'
+include 'telegram-forwarder-starter-x'
 
 develocity {
     buildScan {

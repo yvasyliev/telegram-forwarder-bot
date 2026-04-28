@@ -5,7 +5,9 @@ plugins {
 
 dependencies {
     api project(':telegram-forwarder-starter')
-    api project(':telegram-forwarder-starter-thymeleaf')
+
+    implementation 'org.springframework.integration:spring-integration-feed'
+    implementation 'org.springframework:spring-web'
 
     annotationProcessor libs.mapstruct.processor
 }
@@ -13,7 +15,8 @@ dependencies {
 jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: [
-                'io/github/yvasyliev/forwarder/telegram/logging/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/x/configuration/**',
+                'io/github/yvasyliev/forwarder/telegram/x/dto/**'
         ])
     }))
 }
