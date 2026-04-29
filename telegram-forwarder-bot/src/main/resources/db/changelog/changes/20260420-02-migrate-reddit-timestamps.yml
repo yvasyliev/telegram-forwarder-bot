@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260420-05-create-last-fetched-posts
+      author: yvasyliev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: last_fetched_posts
+      changes:
+        - createTable:
+            tableName: last_fetched_posts
+            columns:
+              - column:
+                  name: source_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: source_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: published_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: last_fetched_posts
+            columnNames: source_type, source_name
+            constraintName: pk_last_fetched_posts
+
+  - changeSet:
+      id: 20260420-06-drop-reddit-timestamp-properties
+      author: yvasyliev
+      preConditions:
+        onFail: MARK_RAN
+        tableExists:
+          tableName: reddit_timestamp_properties
+      changes:
+        - dropTable:
+            tableName: reddit_timestamp_properties

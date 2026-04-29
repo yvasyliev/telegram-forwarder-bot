@@ -19,14 +19,14 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RedditLinkServiceTest {
-    private static final String TEST_SUBREDDIT = "testsubreddit";
-    private static final Instant LAST_CREATED = Instant.now().minusSeconds(NumberUtils.INTEGER_ONE);
-    @Mock private RedditInstantPropertyService instantPropertyService;
+    @Mock private RedditLastFetchedPostService redditLastFetchedPostService;
     @Mock private RedditClient redditClient;
 
     @Test
     void testGetNewLinks() {
-        var redditLinkService = new RedditLinkService(instantPropertyService, redditClient, TEST_SUBREDDIT);
+        var subreddit = "subreddit";
+        var publishedAt = Instant.now().minusSeconds(NumberUtils.INTEGER_ONE);
+        var redditLinkService = new RedditLinkService(redditLastFetchedPostService, redditClient, subreddit);
         var oldPost = mock(Link.class);
         var newPost = mock(Link.class);
         var sourcePost = mock(Link.class);
@@ -40,10 +40,10 @@ class RedditLinkServiceTest {
         );
         var expected = List.of(sourcePost);
 
-        when(instantPropertyService.getLastCreated()).thenReturn(LAST_CREATED);
-        when(redditClient.getSubredditNew(TEST_SUBREDDIT)).thenReturn(new Thing<>(null, listing));
-        when(oldPost.created()).thenReturn(LAST_CREATED.minusSeconds(NumberUtils.INTEGER_ONE));
-        when(newPost.created()).thenReturn(LAST_CREATED.plusSeconds(NumberUtils.INTEGER_ONE));
+        when(redditLastFetchedPostService.getLastPublishedAt(subreddit)).thenReturn(publishedAt);
+        when(redditClient.getSubredditNew(subreddit)).thenReturn(new Thing<>(null, listing));
+        when(oldPost.created()).thenReturn(publishedAt.minusSeconds(NumberUtils.INTEGER_ONE));
+        when(newPost.created()).thenReturn(publishedAt.plusSeconds(NumberUtils.INTEGER_ONE));
         when(newPost.sourceLink()).thenReturn(sourcePost);
 
         var actual = redditLinkService.getNewLinks();

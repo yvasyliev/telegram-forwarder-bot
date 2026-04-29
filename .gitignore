@@ -5,6 +5,7 @@ build/
 !**/src/test/**/build/
 *.db
 *.pid
+*.backup
 
 ### IntelliJ IDEA ###
 .idea

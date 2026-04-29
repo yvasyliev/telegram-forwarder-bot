@@ -21,7 +21,8 @@ public class RedditPostSenderManager {
             link.permalink()
     );
     private final List<RedditPostSenderStrategy> postSenderStrategies;
-    private final RedditInstantPropertyService instantPropertyService;
+    private final RedditLastFetchedPostService redditLastFetchedPostService;
+    private final String subreddit;
 
     /**
      * Sends the given Reddit post using the appropriate sender strategy.
@@ -35,7 +36,7 @@ public class RedditPostSenderManager {
             log.error("Failed to send post: {}", post.permalink(), e);
         }
 
-        instantPropertyService.saveLastCreated(post.created());
+        redditLastFetchedPostService.save(subreddit, post.created());
     }
 
     private RedditPostSender getSender(Link post) {

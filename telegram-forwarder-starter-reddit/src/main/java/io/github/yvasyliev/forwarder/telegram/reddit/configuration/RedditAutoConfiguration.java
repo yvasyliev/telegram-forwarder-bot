@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Import;
 @ConditionalOnProperty(prefix = "reddit", name = "enabled", havingValue = BooleanUtils.TRUE, matchIfMissing = true)
 @Import({
         RedditClientConfiguration.class,
-        RedditJpaConfiguration.class,
         RedditMapperConfiguration.class,
         RedditMediaMetadataSenderConfiguration.class,
         RedditPostSenderConfiguration.class,
