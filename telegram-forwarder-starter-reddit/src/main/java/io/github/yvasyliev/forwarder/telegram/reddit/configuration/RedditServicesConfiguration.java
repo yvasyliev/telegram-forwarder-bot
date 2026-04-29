@@ -29,7 +29,7 @@ public class RedditServicesConfiguration {
     /**
      * Creates a {@link PostForwarder} bean for Reddit if one is not already present in the context.
      *
-     * @param redditLastFetchedPostService the Reddit instant property service
+     * @param redditLastFetchedPostService the service for managing Reddit last fetched post information
      * @param redditClient                 the Reddit client
      * @param redditProperties             the Reddit properties
      * @param redditPostSenderStrategies   the list of Reddit post sender strategies
