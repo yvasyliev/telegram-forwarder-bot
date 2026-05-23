@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.x.core.io;
 
+import lombok.EqualsAndHashCode;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 
@@ -11,6 +12,7 @@ import java.net.URLConnection;
  * Custom {@link UrlResource} that allows setting a custom {@code User-Agent} header when opening a connection to the
  * URL.
  */
+@EqualsAndHashCode(callSuper = true)
 public class RssUrlResource extends UrlResource {
     private final String userAgent;
 
