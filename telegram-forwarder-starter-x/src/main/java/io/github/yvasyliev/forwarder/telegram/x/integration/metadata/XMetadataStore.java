@@ -38,13 +38,15 @@ public class XMetadataStore implements MetadataStore {
     }
 
     /**
-     * {@inheritDoc}
+     * Removal is intentionally unsupported because {@link XLastFetchedPostService} only provides
+     * storage and retrieval of the last fetched post timestamp.
      *
-     * @param profile {@inheritDoc}
-     * @return {@inheritDoc}
+     * @param profile the profile whose metadata would be removed
+     * @return never returns normally
+     * @throws UnsupportedOperationException always, because this metadata store does not support deletion
      */
     @Override
     public @Nullable String remove(String profile) {
-        return null;
+        throw new UnsupportedOperationException("XMetadataStore does not support remove(profile)");
     }
 }
