@@ -1,7 +1,9 @@
 package io.github.yvasyliev.forwarder.telegram.x.configuration;
 
 import jakarta.validation.constraints.NotBlank;
+import org.jsoup.helper.HttpConnection;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -12,4 +14,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @ConfigurationProperties("x.api")
 @Validated
-public record XApiProperties(@NotBlank String uriTemplate, @NotBlank String userAgent) {}
+public record XApiProperties(
+        @NotBlank String uriTemplate,
+        @NotBlank @DefaultValue(HttpConnection.DEFAULT_UA) String userAgent
+) {}

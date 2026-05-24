@@ -8,7 +8,7 @@ import org.jsoup.parser.Parser;
 import java.util.List;
 
 /**
- * A description  parser of an X post.
+ * A description parser of an X post.
  */
 public class XDescriptionParser {
     /**

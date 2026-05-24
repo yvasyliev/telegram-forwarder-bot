@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,8 +44,6 @@ class XMetadataStoreTest {
 
     @Test
     void testRemove() {
-        var actual = metadataStore.remove("testProfile");
-
-        assertNull(actual);
+        assertThrows(UnsupportedOperationException.class, () -> metadataStore.remove("testProfile"));
     }
 }
