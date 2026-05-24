@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({TelegramAdminProperties.class, TelegramMediaProperties.class})
 @Import({
         LastFetchedPostServiceConfiguration.class,
-        TelegramForwarderCoreJpaConfiguration.class
+        TelegramForwarderCoreJpaConfiguration.class,
+        TelegramForwarderCoreUtilConfiguration.class
 })
 public class TelegramForwarderCoreAutoConfiguration {}

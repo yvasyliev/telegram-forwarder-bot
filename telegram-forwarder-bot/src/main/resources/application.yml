@@ -90,3 +90,11 @@ telegram:
   security:
     unauthorized-action:
       text: 👮‍♀️ You are not authorized to perform this action
+
+x:
+  api:
+    uri-template: https://nitter.net/{profile}/rss
+  video-service:
+    uri: https://twitsave.com/info
+    x-host: x.com
+    css-selector: li a.block

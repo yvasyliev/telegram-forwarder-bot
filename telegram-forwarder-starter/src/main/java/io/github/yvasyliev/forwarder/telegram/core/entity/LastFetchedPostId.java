@@ -6,12 +6,18 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Composite identifier for {@link LastFetchedPost}.
  */
 @Embeddable
 @Data
-public class LastFetchedPostId {
+public class LastFetchedPostId implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "source_type", nullable = false)
     private SourceType sourceType;

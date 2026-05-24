@@ -4,10 +4,14 @@ plugins {
 }
 
 dependencies {
+    api libs.bundles.commons
+    api libs.mapstruct
     api libs.telegrambots.meta
 
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
     api 'org.springframework.boot:spring-boot-starter-validation'
+
+    api 'org.jsoup:jsoup:1.22.1'
 }
 
 jacocoTestReport {

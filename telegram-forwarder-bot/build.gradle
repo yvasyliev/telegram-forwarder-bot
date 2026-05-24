@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation project(':telegram-forwarder-starter-logging')
     implementation project(':telegram-forwarder-starter-reddit')
+    implementation project(':telegram-forwarder-starter-x')
 
     implementation libs.bundles.telegrambots
 
