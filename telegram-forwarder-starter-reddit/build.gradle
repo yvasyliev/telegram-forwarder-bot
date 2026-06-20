@@ -6,13 +6,8 @@ plugins {
 dependencies {
     api project(':telegram-forwarder-starter')
 
-    api libs.bundles.commons
-    api libs.mapstruct
-
     api 'org.springframework.boot:spring-boot-starter-oauth2-client'
     api 'org.springframework.boot:spring-boot-starter-restclient'
-
-    implementation 'org.jsoup:jsoup:1.22.1'
 
     annotationProcessor libs.mapstruct.processor
 }

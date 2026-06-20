@@ -3,7 +3,6 @@ package io.github.yvasyliev.forwarder.telegram.reddit.service;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class RedditVideoDownloader {
                 .build()
                 .toUriString();
         var downloadInfo = Jsoup.connect(url)
-                .header(HttpHeaders.USER_AGENT, userAgent)
+                .userAgent(userAgent)
                 .get()
                 .select(cssSelector)
                 .first();

@@ -14,7 +14,6 @@
 # 🤖 Telegram Forwarder Bot
 
 A Spring Boot-based Telegram bot that forwards posts from external sources (e.g., Reddit) to a Telegram channel.
-Currently, the bot can only forward posts from a single subreddit.
 
 ## 📋 Requirements
 
@@ -110,6 +109,10 @@ Without these properties, the bot will not start:
       <code>@my_channel</code> or <code>-1001234567890</code>
     </td>
   </tr>
+  <tr>
+    <td><code>x.profiles</code></td>
+    <td>List of X (Twitter) profiles to forward posts from.</td>
+  </tr>
 </table>
 
 ### 🧩 Optional Properties
@@ -163,6 +166,11 @@ You can override the default values of these properties:
       The Spring cron expression for the post publisher scheduler. Defines how often the bot forwards approved posts
       to the Telegram channel.
     </td>
+  </tr>
+  <tr>
+    <td><code>x.enabled</code></td>
+    <td><code>true</code></td>
+    <td>Whether to enable X (Twitter) as a post source.</td>
   </tr>
 </table>
 
@@ -238,10 +246,8 @@ The command will compile the code, run tests, and create an executable JAR file 
 
 ## 🗺️ Long-Term Plans
 
-* Support multiple subreddits, Telegram channels and admin users.
-* Support X (Twitter) and Instagram as external sources.
-* Select medias to forward from a media group (e.g., forward only first two images from a group of 10 images) by the
-  inline buttons.
+* Support multiple subreddits.
+* Support Instagram as external source.
 
 ## 📚 Documentation
 

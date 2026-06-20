@@ -7,8 +7,6 @@ dependencies {
     api project(':telegram-forwarder-starter')
     api project(':telegram-forwarder-starter-thymeleaf')
 
-    api libs.mapstruct
-
     annotationProcessor libs.mapstruct.processor
 }
 
