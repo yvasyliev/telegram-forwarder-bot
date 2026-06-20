@@ -42,7 +42,10 @@ public class XFeedEntryMessageSourceConfiguration {
         var url = UriComponentsBuilder.fromUriString(xApiProperties.uriTemplate())
                 .build(profile)
                 .toURL();
-        var source = new FeedEntryMessageSource(new RssUrlResource(url, xApiProperties.userAgent()), profile);
+        var source = new FeedEntryMessageSource(
+                new RssUrlResource(url, xApiProperties.userAgent(), xApiProperties.bytesToFilter()),
+                profile
+        );
 
         source.setMetadataStore(new XMetadataStore(xLastFetchedPostService));
 
