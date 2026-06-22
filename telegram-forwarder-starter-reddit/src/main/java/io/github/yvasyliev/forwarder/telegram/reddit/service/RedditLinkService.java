@@ -4,6 +4,7 @@ import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Thing;
 import lombok.RequiredArgsConstructor;
 
+import java.time.Instant;
 import java.util.stream.Stream;
 
 /**
@@ -21,8 +22,10 @@ public class RedditLinkService {
      * @return a stream of new links
      */
     public Stream<Link> getNewLinks() {
-        var lastPublishedAt = redditLastFetchedPostService.getLastPublishedAt(subreddit);
+        return getNewLinks(redditLastFetchedPostService.getLastPublishedAt(subreddit));
+    }
 
+    private Stream<Link> getNewLinks(Instant lastPublishedAt) {
         return redditClient.getSubredditNew(subreddit)
                 .data()
                 .children()
