@@ -93,6 +93,8 @@ telegram:
 
 x:
   api:
+    bytes-to-exclude:
+      - 0x0
     uri-template: https://nitter.net/{profile}/rss
   video-service:
     uri: https://twitsave.com/info
