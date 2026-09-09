@@ -13,7 +13,7 @@ jobs:
       SOURCE_BRANCH: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout sources (full history)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
