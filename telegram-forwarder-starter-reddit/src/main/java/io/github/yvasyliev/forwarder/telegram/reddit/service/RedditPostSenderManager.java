@@ -40,12 +40,10 @@ public class RedditPostSenderManager {
     }
 
     private RedditPostSender getSender(Link post) {
-        for (var postSenderStrategy : postSenderStrategies) {
-            if (postSenderStrategy.canSend(post)) {
-                return postSenderStrategy;
-            }
-        }
-
-        return NOOP_SENDER;
+        return postSenderStrategies.stream()
+                .filter(postSenderStrategy -> postSenderStrategy.canSend(post))
+                .findFirst()
+                .map(RedditPostSender.class::cast)
+                .orElse(NOOP_SENDER);
     }
 }
