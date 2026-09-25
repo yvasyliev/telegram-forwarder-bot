@@ -8,4 +8,5 @@ import java.net.URL;
  * @param url  the URL to be sent
  * @param text the optional accompanying text
  */
+@Deprecated(forRemoval = true)
 public record SendUrlDTO(URL url, String text) {}

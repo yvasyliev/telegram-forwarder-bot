@@ -14,4 +14,4 @@ import java.io.Closeable;
 public record SendMediaGroupDTO(
         @Delegate(types = Closeable.class) CloseableArrayList<InputMediaDTO> medias,
         String caption
-) implements Closeable {}
+) implements PartialBotApiMethodDTO {}

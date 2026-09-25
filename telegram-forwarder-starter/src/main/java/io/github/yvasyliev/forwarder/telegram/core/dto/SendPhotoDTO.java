@@ -15,4 +15,4 @@ public record SendPhotoDTO(
         @Delegate(types = Closeable.class) InputFileDTO photo,
         String caption,
         Boolean hasSpoiler
-) implements Closeable {}
+) implements PartialBotApiMethodDTO {}

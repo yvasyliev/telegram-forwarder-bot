@@ -15,4 +15,4 @@ public record SendAnimationDTO(
         @Delegate(types = Closeable.class) InputFileDTO animation,
         String caption,
         boolean hasSpoiler
-) implements Closeable {}
+) implements PartialBotApiMethodDTO {}
