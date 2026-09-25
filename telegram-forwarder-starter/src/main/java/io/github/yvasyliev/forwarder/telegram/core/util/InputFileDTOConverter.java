@@ -2,6 +2,7 @@ package io.github.yvasyliev.forwarder.telegram.core.util;
 
 import io.github.yvasyliev.forwarder.telegram.core.dto.InputFileDTO;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
@@ -11,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * Converter class to convert a {@link URL} to an {@link InputFileDTO}.
  */
+@Component
 public class InputFileDTOConverter {
     /**
      * Converts a {@link URL} to an {@link InputFileDTO}.
