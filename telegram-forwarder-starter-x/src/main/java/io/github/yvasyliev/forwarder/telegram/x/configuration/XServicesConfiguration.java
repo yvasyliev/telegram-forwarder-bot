@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.x.configuration;
 
+import com.rometools.rome.feed.synd.SyndEntry;
 import io.github.yvasyliev.forwarder.telegram.core.service.LastFetchedPostService;
 import io.github.yvasyliev.forwarder.telegram.x.mapper.XLastFetchedPostMapper;
 import io.github.yvasyliev.forwarder.telegram.x.service.XLastFetchedPostService;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.feed.inbound.FeedEntryMessageSource;
+import org.springframework.integration.core.MessageSource;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class XServicesConfiguration {
     /**
      * Creates {@link XPostForwarder} bean if not already defined.
      *
-     * @param sources            the {@link FeedEntryMessageSource} beans for each profile
+     * @param sources            the {@link MessageSource<SyndEntry>} beans for each profile
      * @param xProperties        the {@link XProperties} bean containing configuration properties for X profiles
      * @param xPostSenderManager the {@link XPostSenderManager} bean responsible for managing post sender strategies
      * @return the created {@link XPostForwarder} bean
@@ -49,7 +50,7 @@ public class XServicesConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public XPostForwarder xPostForwarder(
-            @Qualifier(XFeedEntryMessageSourceConfiguration.BEAN_NAME) ObjectProvider<FeedEntryMessageSource> sources,
+            @Qualifier(XFeedEntryMessageSourceConfiguration.BEAN_NAME) ObjectProvider<MessageSource<SyndEntry>> sources,
             XProperties xProperties,
             XPostSenderManager xPostSenderManager
     ) {

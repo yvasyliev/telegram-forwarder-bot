@@ -93,7 +93,7 @@ telegram:
 
 x:
   api:
-    bytes-to-exclude:
+    bytes-to-filter:
       - 0x0
     uri-template: https://nitter.net/{profile}/rss
   video-service:
