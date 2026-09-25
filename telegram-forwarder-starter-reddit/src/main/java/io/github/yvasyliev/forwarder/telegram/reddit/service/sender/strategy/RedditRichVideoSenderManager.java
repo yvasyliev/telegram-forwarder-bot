@@ -3,6 +3,7 @@ package io.github.yvasyliev.forwarder.telegram.reddit.service.sender.strategy;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.RedditPostSender;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -10,10 +11,11 @@ import java.io.IOException;
 /**
  * Manager for sending Reddit rich video posts.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditRichVideoSenderManager implements RedditPostSenderStrategy {
-    private final RedditPostSender animationSender;
-    private final RedditPostSender urlSender;
+    private final RedditPostSender redditAnimationSender;
+    private final RedditPostSender redditUrlSender;
 
     @Override
     public boolean canSend(Link post) {
@@ -26,7 +28,7 @@ public class RedditRichVideoSenderManager implements RedditPostSenderStrategy {
     }
 
     private RedditPostSender getSender(Link post) {
-        return post.isRedditMediaDomain() && isGif(post) ? animationSender : urlSender;
+        return post.isRedditMediaDomain() && isGif(post) ? redditAnimationSender : redditUrlSender;
     }
 
     private boolean isGif(Link post) {

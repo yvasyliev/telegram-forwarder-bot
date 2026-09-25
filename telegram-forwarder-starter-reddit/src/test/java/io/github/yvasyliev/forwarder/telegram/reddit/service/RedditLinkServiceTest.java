@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.service;
 
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Listing;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Thing;
@@ -25,8 +26,9 @@ class RedditLinkServiceTest {
     @Test
     void testGetNewLinks() {
         var subreddit = "subreddit";
+        var redditProperties = RedditProperties.builder().subreddit(subreddit).build();
         var publishedAt = Instant.now().minusSeconds(NumberUtils.INTEGER_ONE);
-        var redditLinkService = new RedditLinkService(redditLastFetchedPostService, redditClient, subreddit);
+        var redditLinkService = new RedditLinkService(redditLastFetchedPostService, redditClient, redditProperties);
         var oldPost = mock(Link.class);
         var newPost = mock(Link.class);
         var sourcePost = mock(Link.class);

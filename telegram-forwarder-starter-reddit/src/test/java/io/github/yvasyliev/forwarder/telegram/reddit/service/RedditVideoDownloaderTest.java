@@ -1,5 +1,7 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.service;
 
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditProperties;
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditVideoDownloaderProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -39,9 +41,8 @@ class RedditVideoDownloaderTest {
     void setUp() throws IOException {
         jsoup = mockStatic(Jsoup.class);
         redditVideoDownloader = new RedditVideoDownloader(
-                URI.create(VIDEO_DOWNLOADER_URI),
-                USER_AGENT,
-                CSS_SELECTOR
+                new RedditVideoDownloaderProperties(URI.create(VIDEO_DOWNLOADER_URI), CSS_SELECTOR),
+                RedditProperties.builder().userAgent(USER_AGENT).build()
         );
 
         var connection = mock(Connection.class);
