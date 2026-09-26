@@ -28,7 +28,7 @@ public class RedditRichVideoSenderManager implements RedditPostSenderStrategy {
     }
 
     private RedditPostSender getSender(Link post) {
-        return post.isRedditMediaDomain() && isGif(post) ? redditAnimationSender : redditUrlSender;
+        return Boolean.TRUE.equals(post.isRedditMediaDomain()) && isGif(post) ? redditAnimationSender : redditUrlSender;
     }
 
     private boolean isGif(Link post) {
