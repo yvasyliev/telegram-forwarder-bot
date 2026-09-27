@@ -1,8 +1,11 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.service;
 
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditProperties;
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditVideoDownloaderProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
+import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -12,11 +15,11 @@ import java.net.URL;
 /**
  * Service for downloading videos from Reddit post.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditVideoDownloader {
-    private final URI apiUri;
-    private final String userAgent;
-    private final String cssSelector;
+    private final RedditVideoDownloaderProperties videoDownloaderProperties;
+    private final RedditProperties redditProperties;
 
     /**
      * Downloads the video from the given Reddit post.
@@ -26,12 +29,13 @@ public class RedditVideoDownloader {
      * @throws IOException if an error occurs while downloading the video
      */
     public URL getVideoDownloadUrl(Link post) throws IOException {
-        var url = UriComponentsBuilder.fromUri(apiUri)
+        var cssSelector = videoDownloaderProperties.cssSelector();
+        var url = UriComponentsBuilder.fromUri(videoDownloaderProperties.uri())
                 .queryParam("url", post.permalink())
                 .build()
                 .toUriString();
         var downloadInfo = Jsoup.connect(url)
-                .userAgent(userAgent)
+                .userAgent(redditProperties.userAgent())
                 .get()
                 .select(cssSelector)
                 .first();

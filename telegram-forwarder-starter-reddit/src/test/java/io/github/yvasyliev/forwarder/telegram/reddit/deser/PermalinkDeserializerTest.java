@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 class PermalinkDeserializerTest {
     private static final String HOST = "https://www.reddit.com";
     private static final ValueDeserializer<Object> PERMALINK_DESERIALIZER
-            = new PermalinkDeserializer(new RedditProperties(URI.create(HOST), null, null, null));
+            = new PermalinkDeserializer(RedditProperties.builder().host(URI.create(HOST)).build());
 
     @Test
     void testDeserialize() throws IOException {

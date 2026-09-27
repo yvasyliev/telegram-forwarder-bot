@@ -6,6 +6,7 @@ import io.github.yvasyliev.forwarder.telegram.core.util.CloseableSupplier;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendMediaGroupDTOMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Sender for Reddit metadata partitions that should be sent as media groups.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditMediaGroupMetadataSender implements RedditMetadataPartitionSender {
     private final RedditSendMediaGroupDTOMapper sendMediaGroupDTOMapper;

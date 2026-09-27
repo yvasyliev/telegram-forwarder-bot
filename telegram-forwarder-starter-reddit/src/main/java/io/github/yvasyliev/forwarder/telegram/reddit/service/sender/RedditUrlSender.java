@@ -5,6 +5,7 @@ import io.github.yvasyliev.forwarder.telegram.core.service.PostSender;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendUrlDTOMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 /**
  * Sender for Reddit URL posts.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditUrlSender implements RedditPostSender {
     private final RedditSendUrlDTOMapper sendUrlDTOMapper;

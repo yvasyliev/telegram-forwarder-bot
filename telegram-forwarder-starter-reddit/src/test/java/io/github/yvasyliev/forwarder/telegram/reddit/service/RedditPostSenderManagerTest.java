@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.service;
 
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.strategy.RedditPostSenderStrategy;
 import org.junit.jupiter.api.AfterEach;
@@ -35,7 +36,7 @@ class RedditPostSenderManagerTest {
         postSenderManager = new RedditPostSenderManager(
                 List.of(postSenderStrategy),
                 redditLastFetchedPostService,
-                SUBREDDIT
+                RedditProperties.builder().subreddit(SUBREDDIT).build()
         );
 
         when(post.created()).thenReturn(NOW);

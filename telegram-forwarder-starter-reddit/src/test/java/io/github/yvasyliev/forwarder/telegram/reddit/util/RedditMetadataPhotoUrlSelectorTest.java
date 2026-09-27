@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.util;
 
+import io.github.yvasyliev.forwarder.telegram.core.configuration.TelegramMediaProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,9 +15,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RedditMetadataPhotoUrlSelectorTest {
-    private static final int MAX_DIMENSION_SUM = 1000;
     private static final RedditMetadataPhotoUrlSelector METADATA_PHOTO_URL_SELECTOR
-            = new RedditMetadataPhotoUrlSelector(MAX_DIMENSION_SUM);
+            = new RedditMetadataPhotoUrlSelector(new TelegramMediaProperties(1000, null));
     @Mock private Link.Metadata metadata;
     @Mock private URL expected;
 

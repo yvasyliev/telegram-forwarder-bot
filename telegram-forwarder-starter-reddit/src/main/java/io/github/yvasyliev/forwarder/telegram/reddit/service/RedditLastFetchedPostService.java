@@ -4,12 +4,14 @@ import io.github.yvasyliev.forwarder.telegram.core.entity.LastFetchedPost;
 import io.github.yvasyliev.forwarder.telegram.core.service.LastFetchedPostService;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditLastFetchedPostMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 /**
  * Service for managing the last fetched post information for Reddit subreddits.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditLastFetchedPostService {
     private final LastFetchedPostService lastFetchedPostService;

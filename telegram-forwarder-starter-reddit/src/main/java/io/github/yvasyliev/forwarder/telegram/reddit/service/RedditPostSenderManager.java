@@ -1,10 +1,12 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.service;
 
+import io.github.yvasyliev.forwarder.telegram.reddit.configuration.RedditProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.RedditPostSender;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.strategy.RedditPostSenderStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.List;
 /**
  * Manager for sending Reddit posts using appropriate senders.
  */
+@Service
 @RequiredArgsConstructor
 @Slf4j
 public class RedditPostSenderManager {
@@ -22,7 +25,7 @@ public class RedditPostSenderManager {
     );
     private final List<RedditPostSenderStrategy> postSenderStrategies;
     private final RedditLastFetchedPostService redditLastFetchedPostService;
-    private final String subreddit;
+    private final RedditProperties redditProperties;
 
     /**
      * Sends the given Reddit post using the appropriate sender strategy.
@@ -36,7 +39,7 @@ public class RedditPostSenderManager {
             log.error("Failed to send post: {}", post.permalink(), e);
         }
 
-        redditLastFetchedPostService.save(subreddit, post.created());
+        redditLastFetchedPostService.save(redditProperties.subreddit(), post.created());
     }
 
     private RedditPostSender getSender(Link post) {

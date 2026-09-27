@@ -5,6 +5,7 @@ import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.metadata.par
 import io.github.yvasyliev.forwarder.telegram.reddit.util.GalleryMetadataPartitioner;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -13,11 +14,12 @@ import java.util.List;
 /**
  * Strategy for sending Reddit posts that contain gallery data.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditGalleryDataSender implements RedditPostSenderStrategy {
     private final GalleryMetadataPartitioner galleryMetadataPartitioner;
-    private final RedditMetadataPartitionSender mediaMetadataSender;
-    private final RedditMetadataPartitionSender mediaGroupMetadataSender;
+    private final RedditMetadataPartitionSender redditMediaMetadataSenderManager;
+    private final RedditMetadataPartitionSender redditMediaGroupMetadataSender;
 
     @Override
     public boolean canSend(Link post) {
@@ -37,6 +39,8 @@ public class RedditGalleryDataSender implements RedditPostSenderStrategy {
     }
 
     private RedditMetadataPartitionSender getSender(List<Link.Metadata> partition) {
-        return NumberUtils.INTEGER_ONE.equals(partition.size()) ? mediaMetadataSender : mediaGroupMetadataSender;
+        return NumberUtils.INTEGER_ONE.equals(partition.size())
+                ? redditMediaMetadataSenderManager
+                : redditMediaGroupMetadataSender;
     }
 }
