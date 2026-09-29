@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.x.service;
 
+import io.github.yvasyliev.forwarder.telegram.x.configuration.XVideoServiceProperties;
 import lombok.Cleanup;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -19,7 +20,11 @@ class XVideoServiceTest {
     private static final URI API_URI = URI.create("https://api.xvideo.com");
     private static final String X_HOST = "x-host";
     private static final String CSS_SELECTOR = "a";
-    private static final XVideoService SERVICE = new XVideoService(API_URI, X_HOST, CSS_SELECTOR);
+    private static final XVideoService SERVICE = new XVideoService(new XVideoServiceProperties(
+            API_URI,
+            X_HOST,
+            CSS_SELECTOR
+    ));
 
     @Test
     void testGetVideo() throws IOException {

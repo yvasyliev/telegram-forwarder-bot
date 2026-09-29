@@ -8,6 +8,7 @@ import io.github.yvasyliev.forwarder.telegram.x.dto.XDescription;
 import io.github.yvasyliev.forwarder.telegram.x.mapper.XSendPhotoDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 /**
  * Strategy for sending X posts with a single photo to Telegram.
  */
+@Service
 @RequiredArgsConstructor
 public class XPhotoPostSenderStrategy implements XPostSenderStrategy {
     private final XSendPhotoDTOMapper sendPhotoDTOMapper;

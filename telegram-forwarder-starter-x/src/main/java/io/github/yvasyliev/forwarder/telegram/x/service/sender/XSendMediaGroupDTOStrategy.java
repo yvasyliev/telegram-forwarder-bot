@@ -8,6 +8,7 @@ import io.github.yvasyliev.forwarder.telegram.x.dto.XDescription;
 import io.github.yvasyliev.forwarder.telegram.x.mapper.XSendMediaGroupDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Strategy for sending X posts as media groups when they contain multiple images.
  */
+@Service
 @RequiredArgsConstructor
 public class XSendMediaGroupDTOStrategy implements XPostSenderStrategy {
     private final XSendMediaGroupDTOMapper sendMediaGroupDTOMapper;

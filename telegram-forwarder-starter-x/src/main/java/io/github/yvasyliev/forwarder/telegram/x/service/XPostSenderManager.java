@@ -7,6 +7,7 @@ import io.github.yvasyliev.forwarder.telegram.x.service.sender.XPostSenderStrate
 import io.github.yvasyliev.forwarder.telegram.x.util.XDescriptionParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Manager for sending X posts to Telegram.
  */
+@Service
 @RequiredArgsConstructor
 @Slf4j
 public class XPostSenderManager {

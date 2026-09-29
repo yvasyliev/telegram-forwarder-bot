@@ -4,12 +4,14 @@ import io.github.yvasyliev.forwarder.telegram.x.dto.XDescription;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * A description parser of an X post.
  */
+@Component
 public class XDescriptionParser {
     /**
      * Parses the description of an X post from its HTML content.
