@@ -1,17 +1,20 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.util;
 
+import io.github.yvasyliev.forwarder.telegram.core.configuration.TelegramMediaProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Partitions gallery metadata items from a Reddit post into smaller lists of a specified size.
  */
+@Component
 @RequiredArgsConstructor
 public class GalleryMetadataPartitioner {
-    private final int partitionSize;
+    private final TelegramMediaProperties mediaProperties;
 
     /**
      * Partitions the gallery metadata items of the given Reddit post.
@@ -26,6 +29,6 @@ public class GalleryMetadataPartitioner {
                 .map(item -> post.mediaMetadata().get(item.mediaId()))
                 .toList();
 
-        return ListUtils.partition(metadataList, partitionSize);
+        return ListUtils.partition(metadataList, mediaProperties.groupMaxSize());
     }
 }

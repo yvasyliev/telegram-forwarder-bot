@@ -3,6 +3,7 @@ package io.github.yvasyliev.forwarder.telegram.reddit.service.sender.strategy;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.RedditPostSender;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.IOException;
 /**
  * Manager for sending Reddit image posts.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditImageSenderManager implements RedditPostSenderStrategy {
     private final RedditPostSender redditAnimationSender;

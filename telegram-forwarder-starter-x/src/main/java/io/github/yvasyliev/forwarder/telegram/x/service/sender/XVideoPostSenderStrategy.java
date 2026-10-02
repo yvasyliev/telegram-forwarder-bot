@@ -9,6 +9,7 @@ import io.github.yvasyliev.forwarder.telegram.x.mapper.XSendVideoDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -17,6 +18,7 @@ import java.io.IOException;
 /**
  * Strategy for sending X posts as videos to Telegram.
  */
+@Service
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
 public class XVideoPostSenderStrategy implements XPostSenderStrategy {

@@ -1,5 +1,6 @@
 package io.github.yvasyliev.forwarder.telegram.reddit.util;
 
+import io.github.yvasyliev.forwarder.telegram.core.configuration.TelegramMediaProperties;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +16,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GalleryMetadataPartitionerTest {
-    private static final int PARTITION_SIZE = 2;
     private static final GalleryMetadataPartitioner GALLERY_METADATA_PARTITIONER = new GalleryMetadataPartitioner(
-            PARTITION_SIZE
+            new TelegramMediaProperties(null, 2)
     );
     @Mock private Link post;
 

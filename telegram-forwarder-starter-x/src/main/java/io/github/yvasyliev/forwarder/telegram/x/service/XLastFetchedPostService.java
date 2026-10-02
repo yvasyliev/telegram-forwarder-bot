@@ -4,12 +4,14 @@ import io.github.yvasyliev.forwarder.telegram.core.entity.LastFetchedPost;
 import io.github.yvasyliev.forwarder.telegram.core.service.LastFetchedPostService;
 import io.github.yvasyliev.forwarder.telegram.x.mapper.XLastFetchedPostMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 /**
  * Service for managing the last fetched post information for X profiles.
  */
+@Service
 @RequiredArgsConstructor
 public class XLastFetchedPostService {
     private final LastFetchedPostService lastFetchedPostService;

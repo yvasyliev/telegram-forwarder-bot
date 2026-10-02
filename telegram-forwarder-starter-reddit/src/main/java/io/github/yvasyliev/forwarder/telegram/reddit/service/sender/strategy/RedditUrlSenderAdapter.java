@@ -4,14 +4,16 @@ import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.service.sender.RedditPostSender;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
+import org.springframework.stereotype.Service;
 
 /**
  * Adapter for sending Reddit posts that are links (URLs).
  */
+@Service
 @RequiredArgsConstructor
 public class RedditUrlSenderAdapter implements RedditPostSenderStrategy {
     @Delegate
-    private final RedditPostSender urlSender;
+    private final RedditPostSender redditUrlSender;
 
     @Override
     public boolean canSend(Link post) {

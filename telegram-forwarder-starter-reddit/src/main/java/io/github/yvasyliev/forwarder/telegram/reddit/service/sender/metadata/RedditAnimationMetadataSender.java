@@ -6,6 +6,7 @@ import io.github.yvasyliev.forwarder.telegram.core.util.CloseableSupplier;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendAnimationDTOMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 /**
  * Sends Reddit animation metadata as Telegram animations.
  */
+@Service
 @RequiredArgsConstructor
 public class RedditAnimationMetadataSender implements RedditMediaMetadataSender {
     private final RedditSendAnimationDTOMapper sendAnimationDTOMapper;

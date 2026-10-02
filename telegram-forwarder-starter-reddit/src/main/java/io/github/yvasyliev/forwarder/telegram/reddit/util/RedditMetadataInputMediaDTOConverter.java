@@ -6,12 +6,14 @@ import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaPhot
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditInputMediaVideoDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Context;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 /**
  * Converts Reddit link metadata into Telegram input media DTOs.
  */
+@Component
 @RequiredArgsConstructor
 public class RedditMetadataInputMediaDTOConverter {
     private final RedditInputMediaVideoDTOMapper inputMediaVideoDTOMapper;
