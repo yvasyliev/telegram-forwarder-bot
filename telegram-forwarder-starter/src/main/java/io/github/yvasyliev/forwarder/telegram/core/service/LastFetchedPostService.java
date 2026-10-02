@@ -4,6 +4,7 @@ import io.github.yvasyliev.forwarder.telegram.core.entity.LastFetchedPost;
 import io.github.yvasyliev.forwarder.telegram.core.entity.LastFetchedPostId;
 import io.github.yvasyliev.forwarder.telegram.core.repository.LastFetchedPostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -11,6 +12,7 @@ import java.time.Instant;
 /**
  * Service for managing the last fetched post information for different sources.
  */
+@Service
 @RequiredArgsConstructor
 public class LastFetchedPostService {
     private final LastFetchedPostRepository lastFetchedPostRepository;
