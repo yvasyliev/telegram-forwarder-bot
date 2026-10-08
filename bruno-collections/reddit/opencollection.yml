@@ -1,0 +1,47 @@
+opencollection: 1.0.0
+
+info:
+  name: reddit
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  headers:
+    - name: User-Agent
+      value: java:io.github.yvasyliev:v5.3.0 (by /u/{{username}})
+  auth:
+    type: oauth2
+    flow: client_credentials
+    accessTokenUrl: https://www.reddit.com/api/v1/access_token
+    credentials:
+      clientId: "{{client-id}}"
+      clientSecret: "{{client-secret}}"
+      placement: basic_auth_header
+    tokenConfig:
+      id: credentials
+      placement:
+        header: Bearer
+      source: access_token
+    settings:
+      autoFetchToken: true
+      autoRefreshToken: false
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
+    presets:
+      request:
+        type: http
+        url: https://oauth.reddit.com
+      defaultEnvironment: reddit

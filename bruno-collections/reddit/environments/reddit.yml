@@ -1,0 +1,11 @@
+name: reddit
+variables:
+  - secret: true
+    name: username
+    description: Your Reddit profile username without the "r/" prefix
+  - secret: true
+    name: client-id
+    description: Application Client ID from the https://www.reddit.com/prefs/apps
+  - secret: true
+    name: client-secret
+    description: Application Client Secret from the https://www.reddit.com/prefs/apps
