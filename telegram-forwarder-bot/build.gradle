@@ -33,7 +33,10 @@ jacocoTestReport {
 
 processResources {
     filesMatching('application.yml') {
-        expand project.properties
+        expand(
+                'group': project.group,
+                'version': project.version
+        )
     }
 }
 
