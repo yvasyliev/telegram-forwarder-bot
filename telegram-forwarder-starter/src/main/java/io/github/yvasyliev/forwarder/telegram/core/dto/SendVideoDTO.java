@@ -15,4 +15,4 @@ public record SendVideoDTO(
         @Delegate(types = Closeable.class) InputFileDTO video,
         String caption,
         Boolean hasSpoiler
-) implements Closeable {}
+) implements PartialBotApiMethodDTO {}
