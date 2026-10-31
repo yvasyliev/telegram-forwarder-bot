@@ -3,8 +3,8 @@ package io.github.yvasyliev.forwarder.telegram.reddit.converter;
 import io.github.yvasyliev.forwarder.telegram.core.dto.PartialBotApiMethodDTO;
 import io.github.yvasyliev.forwarder.telegram.core.util.CloseableSupplier;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
+import io.github.yvasyliev.forwarder.telegram.reddit.mapper.AbstractRedditSendMediaGroupDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendAnimationDTOMapper;
-import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendMediaGroupDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendPhotoDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.util.GalleryMetadataPartitioner;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class RedditGalleryDataConverter implements RedditLinkConverter {
     private final GalleryMetadataPartitioner galleryMetadataPartitioner;
     private final RedditSendAnimationDTOMapper sendAnimationDTOMapper;
     private final RedditSendPhotoDTOMapper sendPhotoDTOMapper;
-    private final RedditSendMediaGroupDTOMapper sendMediaGroupDTOMapper;
+    private final AbstractRedditSendMediaGroupDTOMapper sendMediaGroupDTOMapper;
 
     /**
      * {@inheritDoc}

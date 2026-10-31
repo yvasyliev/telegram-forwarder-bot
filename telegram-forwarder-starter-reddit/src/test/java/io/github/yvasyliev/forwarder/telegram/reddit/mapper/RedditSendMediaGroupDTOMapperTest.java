@@ -27,7 +27,9 @@ import static org.mockito.Mockito.when;
 class RedditSendMediaGroupDTOMapperTest {
     private static final boolean HAS_SPOILER = true;
     private static final String CAPTION = "Sample Caption";
-    private final RedditSendMediaGroupDTOMapper mapper = Mappers.getMapper(RedditSendMediaGroupDTOMapper.class);
+    private final AbstractRedditSendMediaGroupDTOMapper mapper = Mappers.getMapper(
+            AbstractRedditSendMediaGroupDTOMapper.class
+    );
     @Mock private RedditInputMediaVideoDTOMapper inputMediaVideoDTOMapper;
     @Mock private RedditInputMediaPhotoDTOMapper inputMediaPhotoDTOMapper;
 

@@ -16,8 +16,7 @@ import java.util.List;
  */
 @Mapper
 @Setter(onMethod_ = @Autowired)
-@SuppressWarnings("checkstyle:AbstractClassName")
-public abstract class RedditSendMediaGroupDTOMapper {
+public abstract class AbstractRedditSendMediaGroupDTOMapper {
     private RedditInputMediaVideoDTOMapper inputMediaVideoDTOMapper;
     private RedditInputMediaPhotoDTOMapper inputMediaPhotoDTOMapper;
 

@@ -5,7 +5,7 @@ import io.github.yvasyliev.forwarder.telegram.core.dto.SendMediaGroupDTO;
 import io.github.yvasyliev.forwarder.telegram.core.dto.SendPhotoDTO;
 import io.github.yvasyliev.forwarder.telegram.reddit.dto.Link;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendAnimationDTOMapper;
-import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendMediaGroupDTOMapper;
+import io.github.yvasyliev.forwarder.telegram.reddit.mapper.AbstractRedditSendMediaGroupDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.mapper.RedditSendPhotoDTOMapper;
 import io.github.yvasyliev.forwarder.telegram.reddit.util.GalleryMetadataPartitioner;
 import lombok.Cleanup;
@@ -30,7 +30,7 @@ class RedditGalleryDataConverterTest {
     @Mock private GalleryMetadataPartitioner galleryMetadataPartitioner;
     @Mock private RedditSendAnimationDTOMapper sendAnimationDTOMapper;
     @Mock private RedditSendPhotoDTOMapper sendPhotoDTOMapper;
-    @Mock private RedditSendMediaGroupDTOMapper sendMediaGroupDTOMapper;
+    @Mock private AbstractRedditSendMediaGroupDTOMapper sendMediaGroupDTOMapper;
 
     private static Link.Metadata metadata(Link.Metadata.Type type) {
         return Link.Metadata.builder()

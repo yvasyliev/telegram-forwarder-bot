@@ -66,7 +66,7 @@ public class PostControlsSender {
      *
      * @param messages the {@link List} of {@link Message} that were sent
      */
-    public void sendPostControlKeyboard(List<Message> messages) {
+    private void sendPostControlKeyboard(List<Message> messages) {
         var sendMessage = sendMessageMapper.map(postControlsSendMessageProperties, messages);
 
         try {
