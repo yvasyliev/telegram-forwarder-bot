@@ -3,6 +3,7 @@ package io.github.yvasyliev.forwarder.telegram.thymeleaf;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
 import org.thymeleaf.context.AbstractContext;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * It applies a list of {@link TemplateContextCustomizer} instances to modify the context as needed.
  */
 @Aspect
+@Component
 @RequiredArgsConstructor
 public class TelegramTemplateProcessorInterceptor {
     private final List<TemplateContextCustomizer> contextCustomizers;

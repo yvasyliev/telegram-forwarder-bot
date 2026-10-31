@@ -1,11 +1,13 @@
 package io.github.yvasyliev.forwarder.telegram.thymeleaf;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.thymeleaf.ITemplateEngine;
 
 /**
  * A processor that uses a Thymeleaf template engine to process Telegram templates.
  */
+@Service
 @RequiredArgsConstructor
 public class TelegramTemplateProcessor {
     private final ITemplateEngine templateEngine;
